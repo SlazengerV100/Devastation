@@ -17,9 +17,9 @@ First meeting! How exciting. Before we discuss the game itself I think we should
 
 - Project Planning and Risk Management. Draft a project timeline, considering other commitments and course workloads. This could invlove creating a gantt chart. 
 
--Collaboration and Communication Plan. Choose a collaboration methodology (e.g., SCRUM, Agile, Waterfall) and set up communication channels (e.g., Slack, email, weekly meetings).
+- Collaboration and Communication Plan. Choose a collaboration methodology (e.g., SCRUM, Agile, Waterfall) and set up communication channels (e.g., Slack, email, weekly meetings).
 
-- Discuss what we want from ENGR301/SWEN326 we want to implement into this project (pre-commit, project plans, use of issues and milestones, requirement gathering process)
+- Discuss what from ENGR301/SWEN326 we want to implement into this project (pre-commit, project plans, use of issues and milestones, requirement gathering process etc)
 
 ## Discussion Points
 1. **[Agenda item 1]:**
