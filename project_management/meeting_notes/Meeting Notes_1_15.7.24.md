@@ -31,6 +31,7 @@ First meeting! How exciting. Before we discuss the game itself I think we should
 ## Action Items
 - [ ] Make gannt chart
 - [ ] Kahu to write up Agile methodolgy method document in project_management directory
+- [ ] Set up pre-commit
 
 
 ## Additional Notes
