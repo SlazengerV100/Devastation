@@ -22,16 +22,25 @@ First meeting! How exciting. Before we discuss the game itself I think we should
 - Discuss what from ENGR301/SWEN326 we want to implement into this project (pre-commit, project plans, use of issues and milestones, requirement gathering process etc)
 
 ## Discussion Points
-1. **[Agenda item 1]:**
-   - [Summary of discussion]
-   - [Action items arising from discussion]
-     - [Action item 1]
-     - [Action item 2]
+1. Should we use pre-commit?
+    - Vote 5-1 **in favour**
+1. Should we have a scrum master?
+    - Anthony volunteered to be scrum master
+1. Regular group meetings on Wednesday morning
+1. Branching strategy the same as ENGR301
+
+## Roles and Responsibilities
+- **Anthony:** Scrum Master
+- **Alex:** UI/UX Designer / Meeting Coordinator
+- **Kahu:** UI/UX Designer
+- **Joseph:** Product Owner Liaison
+- **Rene:** Quality Assurance Lead
+- **Nate:** Documentation Lead
      
 ## Action Items
-- [ ] Make gannt chart
+- [ ] Make Gannt chart
 - [ ] Kahu to write up Agile methodolgy method document in project_management directory
-- [ ] Set up pre-commit
+- [ ] Research possible database hosting services
 
 
 ## Additional Notes
