@@ -30,6 +30,8 @@ First meeting! How exciting. Before we discuss the game itself I think we should
      
 ## Action Items
 - [ ] Make gannt chart
+- [ ] Kahu to write up Agile methodolgy method document in project_management directory
+
 
 ## Additional Notes
 - The plan and requirements analysis documentation is worth 5% of the final mark and are due on the 26/7/24 (end of next week)
