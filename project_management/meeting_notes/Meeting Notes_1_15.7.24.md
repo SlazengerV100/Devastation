@@ -4,7 +4,7 @@
 - **Date:** 15/7/24
 - **Time:** 2.00PM
 - **Location:** RB107
-- **Attendees:** Alex, Joseph
+- **Attendees:** Alex, Joseph, Rene, Nate, Anthony, Kahurangi
 
 First meeting! How exciting. Before we discuss the game itself I think we should discuss the project management stuff of which I have outlined in the agenda. 
 
