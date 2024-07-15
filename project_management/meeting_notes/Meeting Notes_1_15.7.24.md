@@ -42,6 +42,7 @@ First meeting! How exciting. Before we discuss the game itself I think we should
 - [ ] Kahu to write up Agile methodolgy method document in project_management directory
 - [ ] Set up pre-commit
 - [ ] Research possible database hosting services
+- [ ] Research how to make a web based game
 
 
 ## Additional Notes
