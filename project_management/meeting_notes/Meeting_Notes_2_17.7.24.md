@@ -12,7 +12,7 @@
 - Kahu to run us through his work [life cycle doc](https://gitlab.ecs.vuw.ac.nz/manninalex/engr302-project/-/blob/main/project_management/workLifeCycle.MD?ref_type=heads)
 - Agree on requirement gathering process, types of requirements to gather and requirements documentation format (should we use gitlab issues, lucidchart, markdown?)
 - Agree on design artifacts we are going to create (wireframes, UML diagrams, state diagrams, personas etc)
-- BRAINSTORM GAME IDAES...... (and generate requirements from that)
+- BRAINSTORM GAME IDEAS...... (and generate requirements from that)
   - The PO wants to use
 the game in a class/lab situation, so it should be a multiplayer game
   - The PO wants a type of agile
