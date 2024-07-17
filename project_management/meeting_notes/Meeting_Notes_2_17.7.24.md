@@ -20,12 +20,23 @@ development method, such as DevOps, Scrum, Kanban, or XP to be taught by the gam
 
 
 ## Discussion Points
-1. **[Agenda item 1]:**
-   - [Summary of discussion]
-   - [Action items arising from discussion]
-     - [Action item 1]
-     - [Action item 2]
+1. **[Pizza Game Idea]:**
+   
+   A pizza game representing agile where agile roles are mirrored by pizzeria roles seen below. The idea is based around a product owner (pizza orderer) who gives a vague order of a pizza that they want to the pizzeria team. 
+   
+   Players will have pizzeria roles mirroring agile roles and have to work in a team to create pizzas which match what the product owners want. There will be challenges which the team will have to solve as the pizzas created will most likely not perfectly match the product owners requirements on the first try.
 
+   
+
+  | Agile Role | Pizzeria Role Equivalent | What Do They Do? |
+|------|-------|--------------|
+| Product Owner | Pizza Orderer (NPC) | Gives vauge description of pizza |
+| Scrum Master | Head Chef | Delegates tasks to chefs | 
+|  Developers|  Chefs | Does pizza making activities (add toppings, cook etc) |
+|  Quality Assurance | Pizza Checker | Verifies pizza quality | 
+
+
+   
 ## Action Items
 - [ ] [Assignee 1]
 
