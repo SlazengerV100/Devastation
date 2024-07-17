@@ -4,7 +4,7 @@
 - **Date:** 17/5/24
 - **Time:** 12PM
 - **Location:** CO242A
-- **Attendees:** Alex, 
+- **Attendees:** Everyone
 
 ## Agenda
 - Inrtoduction
