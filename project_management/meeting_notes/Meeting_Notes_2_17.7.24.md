@@ -38,7 +38,9 @@ development method, such as DevOps, Scrum, Kanban, or XP to be taught by the gam
 
    
 ## Action Items
-- [ ] [Assignee 1]
+- [ ] Generate requirements
+- [ ] Get stakeholder feedback on pizza game idea from stakeholder
+- [ ] More research on tech stack
 
 ## Additional Notes
 - [Any additional notes or remarks from the meeting]
