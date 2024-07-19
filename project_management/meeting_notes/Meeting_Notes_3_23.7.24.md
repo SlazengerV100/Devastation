@@ -13,7 +13,9 @@
 3. Explain any road blocks you have been facing
 
 ## Agenda
-- [Agenda item 1]
+- Review requirements (Group): add detail where necessary and prioritise based upon group consensus
+- Stakeholder review (Joseph): hear update from the stakeholder
+- Plan Sprint 2 (Anthony): review tasks on the backlog, assign tasks and add new tasks for this sprint
 
 ## Discussion Points
 1. **[Agenda item 1]:**
