@@ -18,11 +18,8 @@
 - Plan Sprint 2 (Anthony): review tasks on the backlog, assign tasks and add new tasks for this sprint
 
 ## Discussion Points
-1. **[Agenda item 1]:**
-   - [Summary of discussion]
-   - [Action items arising from discussion]
-     - [Action item 1]
-     - [Action item 2]
+1. Reviewed requirements to add detail and specificity
+1. The stakeholder said that we need to start with a methodology and create the idea from there, not the other way around.
 
 ## Action Items
 - [ ] [Assignee 1]
