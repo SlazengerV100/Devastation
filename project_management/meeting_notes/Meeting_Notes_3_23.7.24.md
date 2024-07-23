@@ -1,10 +1,10 @@
 # Meeting Notes
 
 ## Meeting Details
-- **Date:** [Date of the meeting]
-- **Time:** [Time of the meeting]
-- **Location:** [Location of the meeting]
-- **Attendees:** [List of attendees]
+- **Date:** 24/7/24
+- **Time:** 10AM
+- **Location:** CO242A
+- **Attendees:** Rene, Anthony, Nate, Joseph, Kahu
 
 ## Stand up (done by all team members)
 
@@ -25,7 +25,8 @@
 - [ ] [Assignee 1]
 
 ## Additional Notes
-- [Any additional notes or remarks from the meeting]
+- Tutor Email: irincofran@vuw.ac.nz (Frank)
+
 
 ## Missing Attendees
 
