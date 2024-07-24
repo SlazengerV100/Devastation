@@ -32,10 +32,27 @@
 - Blocks instead of tickets with different size and colour representing different ascents of a ticket such as difficulty and priority
 
 ##### Key Base Game Ideas (What our game must have):
-- Move around game,  Multiplayer movement
-- Kanban
+- Move around game in multiplayer fashion
 - Top down
-- Get as many points as we can in a set amount of time
+- Kanban board that is the shape of the map
+- Doors between the different rooms representing Kanban buckets
+- All players can walk anywhere between the rooms
+- Each room has a number of relevant workstations
+- Tickets come in which are worth points and have a variable number of tasks to be done at each workstation
+- The amount of points that each ticket is worth is determined by the number of tasks and the difficulty of each task
+- The goal is to get as many points as possible
+- The game ends after x amount of time
+- Burn out meter that is proportional to the number of tickets in the room
+- Players are stunned and can't do anything for a short period of time if the burn out meter reaches the max
+
+## Roles
+| Role Name | Description |
+|-----------|-------------|
+| Project Manager | Receive tasks of unknown size. Allocates tasks to the developer(s) based on their state / burn out meter |
+| Developer(s) | Receives tasks from the Project Manager. Completes tasks on relevant workstations |
+| Tester(s) | Receives tasks from the Developer(s). Completes tasks on relevant workstations |
+
+
 
 ## Action Items
 - [ ] [Assignee 1]
