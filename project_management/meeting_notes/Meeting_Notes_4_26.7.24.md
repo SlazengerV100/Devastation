@@ -43,21 +43,22 @@ Project manager has an undefined amount of tasks to give to the developer and ma
 
 ##### Developer
 Developer has several work stations that each can complete a subtask in a task by dragging a task to the work station
-    - Has a burnout meter dependent on the amount of tasks in his area
-    - Tasks must be placed at a workstation and only a single task can be present at a single workstation
+- Has a burnout meter dependent on the amount of tasks in his area
+- Tasks must be placed at a workstation and only a single task can be present at a single workstation
 
 ##### Tester
 Tester has several work stations that each can complete a subtask in a task by dragging a task to the work station
-    - Has a burnout meter dependent on the amount of tasks in his area
-    - Tasks must be placed at a workstation and only a single task can be present at a single workstation
-    - Subtask testing will be of an undefined amount of time that can be more or less than the time it took in development
-    - Total testing time of subtasks in a task will be greater than the time it takes in development to add stress
-    - After testing all subtasks, can drag the task to the completed section (or to review if added).
+- Has a burnout meter dependent on the amount of tasks in his area
+- Tasks must be placed at a workstation and only a single task can be present at a single workstation
+- Subtask testing will be of an undefined amount of time that can be more or less than the time it took in development
+- Total testing time of subtasks in a task will be greater than the time it takes in development to add stress
+- After testing all subtasks, can drag the task to the completed section (or to review if added).
 
 #### Game Mechanics
 - Burnout: 
     - players will explode into flames when they hit burnout, reseting all tasks being done and putting them into a unplayable state for some amount of time
     - burnout increases constantly and only decreases once a task is moved to the next stage of development, thus more tasks has a snowball affect on the amount of burnout
+    
 - Random Events - just like real life a developer may become sick etc and this will have some discussed in game effects
 
 
