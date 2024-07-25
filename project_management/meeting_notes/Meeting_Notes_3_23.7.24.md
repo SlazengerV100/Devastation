@@ -62,6 +62,6 @@
 
 ## Missing Attendees
 
-### Full Name
-- **Reason:** [Reason for missing the meeting]
-- **Reallocation:** [What will be done by this team member to compensate]
+### Alex Manning
+- **Reason:** Out of Wellington for trip
+- **Reallocation:** Make sure I ahve read all of meeting notes and make sure I unserstand the new game idea, I will also complete issue #10
