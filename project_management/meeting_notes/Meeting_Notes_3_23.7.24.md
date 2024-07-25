@@ -64,4 +64,4 @@
 
 ### Alex Manning
 - **Reason:** Out of Wellington for trip
-- **Reallocation:** Make sure I ahve read all of meeting notes and make sure I unserstand the new game idea, I will also complete issue #10
+- **Reallocation:** Make sure I have read all of meeting notes and make sure I unserstand the new game idea, I will also complete issue #10
