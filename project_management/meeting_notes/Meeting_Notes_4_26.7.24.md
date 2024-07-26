@@ -36,18 +36,21 @@ A task is a game object that contains one or more subtasks to be completed by th
 
 ##### Project Manager
 Project manager has an undefined amount of tasks to give to the developer and manage for future roles (tester and reviewer).
-    - Each task is work some amount of points, with tasks containing more subtasks being worth more (not linear)
-    - PM can see the time estimate to complete all subtasks but not what each individual subtask is (Impression he does not have any technical knowledge)
-    - PM must manage tasks given to developer and so forth to make sure they do not hit burnout
-    - Only the PM can see the burnout meters of each player
+
+- Each task is work some amount of points, with tasks containing more subtasks being worth more (not linear)
+- PM can see the time estimate to complete all subtasks but not what each individual subtask is (Impression he does not have any technical knowledge)
+- PM must manage tasks given to developer and so forth to make sure they do not hit burnout
+- Only the PM can see the burnout meters of each player
 
 ##### Developer
 Developer has several work stations that each can complete a subtask in a task by dragging a task to the work station
+
 - Has a burnout meter dependent on the amount of tasks in his area
 - Tasks must be placed at a workstation and only a single task can be present at a single workstation
 
 ##### Tester
 Tester has several work stations that each can complete a subtask in a task by dragging a task to the work station
+
 - Has a burnout meter dependent on the amount of tasks in his area
 - Tasks must be placed at a workstation and only a single task can be present at a single workstation
 - Subtask testing will be of an undefined amount of time that can be more or less than the time it took in development
@@ -59,7 +62,8 @@ Tester has several work stations that each can complete a subtask in a task by d
     - players will explode into flames when they hit burnout, reseting all tasks being done and putting them into a unplayable state for some amount of time
     - burnout increases constantly and only decreases once a task is moved to the next stage of development, thus more tasks has a snowball affect on the amount of burnout
     
-- Random Events - just like real life a developer may become sick etc and this will have some discussed in game effects
+- Random Events
+    - just like real life a developer may become sick etc and this will have some discussed in game effects
 
 
 ## Action Items
