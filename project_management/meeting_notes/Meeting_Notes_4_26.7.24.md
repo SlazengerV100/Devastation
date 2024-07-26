@@ -4,7 +4,7 @@
 - **Date:** 26/7/24
 - **Time:** 2PM
 - **Location:** CO242A
-- **Attendees:** Alex, Rene
+- **Attendees:** Alex, Rene, Joseph, Anthony, Nate
 
 ## Agenda
 Finish project initial requirements which involves
