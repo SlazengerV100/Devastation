@@ -13,8 +13,9 @@ Finish project initial requirements which involves
 - Read https://gitlab.ecs.vuw.ac.nz/manninalex/engr302-project/-/blob/main/project_management/Plan%20and%20Requirements%20analysis%20info.pdf?ref_type=heads and confirm that we think we have met everything that is required of our requirements
 
 ## Discussion Points
+1. Discussed using Java as the back end server instead of Socket.io. This is because it would be easier to set up and the development team are more familiar with Java. The [Spring](https://spring.io/) framework could be used to implement a RESTful API that communicates between the client and the server. Graphic rendering would still be completed on the client side. Model, game stat and logic to be completed server side.
 
-Brainstorme game aspects we like and come to a group consensus on the idea
+1. Brainstorm game aspects we like and come to a group consensus on the idea
 
 ##### Game Idea Aspects That we Like:
 
