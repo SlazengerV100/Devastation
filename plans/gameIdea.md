@@ -1,4 +1,27 @@
 # Dev-a-station
+## Main Teaching Goal
+
+**Dev-a-station** aims to subtly teach students the principles of Kanban while introducing them to key concepts related to the work lifecycle. The game offers a hands-on experience with the following ideas:
+
+### Kanban Fundamentals
+- Understanding the visualisation of workflow through a Kanban board.
+- Learning how tasks move through different stages of a project.
+
+### Work Lifecycle
+- **Project Manager to Developer to Tester to Merged:**
+  - The game simulates the typical lifecycle of a task, moving from the project manager to the developer, then to the tester, and finally merging it upon completion.
+
+### Real-World Scenarios
+- **Failing Testing:**
+  - Players experience scenarios where a ticket fails testing and needs to be sent back for redevelopment, illustrating the iterative nature of software development.
+
+- **Blow-Out Tickets:**
+  - Tickets can "blow out," meaning they expand in scope and require reprioritisation, teaching students about scope creep and task management.
+
+- **Worker Burnout:**
+  - The game introduces the concept of burnout, where players can become overloaded with tasks, leading to decreased productivity and temporary incapacitation. This highlights the importance of workload management and mental health in the workplace.
+
+Through engaging gameplay, students learn these concepts in a practical, interactive way, gaining a deeper understanding of project management and teamwork in a development environment.
 
 **Dev-a-station** is a multiplayer, top-down game that simulates a Kanban board and visualisation of workflow. 
 The game map represents a Kanban board, with at least one player in each column, each having different roles but 
