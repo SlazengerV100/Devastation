@@ -18,6 +18,7 @@
 1. Should each game played be represented as an entire project or just a sprint? **This will be decided later**
 1. Implement a grid-based movement
 1. Make the tickets physical objects
+1. Alex, Kahu and Anthony are going to primarily work on front end. Nate, Joseph and Rene will primarily work on the back end.
 
 ## Action Items
 - [ ] Create another repository for game-specific requirements
