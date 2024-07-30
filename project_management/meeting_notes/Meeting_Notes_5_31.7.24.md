@@ -14,16 +14,17 @@
 - Group whiteboard session to create backend class diagram https://gitlab.ecs.vuw.ac.nz/manninalex/engr302-project/-/issues/14
 
 ## Discussion Points
-1. 
+1. Dicussed whether tickets should come in with a known total time and hidden tasks or completely blank. The first option will ensure the project manager does not have too much to do and is not unfairly the best role in the game. The second option means the 'Plan' room will have workstations.
+1. Should each game played be represented as an entire project or just a sprint? **This will be decided later**
+1. Implement a grid-based movement
+1. Make the tickets physical objects
 
 ## Action Items
-- [ ] [Assignee 1]
-
-## Additional Notes
-- [Any additional notes or remarks from the meeting]
+- [ ] Create another repository for game-specific requirements
+- [ ] Complete game-specific requirements
+- [ ] Create UML Class Diagram for back end
+- [ ] Begin creation of prototype for front end (Figma)
 
 ## Missing Attendees
 
-### Full Name
-- **Reason:** [Reason for missing the meeting]
-- **Reallocation:** [What will be done by this team member to compensate]
+None
