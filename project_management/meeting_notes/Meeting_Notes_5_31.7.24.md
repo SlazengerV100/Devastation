@@ -22,6 +22,10 @@
 1. Had a discussion on whether game state needs to be stored in a database or not. The discussion reuslted in us deciding game state data does not need to be stored in a database and it will just be stored in program variable instnaces 
 1. Rene, Anthony and Alex had the idea that the game has pre defined levels. This means that the type of tickets and when they arrive should be pre determinded and designed by us in a way that means each level is feasible, a good amount of challege without being impossible. 
 
+This is the mock paper version of the game we made and used in this meeting
+![Paper Game](images/IMG_5929.jpg)
+
+
 ## Action Items
 - [ ] Create another repository for game-specific requirements
 - [ ] Complete game-specific requirements
