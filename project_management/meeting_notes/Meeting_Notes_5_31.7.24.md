@@ -19,6 +19,8 @@
 1. Implement a grid-based movement
 1. Make the tickets physical objects
 1. Alex, Kahu and Anthony are going to primarily work on front end. Nate, Joseph and Rene will primarily work on the back end.
+1. Had a discussion on whether game state needs to be stored in a database or not. The discussion reuslted in us deciding game state data does not need to be stored in a database and it will just be stored in program variable instnaces 
+1. Rene, Anthony and Alex had the idea that the game has pre defined levels. This means that the type of tickets and when they arrive should be pre determinded and designed by us in a way that means each level is feasible, a good amount of challege without being impossible. 
 
 ## Action Items
 - [ ] Create another repository for game-specific requirements
