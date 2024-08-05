@@ -32,7 +32,7 @@ Each sprint will follow the same format with 6 columns, and each sprint will be 
 - **Review**: Tickets that have passed all unit tests and are awaiting review from 2 reviewers.
 - **Closed**: Merged tickets.
 
-An example of this format can be seen here: ![Kanban Board Example](./src/kanbanBoard.png)
+An example of this format can be seen here: ![Kanban Board Example](src/kanbanBoard.png)
 
 # Work Lifecycle
 
