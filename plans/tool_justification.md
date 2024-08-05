@@ -64,7 +64,7 @@
 
 **Evaluation:**
 - **Pros:** Firebase offers real-time database capabilities, easy-to-use SDKs, and built-in authentication, which can simplify backend development and data management.
-- **Decision:** The team realised that storing game data in a database was not necessary for the project’s objectives. Therefore, they chose to handle game state management within the application logic instead of using Firebase. There have been ideas to store some perstant data such as pre configured game levels and high scores. If we do end up needing to store and retrieve persistant storage, we will most. likely use Firebase
+- **Decision:** The team realised that storing game data in a database was not necessary for the project’s objectives. Therefore, they chose to handle game state management within the application logic instead of using Firebase. There have been ideas to store some perstant data such as pre configured game levels and high scores. If we do end up needing to store and retrieve persistant storage, we will most likely use Firebase
 
 
 
