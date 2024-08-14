@@ -26,6 +26,18 @@ The app provides a basic chat interface where users can:
     - **`index.html`**: Provides a user interface for connecting, sending, and receiving messages.
     - **`app.js`**: Contains JavaScript code to handle WebSocket connections and interactions.
 
+## Dependencies
+
+The project uses the following dependencies:
+
+- **`spring-boot-starter-web`**: Provides  components for building a web application, including RESTful APIs and embedded web server capabilities.
+- **`spring-boot-starter-websocket`**: Adds WebSocket support to the Spring Boot application, enabling real-time communication.
+- **`webjars-locator-core`**: Helps in locating web assets (JavaScript, CSS) packaged as WebJars.
+- **`sockjs-client`**: Provides a JavaScript library that offers WebSocket-like functionality over various transport protocols for better cross-browser support.
+- **`stomp-websocket`**: A JavaScript library that implements the STOMP protocol, enabling messaging between the client and server over WebSockets.
+- **`bootstrap`**: A front-end framework for designing responsive and visually appealing web interfaces.
+- **`jquery`**: A JavaScript library that simplifies DOM manipulation, event handling, and Ajax interactions.
+
 ## Requirements
 
 - **Java 17**: Make sure you have Java 17 installed on your machine.
