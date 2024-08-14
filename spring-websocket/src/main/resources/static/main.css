@@ -12,3 +12,20 @@ body {
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
+
+.circle {
+    height: 50px;
+    width: 50px;
+    background-color: darkred;
+    border-radius: 50%;
+    position: absolute; /* Allows for dynamic positioning */
+}
+
+.canvas{
+    height: 500px;
+    width: 500px;
+    background-color: #555;
+    position: absolute;
+    left: 50px;
+    top: 350px;
+}
