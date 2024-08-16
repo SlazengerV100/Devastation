@@ -2,8 +2,8 @@ package com.group3.springwebsocket;
 
 public class State {
 
-    private int x;
-    private int y;
+    private int x = 0;
+    private int y = 0;
 
     public int getX() {
         return x;

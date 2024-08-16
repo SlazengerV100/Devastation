@@ -37,10 +37,14 @@ public class StateController {
                 case "right":
                     if (x < 450) x += 20;
                     break;
+                default:
+                    System.out.println("Unknown direction: " + data.getDirection());
+                    return;
             }
 
             // Update the state
             stateService.updateState(x, y);
+            System.out.println("State updated to x=" + x + ", y=" + y);
 
             // Broadcast the updated state to all connected clients
             socketIOServer.getBroadcastOperations().sendEvent("stateUpdate", stateService.getState());
@@ -48,6 +52,7 @@ public class StateController {
 
         // When a client connects, send the current state
         socketIOServer.addConnectListener(client -> {
+            System.out.println("Client connected: " + client.getSessionId());
             client.sendEvent("stateUpdate", stateService.getState());
         });
     }
