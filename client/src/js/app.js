@@ -1,6 +1,11 @@
-import { io } from 'socket.io-client';
+import io from 'socket.io-client';
 
-const socket = io('http://localhost:9092'); // Replace with your server's URL and port
+const socket = io('http://localhost:9092');
+
+let currentX = 0;
+let currentY = 0;
+const ballSize = 50; // Size of the ball
+const canvasSize = 500; // Size of the canvas
 
 // Handle connection
 socket.on('connect', () => {
@@ -12,70 +17,57 @@ socket.on('disconnect', () => {
     console.log('Disconnected from the server');
 });
 
-// Handle receiving greetings from the server
-socket.on('greeting', (data) => {
-    console.log('Received greeting: ' + data.content);
-    showGreeting(data.content);
-});
-
-// Handle receiving state updates from the server
+// Handle state updates from the server
 socket.on('stateUpdate', (state) => {
     console.log('Received state update: ', state);
-    showState(state);
+    updateBallPosition(state.x, state.y);
 });
 
-// Send a greeting message to the server
-function sendName() {
-    const name = document.getElementById('name').value;
-    socket.emit('message', { name });
-}
-
-// Show the greeting in the UI
-function showGreeting(message) {
-    const greetingsElement = document.getElementById('greetings');
-    const newRow = greetingsElement.insertRow();
-    const cell = newRow.insertCell(0);
-    cell.textContent = message;
-}
-
-// Send move commands to the server
+// Functions to move the ball
 function moveUp() {
-    socket.emit('move', { x: currentX, y: currentY - 10 });
+    if (currentY > 0) {
+        currentY -= 20;
+        updateState(currentX, currentY);
+    }
 }
 
 function moveDown() {
-    socket.emit('move', { x: currentX, y: currentY + 10 });
+    if (currentY < canvasSize - ballSize) {
+        currentY += 20;
+        updateState(currentX, currentY);
+    }
 }
 
 function moveLeft() {
-    socket.emit('move', { x: currentX - 10, y: currentY });
+    if (currentX > 0) {
+        currentX -= 20;
+        updateState(currentX, currentY);
+    }
 }
 
 function moveRight() {
-    socket.emit('move', { x: currentX + 10, y: currentY });
+    if (currentX < canvasSize - ballSize) {
+        currentX += 20;
+        updateState(currentX, currentY);
+    }
 }
 
-// Update the circle's position based on the state
-function showState(state) {
-    const circle = document.querySelector('.circle');
-    currentX = state.x;
-    currentY = state.y;
-    circle.style.left = `${state.x}px`;
-    circle.style.top = `${state.y}px`;
+// Update the server with the new state
+function updateState(x, y) {
+    socket.emit('move', { x, y });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('connect').addEventListener('click', () => {
-        socket.connect();
-    });
+// Update the ball position on the screen
+function updateBallPosition(x, y) {
+    const ball = document.querySelector('.circle');
+    ball.style.left = `${x}px`;
+    ball.style.top = `${y}px`;
+    currentX = x;
+    currentY = y;
+}
 
-    document.getElementById('disconnect').addEventListener('click', () => {
-        socket.disconnect();
-    });
-
-    document.getElementById('send').addEventListener('click', sendName);
-    document.getElementById('up').addEventListener('click', moveUp);
-    document.getElementById('down').addEventListener('click', moveDown);
-    document.getElementById('left').addEventListener('click', moveLeft);
-    document.getElementById('right').addEventListener('click', moveRight);
-});
+// Attach button events
+document.getElementById('up').addEventListener('click', moveUp);
+document.getElementById('down').addEventListener('click', moveDown);
+document.getElementById('left').addEventListener('click', moveLeft);
+document.getElementById('right').addEventListener('click', moveRight);

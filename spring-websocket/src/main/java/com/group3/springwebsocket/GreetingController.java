@@ -16,9 +16,16 @@ public class GreetingController {
 
     @PostConstruct
     private void init() {
-        socketIOServer.addEventListener("message", HelloMessage.class, (client, data, ackSender) -> {
-            Greeting greeting = new Greeting("Hello, " + data.getName() + "!");
-            socketIOServer.getBroadcastOperations().sendEvent("greeting", greeting);
+        // Handle incoming "message" events from clients
+        socketIOServer.addEventListener("message", String.class, (client, data, ackSender) -> {
+            // Print the received message
+            System.out.println("Received message: " + data);
+
+            // Send a response back to the client
+            client.sendEvent("response", "Server received your message: " + data);
+
+            // Optionally broadcast the message to all clients
+            socketIOServer.getBroadcastOperations().sendEvent("broadcast", "Broadcasting: " + data);
         });
     }
 }
