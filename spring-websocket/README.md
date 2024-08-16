@@ -14,6 +14,7 @@ The app provides a basic chat interface where users can:
 1. Connect to a WebSocket server.
 2. Send a greeting message with their name.
 3. Receive a personalized greeting message from the server in real-time.
+4. Allows users to control the position of a red circle. The circles position is stored in the server.
 
 ### Components
 
