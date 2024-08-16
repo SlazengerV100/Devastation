@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "pixi.js": "^6.0.0",
-    "socket.io-client": "^4.7.5"
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3"
   },
   "devDependencies": {
     "vite": "^3.0.0"

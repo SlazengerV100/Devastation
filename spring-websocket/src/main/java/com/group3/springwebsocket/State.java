@@ -1,15 +1,9 @@
-package com.group3.spring_websocket;
+package com.group3.springwebsocket;
 
 public class State {
+
     private int x;
     private int y;
-
-    public State() {}
-
-    public State(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
 
     public int getX() {
         return x;
@@ -27,4 +21,3 @@ public class State {
         this.y = y;
     }
 }
-
