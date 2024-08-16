@@ -2,11 +2,6 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:9092');
 
-let currentX = 0;
-let currentY = 0;
-const ballSize = 50; // Size of the ball
-const canvasSize = 500; // Size of the canvas
-
 // Handle connection
 socket.on('connect', () => {
     console.log('Connected to the server');
@@ -25,36 +20,19 @@ socket.on('stateUpdate', (state) => {
 
 // Functions to move the ball
 function moveUp() {
-    if (currentY > 0) {
-        currentY -= 20;
-        updateState(currentX, currentY);
-    }
+    socket.emit('move', { direction: 'up' });
 }
 
 function moveDown() {
-    if (currentY < canvasSize - ballSize) {
-        currentY += 20;
-        updateState(currentX, currentY);
-    }
+    socket.emit('move', { direction: 'down' });
 }
 
 function moveLeft() {
-    if (currentX > 0) {
-        currentX -= 20;
-        updateState(currentX, currentY);
-    }
+    socket.emit('move', { direction: 'left' });
 }
 
 function moveRight() {
-    if (currentX < canvasSize - ballSize) {
-        currentX += 20;
-        updateState(currentX, currentY);
-    }
-}
-
-// Update the server with the new state
-function updateState(x, y) {
-    socket.emit('move', { x, y });
+    socket.emit('move', { direction: 'right' });
 }
 
 // Update the ball position on the screen
@@ -62,8 +40,6 @@ function updateBallPosition(x, y) {
     const ball = document.querySelector('.circle');
     ball.style.left = `${x}px`;
     ball.style.top = `${y}px`;
-    currentX = x;
-    currentY = y;
 }
 
 // Attach button events
