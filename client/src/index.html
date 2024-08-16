@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dev-a-station</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-        }
-        #app {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
-    </style>
+    <title>WebSocket Client</title>
 </head>
 <body>
-<div id="app"></div>
-<script type="module" src="main.js"></script>
+<h1>WebSocket Client</h1>
+
+<div>
+    <button id="connect">Connect</button>
+    <button id="disconnect" disabled>Disconnect</button>
+</div>
+
+<div>
+    <input type="text" id="name" placeholder="Enter your name">
+    <button id="send">Send</button>
+</div>
+
+<div id="conversation" style="display:none;">
+    <h2>Greetings</h2>
+    <table id="greetings">
+        <tbody></tbody>
+    </table>
+</div>
+
+<div>
+    <button id="up">Up</button>
+    <button id="down">Down</button>
+    <button id="left">Left</button>
+    <button id="right">Right</button>
+</div>
+
+<div style="position: relative; width: 500px; height: 500px; border: 1px solid #ddd; margin-top: 20px; background-color: #f5f5f5;">
+    <div class="circle" style="position: absolute; width: 50px; height: 50px; background-color: red; border-radius: 50%;"></div>
+</div>
+
+<script type="module" src="./js/app.js"></script>
 </body>
 </html>
