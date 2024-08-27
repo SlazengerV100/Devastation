@@ -3,20 +3,23 @@ import * as PIXI from 'pixi.js';
 import { Stage, Container, Sprite, Text, Graphics } from '@pixi/react';
 import { TextStyle } from 'pixi.js';
 
-const GameCanvas = ({ state }) => {
-    const [bunnyX, setBunnyX] = useState(0);
-    const [bunnyY, setBunnyY] = useState(0);
+const GameCanvas = (props) => {
+    const spriteSize = 80;
+
+    const projectManagerImage = 'https://static.vecteezy.com/system/resources/previews/028/652/011/original/pixel-art-student-character-png.png';
+    const testerImage = 'https://static.vecteezy.com/system/resources/previews/027/190/731/original/pixel-art-black-t-shirt-man-character-png.png'
+    const developerImage = 'https://static.vecteezy.com/system/resources/previews/027/190/803/original/pixel-art-female-teacher-character-png.png'
+
+    const [projectManagerX, setProjectManagerX] = useState(0);
+    const [projectManagerY, setProjectManagerY] = useState(0);
+
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
     const blurFilter = new PIXI.filters.BlurFilter();
 
     useEffect(() => {
-        if (state == null) return;
 
-        // Update ball coordinates from state
-        setBunnyX(state.x);
-        setBunnyY(state.y);
-    }, [state]);
+    }, [props.gameState]);
 
     useEffect(() => {
         // Handle window resize
@@ -33,7 +36,8 @@ const GameCanvas = ({ state }) => {
         };
     }, []);
 
-    const bunnyUrl = 'https://pixijs.io/pixi-react/img/bunny.png';
+
+
 
     // Create a graphics object to draw the background
     const drawBackground = (g) => {
@@ -49,7 +53,13 @@ const GameCanvas = ({ state }) => {
                 draw={drawBackground}
                 zIndex={-1} // Ensure the background is behind other elements
             />
-            <Sprite image={bunnyUrl} x={bunnyX} y={bunnyY} />
+            <Sprite
+                image={projectManagerImage}
+                x={projectManagerX}
+                y={projectManagerY}
+                width={spriteSize}
+                height={spriteSize}
+            />
 
         </Stage>
     );

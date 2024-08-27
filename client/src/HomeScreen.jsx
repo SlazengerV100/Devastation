@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-const HomeScreen = ({ setPlayerTitle, isConnected, tryReconnect, gameState, setGameStarted }) => {
+const HomeScreen = ({ setPlayerTitle, isConnected, tryReconnect, gameState }) => {
     // Use default empty object if gameState is null
     const playerMap = gameState?.playerMap || {};
     const [selectedPlayer, setSelectedPlayer] = useState('');
@@ -9,8 +9,11 @@ const HomeScreen = ({ setPlayerTitle, isConnected, tryReconnect, gameState, setG
     // Handle change in selected player
     const handlePlayerSelection = (title) => {
         setSelectedPlayer(title);
-        setPlayerTitle(title);
     };
+
+    const handlePlayButton = () => {
+        setPlayerTitle(selectedPlayer);
+    }
 
     return (
         <div
@@ -46,7 +49,6 @@ const HomeScreen = ({ setPlayerTitle, isConnected, tryReconnect, gameState, setG
                                         style={{
                                             marginBottom: '10px',
                                             opacity: isActive ? 0.5 : 1,
-                                            filter: isActive ? 'blur(2px)' : 'none',
                                             cursor: isActive ? 'not-allowed' : 'pointer',
                                             display: 'flex',
                                             alignItems: 'center'
@@ -65,23 +67,22 @@ const HomeScreen = ({ setPlayerTitle, isConnected, tryReconnect, gameState, setG
                                 );
                             })}
                         </ul>
-                        {selectedPlayer && (
-                            <button
-                                onClick={() => setGameStarted(true)}
-                                style={{
-                                    padding: '10px 20px',
-                                    fontSize: '1rem',
-                                    cursor: 'pointer',
-                                    backgroundColor: '#28a745',
-                                    color: '#FFF',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    marginTop: '20px'
-                                }}
-                            >
-                                Play
-                            </button>
-                        )}
+                        <button
+                            onClick={handlePlayButton}
+                            style={{
+                                padding: '10px 20px',
+                                fontSize: '1rem',
+                                cursor: 'pointer',
+                                backgroundColor: '#28a745',
+                                color: '#FFF',
+                                border: 'none',
+                                borderRadius: '5px',
+                                marginTop: '20px',
+                                visibility: selectedPlayer ? 'visible' : 'hidden'
+                            }}
+                        >
+                            Play
+                        </button>
                     </div>
                 </>
             ) : (
