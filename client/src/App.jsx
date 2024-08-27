@@ -11,9 +11,20 @@ const App = () => {
 
     const stompClientRef = useRef(null); // Using useRef to store stompClient
 
+    // Attempt to connect to WebSocket upon mounting
     useEffect(() => {
         connect();
     }, [])
+
+    // Upon mounting, check if playerTitle has previously been set
+    useEffect(() => {
+        if (sessionStorage.getItem('playerTitle')) {
+            setPlayerTitle(sessionStorage.getItem('playerTitle'));
+            setGameStarted(true);
+        }
+    }, []);
+
+    // Connect to WebSocket
     const connect = () => {
         const socket = new WebSocket('ws://localhost:8080/stomp-endpoint'); // Replace with your server URL
         const client = Stomp.over(socket);
@@ -33,6 +44,7 @@ const App = () => {
         });
     }
 
+    // Disconnect from WebSocket
     const disconnect = () => {
         if (stompClientRef.current && stompClientRef.current.connected) {
             stompClientRef.current.disconnect(() => {
@@ -43,11 +55,12 @@ const App = () => {
         }
     }
 
+    // Set up key press listening and handling of key presses for player movement
     useEffect(() => {
         const handleKeyPress = (event) => {
             const client = stompClientRef.current;
             if (!client || !client.connected) {
-                console.warn('STOMP client is not connected.');
+                console.warn('client is not connected.');
                 return;
             }
 
@@ -83,18 +96,9 @@ const App = () => {
 
     }, [playerTitle]);
 
+    // Set player title when it is set in the HomeScreen component and start game
     useEffect(() => {
-        if (sessionStorage.getItem('playerTitle')) {
-            setPlayerTitle(sessionStorage.getItem('playerTitle'));
-            setGameStarted(true);
-        }
-    }, []);
-
-    useEffect(() => {
-        console.log("Player Title: " + playerTitle);
-        console.log("stompClientRef: " + stompClientRef.current);
         if (playerTitle && stompClientRef.current && stompClientRef.current.connected) {
-            console.log("Set player name");
             sessionStorage.setItem('playerTitle', playerTitle);
             const activate = true;
             stompClientRef.current.send("/app/activatePlayer", {}, JSON.stringify({ playerTitle, activate }));
@@ -109,7 +113,7 @@ const App = () => {
                     ?
                     <HomeScreen setPlayerTitle={setPlayerTitle} isConnected={isConnected} tryReconnect={connect} gameState={gameState} />
                     :
-                    <GameCanvas playerTitle={playerTitle} />
+                    <GameCanvas playerTitle={playerTitle} gameState={gameState}/>
             }
         </div>
     );
