@@ -1,10 +1,10 @@
-package com;
+package engr302S3.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class ServerApplicationTests {
 
 	@Test
 	void contextLoads() {
