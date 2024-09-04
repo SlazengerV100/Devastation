@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import spriteSheetURL from '../../assets/testC.png';
 
-const SPRITE_HEIGHT = 48;
+const SPRITE_HEIGHT = 96;
 const SPRITE_WIDTH = 48;
 const baseTexture = PIXI.BaseTexture.from(spriteSheetURL);
 
@@ -36,7 +36,7 @@ export const fetchIdle = (direction = "DOWN") => {
     }
 
     const xOffset = offsetNum * SPRITE_WIDTH
-    const yOffset = 30
+    const yOffset = 0
     return fetchFrame(xOffset, yOffset, SPRITE_WIDTH, SPRITE_HEIGHT)
 }
 
