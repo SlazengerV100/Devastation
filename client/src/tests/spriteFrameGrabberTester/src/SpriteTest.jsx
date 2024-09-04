@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Stage, Sprite } from '@pixi/react';
-import {fetchIdle, fetchStillIdle} from '../../../js/spriteFrameGrabber.js'; // Assuming spriteFrameGrabber.js is in the same directory
+import {fetchDamage, fetchIdle, fetchRunning, fetchSitting, fetchStillIdle} from '../../../js/spriteFrameGrabber.js'; // Assuming spriteFrameGrabber.js is in the same directory
 
 const SpriteTest = () => {
     // State to hold the texture array
@@ -48,8 +48,11 @@ const SpriteTest = () => {
     // Update textures based on frame and direction changes
     useEffect(() => {
         const loadSprites = () => {
-            const newTextures = [fetchStillIdle(direction)];
+            const newTextures = [];
             newTextures.push(fetchIdle(direction,frame))
+            newTextures.push(fetchRunning(direction,frame))
+            newTextures.push(fetchSitting(direction,frame))
+            newTextures.push(fetchDamage(direction,frame))
             // Fetch texture for the current direction
             setTextures(newTextures);  // Store textures in state
         };
