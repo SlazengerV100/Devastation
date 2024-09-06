@@ -1,8 +1,6 @@
 package engr302S3.server.players;
 
 import engr302S3.server.ticketFactory.Ticket;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Optional;
 
@@ -57,6 +55,9 @@ public abstract class Techie extends Player {
         //TODO
     }
 
+    /**
+     * Implement station dependent logic
+     */
     @Override
     public void dropTicket() {
         if (this.getHeldTicket().isEmpty()) {
