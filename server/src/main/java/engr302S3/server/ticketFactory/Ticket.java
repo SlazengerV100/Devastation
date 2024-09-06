@@ -1,0 +1,33 @@
+package engr302S3.server.ticketFactory;
+
+import lombok.Getter;
+
+import java.util.ArrayList;
+
+/**
+ * Ticket contains a collection of tasks for the players to complete. Tickets keep track of how
+ * long they have been active for the purpose of scoring.
+ */
+@Getter
+public class Ticket {
+
+  private final ArrayList<Task> tasks;
+  private final String ticketTitle;
+  private int totalTime;
+  private final double blowOutProb;
+
+  Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks){
+    this.ticketTitle = title;
+    this.totalTime = totalTime;
+    this.blowOutProb = blowOutProb;
+    this.tasks = tasks;
+  }
+
+  /**
+   * Increments time the Ticket has been active.
+   */
+  public void incrementTime(){
+    totalTime++;
+  }
+
+}
