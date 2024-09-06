@@ -1,5 +1,9 @@
 package engr302S3.server;
 
+import engr302S3.server.players.Developer;
+import engr302S3.server.players.Player;
+import engr302S3.server.players.ProjectManager;
+import engr302S3.server.players.Tester;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
@@ -9,12 +13,12 @@ import java.util.Map;
 @Getter
 @Service
 public class StateService {
-    private Map<String, Player> playerMap = new HashMap<>();
+    private final Map<String, Player> playerMap = new HashMap<>();
 
     StateService(){
-        playerMap.put("Project Manager", new Player(Player.Role.PROJECT_MANAGER, 0, 50, false));
-        playerMap.put("Developer", new Player(Player.Role.DEVELOPER, 100, 50, false));
-        playerMap.put("Tester",  new Player(Player.Role.TESTER, 200, 50, false));
+        playerMap.put("Project Manager", new ProjectManager(0, 50, false));
+        playerMap.put("Developer", new Developer(100, 50, false));
+        playerMap.put("Tester",  new Tester(200, 50, false));
     }
 
     public void movePlayer(String playerTitle, String direction) {
