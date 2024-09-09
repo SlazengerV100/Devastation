@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import * as PIXI from 'pixi.js';
-import { Stage, Container, Sprite, Graphics , Text} from '@pixi/react';
+import { Stage, Graphics, Text } from '@pixi/react';
 import Player from "./Sprite.jsx";
 
 const GameCanvas = ({ playerTitle, gameState }) => {
     const [frame, setFrame] = useState(0);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-
     const [players, setPlayers] = useState([]);
+    const [shouldUpdateBackground, setShouldUpdateBackground] = useState(true);
+    const [resizeTimeout, setResizeTimeout] = useState(null);
 
-    // This is to increment the client side frame
     useEffect(() => {
-        const interval = setInterval(() => {
-            setFrame(prev => prev + 1)
-        }, 100)
-        //clean up function
-        return () => clearInterval(interval)
-    }, [])
+        let animationFrameId;
+        const animate = () => {
+            setFrame(prev => prev + 1);
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
+        animationFrameId = requestAnimationFrame(animate);
+
+        return () => cancelAnimationFrame(animationFrameId);
+    }, []);
 
     useEffect(() => {
         // Parse the gameState and update the player positions
@@ -33,35 +37,44 @@ const GameCanvas = ({ playerTitle, gameState }) => {
         }
     }, [gameState]);
 
-    useEffect(() => {
-        // Handle window resize
-        const handleResize = () => {
+    // Handle window resize
+    const handleResize = useCallback(() => {
+        if (resizeTimeout) {
+            clearTimeout(resizeTimeout);
+        }
+        const timeout = setTimeout(() => {
             setWindowWidth(window.innerWidth);
             setWindowHeight(window.innerHeight);
-        };
+            setShouldUpdateBackground(true); // Flag to update background on resize
+        }, 200);  // Adjust delay as needed
+        setResizeTimeout(timeout);
+    }, [resizeTimeout]);
 
+    useEffect(() => {
         window.addEventListener('resize', handleResize);
 
-        // Cleanup event listener on component unmount
         return () => {
             window.removeEventListener('resize', handleResize);
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout); // Clean up timeout on unmount
+            }
         };
-    }, []);
+    }, [handleResize, resizeTimeout]);
 
     // Create a graphics object to draw the background
     const drawBackground = (g) => {
-        g.clear();
-        g.beginFill(0xf4f3ef); // Set the background color
-        g.drawRect(0, 0, windowWidth, windowHeight);
-        g.endFill();
+        if (shouldUpdateBackground) {
+            g.clear();
+            g.beginFill(0xf4f3ef); // Set the background color
+            g.drawRect(0, 0, windowWidth, windowHeight);
+            g.endFill();
+            setShouldUpdateBackground(false); // Prevent further updates until needed
+        }
     };
 
     return (
         <Stage width={windowWidth} height={windowHeight - 7}>
-            <Graphics
-                draw={drawBackground}
-                zIndex={-1} // Ensure the background is behind other elements
-            />
+            <Graphics draw={drawBackground} zIndex={-1} />
             <Text
                 text={`You are ${playerTitle}`}
                 x={windowWidth / 2} // Center horizontally
@@ -74,10 +87,9 @@ const GameCanvas = ({ playerTitle, gameState }) => {
                     align: 'center',
                 })}
             />
-            {players.map((p, i) => (<Player key={i} player={p} frame={frame}/>))}
+            {players.map((p, i) => <Player key={i} player={p} frame={frame} />)}
         </Stage>
     );
 };
 
 export default GameCanvas;
-

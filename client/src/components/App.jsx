@@ -9,14 +9,13 @@ const App = () => {
     const [playerTitle, setPlayerTitle] = useState(null);
     const [gameState, setGameState] = useState(null);
 
-    const stompClientRef = useRef(null); // Using useRef to store stompClient
+    const stompClientRef = useRef(null);
 
-    // Attempt to connect to WebSocket upon mounting
     useEffect(() => {
         connect();
-    }, [])
+        return () => disconnect();
+    }, []);
 
-    // Upon mounting, check if playerTitle has previously been set
     useEffect(() => {
         if (sessionStorage.getItem('playerTitle')) {
             setPlayerTitle(sessionStorage.getItem('playerTitle'));
@@ -24,15 +23,14 @@ const App = () => {
         }
     }, []);
 
-    // Connect to WebSocket
     const connect = () => {
-        const socket = new WebSocket('ws://localhost:8080/stomp-endpoint'); // Replace with your server URL
+        const socket = new WebSocket('ws://localhost:8080/stomp-endpoint');
         const client = Stomp.over(socket);
 
         client.connect({}, (frame) => {
             console.log('Connected: ' + frame);
             setConnected(true);
-            stompClientRef.current = client; // Update stompClientRef with the connected client
+            stompClientRef.current = client;
             client.subscribe('/topic/state', (stateUpdate) => {
                 const state = JSON.parse(stateUpdate.body);
                 setGameState(state);
@@ -44,82 +42,72 @@ const App = () => {
         });
     }
 
-    // Disconnect from WebSocket
     const disconnect = () => {
         if (stompClientRef.current && stompClientRef.current.connected) {
             stompClientRef.current.disconnect(() => {
                 console.log('Disconnected');
                 setConnected(false);
-                stompClientRef.current = null; // Clear stompClientRef on disconnect
+                stompClientRef.current = null;
             });
         }
     }
 
-    // Set up key press listening and handling of key presses for player movement
-    useEffect(() => {
-        const handleKeyPress = (event) => {
-            const client = stompClientRef.current;
-            if (!client || !client.connected) {
-                console.warn('client is not connected.');
+    const handleKeyPress = useCallback((event) => {
+        const client = stompClientRef.current;
+        if (!client || !client.connected) {
+            console.warn('client is not connected.');
+            return;
+        }
+
+        let direction;
+        switch (event.key) {
+            case 'ArrowUp':
+                direction = "UP";
+                break;
+            case 'ArrowDown':
+                direction = "DOWN";
+                break;
+            case 'ArrowLeft':
+                direction = "LEFT";
+                break;
+            case 'ArrowRight':
+                direction = "RIGHT";
+                break;
+            default:
                 return;
-            }
+        }
 
-            let direction;
-            switch (event.key) {
-                case 'ArrowUp':
-                    direction = "UP";
-                    break;
-                case 'ArrowDown':
-                    direction = "DOWN";
-                    break;
-                case 'ArrowLeft':
-                    direction = "LEFT";
-                    break;
-                case 'ArrowRight':
-                    direction = "RIGHT";
-                    break;
-                default:
-                    return; // No action needed for other keys
-            }
-
-            if (playerTitle) {
-                client.send("/app/movePlayer", {}, JSON.stringify({ playerTitle, direction }));
-            } else if (sessionStorage.getItem('playerTitle')) {
-                setPlayerTitle(sessionStorage.getItem('playerTitle'))
-                client.send("/app/movePlayer", {}, JSON.stringify({ playerTitle, direction }));
-            } else {
-                console.warn('Player title is not set.');
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyPress);
-
+        const currentTitle = playerTitle || sessionStorage.getItem('playerTitle');
+        if (currentTitle) {
+            client.send("/app/movePlayer", {}, JSON.stringify({ playerTitle: currentTitle, direction }));
+        } else {
+            console.warn('Player title is not set.');
+        }
     }, [playerTitle]);
 
-    // Set player title when it is set in the HomeScreen component and start game
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
+
     useEffect(() => {
         if (playerTitle && stompClientRef.current && stompClientRef.current.connected) {
             sessionStorage.setItem('playerTitle', playerTitle);
-            const activate = true;
-            stompClientRef.current.send("/app/activatePlayer", {}, JSON.stringify({ playerTitle, activate }));
+            stompClientRef.current.send("/app/activatePlayer", {}, JSON.stringify({ playerTitle, activate: true }));
             setGameStarted(true);
         }
     }, [playerTitle]);
 
     return (
         <div>
-            {
-                !gameStarted
-                    ?
-                    <HomeScreen setPlayerTitle={setPlayerTitle} isConnected={isConnected} tryReconnect={connect} gameState={gameState} />
-                    :
-                    <GameCanvas playerTitle={playerTitle} gameState={gameState}/>
+            {!gameStarted
+                ? <HomeScreen setPlayerTitle={setPlayerTitle} isConnected={isConnected} tryReconnect={connect} gameState={gameState} />
+                : <GameCanvas playerTitle={playerTitle} gameState={gameState} />
             }
         </div>
     );
 };
 
 export default App;
-
-
-
