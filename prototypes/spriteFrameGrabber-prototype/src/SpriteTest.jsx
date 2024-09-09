@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Stage, Sprite } from '@pixi/react';
-import {fetchDamage, fetchIdle, fetchRunning, fetchSitting, fetchStillIdle} from '../../../js/spriteFrameGrabber.js'; // Assuming spriteFrameGrabber.js is in the same directory
+import { fetchDamage, fetchIdle, fetchRunning, fetchSitting, fetchStillIdle } from '../../../client/src/js/spriteFrameGrabber.js';
 
 const SpriteTest = () => {
     // State to hold the texture array
