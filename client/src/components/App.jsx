@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Stomp from 'stompjs';
-import GameCanvas from './GameCanvas';
+import GameCanvas from './GameCanvas.jsx';
 import HomeScreen from "./HomeScreen.jsx";
 
 const App = () => {

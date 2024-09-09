@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import * as PIXI from 'pixi.js';
 import { Stage, Container, Sprite, Graphics , Text} from '@pixi/react';
-import {TextStyle} from "pixi.js";
+import Player from "./Sprite.jsx";
 
 const GameCanvas = ({ playerTitle, gameState }) => {
-    const spriteSize = 80;
-
-    const playerImages = {
-        "PROJECT_MANAGER": 'https://static.vecteezy.com/system/resources/previews/028/652/011/original/pixel-art-student-character-png.png',
-        "TESTER": 'https://static.vecteezy.com/system/resources/previews/027/190/731/original/pixel-art-black-t-shirt-man-character-png.png',
-        "DEVELOPER": 'https://static.vecteezy.com/system/resources/previews/027/190/803/original/pixel-art-female-teacher-character-png.png',
-    };
-
+    const [frame, setFrame] = useState(0);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
     const [players, setPlayers] = useState([]);
+
+    // This is to increment the client side frame
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setFrame(prev => prev + 1)
+            console.log(frame)
+        }, 50)
+        //clean up function
+        return () => clearInterval(interval)
+    }, [])
 
     useEffect(() => {
         // Parse the gameState and update the player positions
@@ -72,28 +75,7 @@ const GameCanvas = ({ playerTitle, gameState }) => {
                     align: 'center',
                 })}
             />
-            {players.map(player => (
-                <Container key={player.name}>
-                    <Sprite
-                        image={playerImages[player.role]}
-                        x={player.x}
-                        y={player.y}
-                        width={spriteSize}
-                        height={spriteSize}
-                    />
-                    <Text
-                        text={player.name}
-                        x={player.x}
-                        y={player.y + spriteSize + 5}
-                        style={{
-                            fontFamily: 'Arial',
-                            fontSize: 14,
-                            fill: '#000000',
-                            align: 'center',
-                        }}
-                    />
-                </Container>
-            ))}
+            {players.map((p, i) => (<Player key={i} player={p}/>))}
         </Stage>
     );
 };
