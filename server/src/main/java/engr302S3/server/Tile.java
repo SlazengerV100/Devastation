@@ -2,14 +2,17 @@ package engr302S3.server;
 
 import engr302S3.server.players.Player;
 import engr302S3.server.ticketFactory.Ticket;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
 public class Tile {
     private final Room room;
     private final int x;
     private final int y;
-    private Player player;
-    private Station station;
-    private Ticket ticket;
+    @Setter private Player player;
+    @Setter private Station station;
+    @Setter private Ticket ticket;
 
     public Tile(Room room, int x, int y) {
         this.room = room;
@@ -20,6 +23,8 @@ public class Tile {
     public enum Room {
         PLANNING,
         DEVELOPMENT,
-        TESTING
+        TESTING,
+        WALL,
+        EMPTY
     }
 }

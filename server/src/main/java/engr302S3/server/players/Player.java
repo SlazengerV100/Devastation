@@ -32,6 +32,12 @@ public abstract class Player {
         this.active = active;
     }
 
+    public Player(Role role, boolean active) {
+        this.role = role;
+        this.heldTicket = Optional.empty();
+        this.active = active;
+    }
+
     /**
      * Drop currently held ticket, need to implement conditions for dropping at location (dependent on role)
      */

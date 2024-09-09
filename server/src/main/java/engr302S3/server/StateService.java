@@ -14,11 +14,24 @@ import java.util.Map;
 @Service
 public class StateService {
     private final Map<String, Player> playerMap = new HashMap<>();
+    private final Map<String, Station> stationMap = new HashMap<>();
+    private final Tile[][] map;
 
     StateService(){
-        playerMap.put("Project Manager", new ProjectManager(0, 50, false));
-        playerMap.put("Developer", new Developer(100, 50, false));
-        playerMap.put("Tester",  new Tester(200, 50, false));
+        playerMap.put("PM", new ProjectManager(false));
+        playerMap.put("DV", new Developer(false));
+        playerMap.put("TS",  new Tester(false));
+
+        stationMap.put("FRE", new Station(StationType.FRONTEND));
+        stationMap.put("BKE", new Station(StationType.BACKEND));
+        stationMap.put("API", new Station(StationType.API));
+
+        stationMap.put("STA", new Station(StationType.STATIC_ANALYSIS));
+        stationMap.put("COV", new Station(StationType.COVERAGE_TESTING));
+        stationMap.put("UNI", new Station(StationType.UNIT_TESTING));
+
+
+        this.map = MapLoader.loadMap( playerMap, stationMap);
     }
 
     public void movePlayer(String playerTitle, String direction) {
@@ -60,5 +73,6 @@ public class StateService {
         Player player = playerMap.get(playerTitle);
         player.setActive(false);
     }
+
 
 }

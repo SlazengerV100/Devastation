@@ -18,6 +18,13 @@ public abstract class Techie extends Player {
         this.disabled = false;
     }
 
+    public Techie(Role role, boolean active) {
+        super(role, active);
+        this.ticketsInAreaArray = new Ticket[10];
+        this.ticketsInArea = 0;
+        this.disabled = false;
+    }
+
     /**
      * Increase burnout dependent on amount of tickets in the area
      */
