@@ -1,0 +1,71 @@
+# Java / Spring Boot related
+/target/
+/out/
+/*.war
+/*.jar
+
+# Maven
+/.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+**/mvnw
+**/mvnw.cmd
+**/.mvn/wrapper
+
+# Logs
+*.log
+**/logs/
+/**/log/
+/**/*.log
+
+# Database
+*.h2.db
+*.mv.db
+
+# Environment variables
+.env
+
+# JS/React related
+/node_modules/
+/dist/
+/build/
+/.yarn/
+.pnp.*
+
+# IDE Specific - IntelliJ
+/.idea/
+/.idea/*
+!.idea/workspace.xml
+!.idea/description.xml
+!.idea/modules.xml
+!.idea/vcs.xml
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/libraryDependencies.xml
+
+# IntelliJ generated files
+*.iml
+*.iws
+.idea_modules/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore specific VS Code settings
+.vscode/
+
+# Other IDEs
+/.project
+/.classpath
+/.factorypath
