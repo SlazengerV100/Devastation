@@ -14,8 +14,7 @@ const GameCanvas = ({ playerTitle, gameState }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setFrame(prev => prev + 1)
-            console.log(frame)
-        }, 50)
+        }, 100)
         //clean up function
         return () => clearInterval(interval)
     }, [])
@@ -75,7 +74,7 @@ const GameCanvas = ({ playerTitle, gameState }) => {
                     align: 'center',
                 })}
             />
-            {players.map((p, i) => (<Player key={i} player={p}/>))}
+            {players.map((p, i) => (<Player key={i} player={p} frame={frame}/>))}
         </Stage>
     );
 };
