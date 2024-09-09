@@ -16,12 +16,22 @@ public abstract class Player {
         TESTER
     }
 
+    public enum Direction {
+        LEFT, RIGHT, UP, DOWN
+    }
+
+    public enum State {
+        RUNNING, IDLE, WORKING
+    }
+
     // Getters and Setters for role, x, y, and active
     // Fields to store the role, position, and active status of the player
     private final Role role;
     @Getter @Setter private int x, y;
     @Getter @Setter private boolean active;
     @Getter @Setter private Optional<Ticket> heldTicket; //setter doubles as pickup (no conditions needed)
+    @Getter @Setter private State state;
+    @Getter @Setter private Direction direction;
 
     // Constructor
     public Player(Role role, int x, int y, boolean active) {
@@ -30,6 +40,8 @@ public abstract class Player {
         this.y = y;
         this.heldTicket = Optional.empty();
         this.active = active;
+        this.direction = Direction.DOWN;
+        this.state = State.IDLE;
     }
 
     /**

@@ -15,10 +15,13 @@ public class StateController {
     @MessageMapping("/movePlayer")
     @SendTo("/topic/state")
     public State movePlayer(Movement movementRequest) {
-        // Update game state
-        stateService.movePlayer(movementRequest.getPlayerTitle(), movementRequest.getDirection());
+        // Update game state with direction and state
+        stateService.movePlayer(
+                movementRequest.getPlayerTitle(),
+                movementRequest.getDirection()
+        );
 
-        //Send back to client
+        // Send back to client with updated state
         return new State(stateService.getPlayerMap());
     }
 

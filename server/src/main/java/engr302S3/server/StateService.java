@@ -39,7 +39,7 @@ public class StateService {
                 return; // If the direction is not valid, do nothing
             }
         }
-
+        player.setDirection(Player.Direction.valueOf(direction));
         player.setX(newX);
         player.setY(newY);
     }
