@@ -1,8 +1,8 @@
 package engr302S3.server;
 
+import engr302S3.server.players.Player;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter

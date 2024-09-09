@@ -23,6 +23,7 @@ public class TicketFactory {
           "Dependency Version Upgrade",
           "Security Vulnerability Patch"
   );
+
   public static Ticket getTicket(){
     return new Ticket(generateTitle(), 0, generateBlowOutProb(), createTasks());
   }
@@ -46,14 +47,13 @@ public class TicketFactory {
     return random.nextDouble(20);
   }
 
-
   /**
    * Generate a random arraylist of tasks
    * Minimum amount is one task for developer
    * Maximum amount is three tasks for developer and three tasks for tester
    * @return ArrayList
    */
-  private static ArrayList<Task> createTasks(){
+  private static ArrayList<Task> createTasks() {
     ArrayList<Task> tasks = new ArrayList<>();
     int numStationTypesLeft = 6;
 
@@ -61,17 +61,16 @@ public class TicketFactory {
     ArrayList<StationType> stations = new ArrayList<>(List.of(StationType.values()));
     ArrayList<StationType> devStations = new ArrayList<>();
     ArrayList<StationType> testStations = new ArrayList<>(); //not used, but might find use later
-    for(StationType station:stations){
-      if(station.isTester()){
+    for (StationType station : stations) {
+      if (station.isTester()) {
         testStations.add(station);
-      }
-      else{
+      } else {
         devStations.add(station);
       }
     }
 
     Random random = new Random();
-    int taskAmount = random.nextInt(1,numStationTypesLeft+1); //the amount of tasks a ticket will have
+    int taskAmount = random.nextInt(1, numStationTypesLeft + 1); //the amount of tasks a ticket will have
 
     //there should always be at least one dev room task, so add a random dev station task first
     StationType station = devStations.get(random.nextInt(3));
@@ -79,11 +78,11 @@ public class TicketFactory {
     //remove the station from the list of valid stations
     numStationTypesLeft--;
     stations.remove(station);
-    if(taskAmount == 1){ //if there is only 1 task for this ticket then return the array
+    if (taskAmount == 1) { //if there is only 1 task for this ticket then return the array
       return tasks;
     }
     //if there are more than 1 assigned task to this ticket, then keep randomly selecting StationTypes
-    for(int i = 1; i<taskAmount; i++){
+    for (int i = 1; i < taskAmount; i++) {
       station = stations.get(random.nextInt(numStationTypesLeft));
       tasks.add(new Task(station));
       numStationTypesLeft--;

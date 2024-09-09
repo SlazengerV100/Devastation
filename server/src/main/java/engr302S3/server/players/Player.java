@@ -1,9 +1,13 @@
-package engr302S3.server;
+package engr302S3.server.players;
 
+import engr302S3.server.ticketFactory.Ticket;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Optional;
 
 @Getter
-public class Player {
+public abstract class Player {
 
     // Enum for role
     public enum Role {
@@ -14,34 +18,24 @@ public class Player {
 
     // Getters and Setters for role, x, y, and active
     // Fields to store the role, position, and active status of the player
-    private Role role;
-    private int x;
-    private int y;
-    private boolean active;
+    private final Role role;
+    @Getter @Setter private int x, y;
+    @Getter @Setter private boolean active;
+    @Getter @Setter private Optional<Ticket> heldTicket; //setter doubles as pickup (no conditions needed)
 
     // Constructor
     public Player(Role role, int x, int y, boolean active) {
         this.role = role;
         this.x = x;
         this.y = y;
+        this.heldTicket = Optional.empty();
         this.active = active;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+    /**
+     * Drop currently held ticket, need to implement conditions for dropping at location (dependent on role)
+     */
+    public abstract void dropTicket();
 
     @Override
     public String toString() {
