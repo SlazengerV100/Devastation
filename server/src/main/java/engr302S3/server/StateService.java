@@ -1,5 +1,6 @@
 package engr302S3.server;
 
+import engr302S3.server.devastation.Devastation;
 import engr302S3.server.players.Developer;
 import engr302S3.server.players.Player;
 import engr302S3.server.players.ProjectManager;
@@ -14,11 +15,15 @@ import java.util.Map;
 @Service
 public class StateService {
     private final Map<String, Player> playerMap = new HashMap<>();
+    private Devastation game;
+    private boolean gameStarted = false;
 
     StateService(){
         playerMap.put("Project Manager", new ProjectManager(0, 50, false));
         playerMap.put("Developer", new Developer(100, 50, false));
         playerMap.put("Tester",  new Tester(200, 50, false));
+
+        this.game = new Devastation(10,10);
     }
 
     public void movePlayer(String playerTitle, String direction) {
@@ -51,6 +56,11 @@ public class StateService {
         }
         Player player = playerMap.get(playerTitle);
         player.setActive(true);
+        // Start the game if it's the first player activation and the game hasn't started
+        if (!gameStarted) {
+            gameStarted = true;  // Mark that the game has started
+            game.runGame();
+        }
     }
 
     public void deactivatePlayer(String playerTitle){
@@ -60,5 +70,6 @@ public class StateService {
         Player player = playerMap.get(playerTitle);
         player.setActive(false);
     }
+
 
 }
