@@ -3,7 +3,6 @@ import React from "react";
 import {fetchIdle, fetchRunning, fetchSitting} from "../js/spriteFrameGrabber.js";
 
 const Player = ({ player, frame }) => {
-    console.log(player)
     const fetchFrame = (state, direction) => {
         switch(state) {
             case "IDLE":

@@ -21,7 +21,7 @@ public abstract class Player {
     }
 
     public enum State {
-        RUNNING, IDLE, WORKING
+        IDLE, WORKING
     }
 
     // Getters and Setters for role, x, y, and active

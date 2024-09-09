@@ -23,6 +23,7 @@ const GameCanvas = ({ playerTitle, gameState }) => {
         return () => cancelAnimationFrame(animationFrameId);
     }, []);
 
+    //TODO shouldn't need to do this, back end should send things in a cleaner format
     useEffect(() => {
         if (gameState && gameState.playerMap) {
             // Convert gameState.playerMap to an array of player objects
