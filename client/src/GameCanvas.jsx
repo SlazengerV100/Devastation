@@ -1,8 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react';
 import * as PIXI from 'pixi.js';
 import { Stage, Container, Sprite, Graphics , Text} from '@pixi/react';
-import {TextStyle} from "pixi.js";
 
+// eslint-disable-next-line react/prop-types
 const GameCanvas = ({ playerTitle, gameState }) => {
     const spriteSize = 80;
 
@@ -20,6 +21,7 @@ const GameCanvas = ({ playerTitle, gameState }) => {
     useEffect(() => {
         // Parse the gameState and update the player positions
         if (gameState && gameState.playerMap) {
+            // eslint-disable-next-line react/prop-types
             const playerArray = Object.entries(gameState.playerMap).map(([name, data]) => ({
                 name,
                 role: data.role,
