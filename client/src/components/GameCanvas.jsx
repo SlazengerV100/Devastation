@@ -12,13 +12,19 @@ const GameCanvas = ({ playerTitle, gameState }) => {
     const [resizeTimeout, setResizeTimeout] = useState(null);
 
     useEffect(() => {
-        let animationFrameId;
-        const animate = () => {
-            setFrame(prev => prev + 1);
-            animationFrameId = requestAnimationFrame(animate);
+        let lastUpdate = 0;
+        const fps = 10; // Desired frames per second
+        const frameInterval = 1000 / fps;
+
+        const animate = (timestamp) => {
+            if (timestamp - lastUpdate >= frameInterval) {
+                setFrame(prev => prev + 1);
+                lastUpdate = timestamp;
+            }
+            requestAnimationFrame(animate);
         };
 
-        animationFrameId = requestAnimationFrame(animate);
+        const animationFrameId = requestAnimationFrame(animate);
 
         return () => cancelAnimationFrame(animationFrameId);
     }, []);
