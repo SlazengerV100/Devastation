@@ -24,18 +24,15 @@ const GameCanvas = ({ playerTitle, gameState }) => {
     }, []);
 
     useEffect(() => {
-        // Parse the gameState and update the player positions
         if (gameState && gameState.playerMap) {
+            // Convert gameState.playerMap to an array of player objects
             const playerArray = Object.entries(gameState.playerMap).map(([name, data]) => ({
-                name,
-                role: data.role,
-                x: data.x,
-                y: data.y,
-                active: data.active
-            }));
+                name, ...data }));
             setPlayers(playerArray);
+
         }
     }, [gameState]);
+
 
     // Handle window resize
     const handleResize = useCallback(() => {
@@ -45,8 +42,8 @@ const GameCanvas = ({ playerTitle, gameState }) => {
         const timeout = setTimeout(() => {
             setWindowWidth(window.innerWidth);
             setWindowHeight(window.innerHeight);
-            setShouldUpdateBackground(true); // Flag to update background on resize
-        }, 200);  // Adjust delay as needed
+            setShouldUpdateBackground(true);
+        }, 200);
         setResizeTimeout(timeout);
     }, [resizeTimeout]);
 
