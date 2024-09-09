@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "20": "^1.0.0",
     "@pixi/react": "^7.1.2",
     "@stomp/stompjs": "^7.0.0",
     "global": "^4.4.0",
