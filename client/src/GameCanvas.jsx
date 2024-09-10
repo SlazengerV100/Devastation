@@ -1,11 +1,10 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react';
 import * as PIXI from 'pixi.js';
-import { Stage, Container, Sprite, Graphics , Text} from '@pixi/react';
+import { Stage, Container, Sprite, Graphics, Text } from '@pixi/react';
+import GameBoard from "./GameBoard.jsx";
 
-// eslint-disable-next-line react/prop-types
 const GameCanvas = ({ playerTitle, gameState, gameBoard }) => {
-    const spriteSize = 80;
+    const spriteSize = 40;
 
     const playerImages = {
         "PROJECT_MANAGER": 'https://static.vecteezy.com/system/resources/previews/028/652/011/original/pixel-art-student-character-png.png',
@@ -15,31 +14,22 @@ const GameCanvas = ({ playerTitle, gameState, gameBoard }) => {
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-
     const [players, setPlayers] = useState([]);
 
     useEffect(() => {
-        // Parse the gameState and update the player positions
         if (gameState && gameState.playerMap) {
-            // eslint-disable-next-line react/prop-types
             const playerArray = Object.entries(gameState.playerMap).map(([name, data]) => ({
                 name,
                 role: data.role,
-                x: data.x,
-                y: data.y,
+                x: data.x * spriteSize, // Adjusting based on sprite size
+                y: data.y * spriteSize,
                 active: data.active
             }));
             setPlayers(playerArray);
-
         }
-    }, [gameState]);
+    }, [gameState, spriteSize]);
 
     useEffect(() => {
-        console.log(gameBoard)
-    }, [gameBoard])
-
-    useEffect(() => {
-        // Handle window resize
         const handleResize = () => {
             setWindowWidth(window.innerWidth);
             setWindowHeight(window.innerHeight);
@@ -47,63 +37,76 @@ const GameCanvas = ({ playerTitle, gameState, gameBoard }) => {
 
         window.addEventListener('resize', handleResize);
 
-        // Cleanup event listener on component unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
-    // Create a graphics object to draw the background
     const drawBackground = (g) => {
         g.clear();
-        g.beginFill(0xf4f3ef); // Set the background color
+        g.beginFill(0xf4f3ef);
         g.drawRect(0, 0, windowWidth, windowHeight);
         g.endFill();
     };
 
+    // Calculate the total width and height of the gameBoard
+    const boardWidth = gameBoard[0].length * spriteSize;
+    const boardHeight = gameBoard.length * spriteSize;
+
+    // Calculate the offset to center the gameBoard
+    const offsetX = (windowWidth - boardWidth) / 2;
+    const offsetY = (windowHeight - boardHeight) / 2;
+
     return (
         <Stage width={windowWidth} height={windowHeight - 7}>
-            <Graphics
-                draw={drawBackground}
-                zIndex={-1} // Ensure the background is behind other elements
-            />
+            <Graphics draw={drawBackground} zIndex={-2} />
+
             <Text
                 text={`You are ${playerTitle}`}
-                x={windowWidth / 2} // Center horizontally
-                y={20} // Position near the top
-                anchor={0.5} // Center the text based on its position
+                x={windowWidth / 2}
+                y={20}
+                anchor={0.5}
                 style={new PIXI.TextStyle({
                     fontFamily: 'Arial',
                     fontSize: 24,
-                    fill: '#000000', // Text color
+                    fill: '#000000',
                     align: 'center',
                 })}
             />
-            {players.map(player => (
-                <Container key={player.name}>
-                    <Sprite
-                        image={playerImages[player.role]}
-                        x={player.x}
-                        y={player.y}
-                        width={spriteSize}
-                        height={spriteSize}
-                    />
-                    <Text
-                        text={player.name}
-                        x={player.x}
-                        y={player.y + spriteSize + 5}
-                        style={{
-                            fontFamily: 'Arial',
-                            fontSize: 14,
-                            fill: '#000000',
-                            align: 'center',
-                        }}
-                    />
-                </Container>
-            ))}
+
+            {/* Render GameBoard */}
+            <Container x={offsetX} y={offsetY}>
+                <GameBoard gameBoard={gameBoard} spriteSize={spriteSize} />
+
+                {players.map(player => (
+                    <Container key={player.name}>
+                        <Sprite
+                            image={playerImages[player.role]}
+                            x={player.x}
+                            y={player.y}
+                            width={spriteSize}
+                            height={spriteSize}
+                        />
+                        <Text
+                            text={player.name}
+                            x={player.x}
+                            y={player.y + spriteSize + 5}
+                            style={{
+                                fontFamily: 'Arial',
+                                fontSize: 14,
+                                fill: '#000000',
+                                align: 'center',
+                            }}
+                        />
+                    </Container>
+                ))}
+            </Container>
+
+
         </Stage>
     );
 };
 
 export default GameCanvas;
+
 

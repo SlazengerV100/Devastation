@@ -44,10 +44,10 @@ public class StateService {
         int newY = player.getY();
 
         switch (direction.toUpperCase()) {
-            case "UP" -> newY -= 20; // Move up decreases the y-coordinate by 20
-            case "DOWN" -> newY += 20; // Move down increases the y-coordinate by 20
-            case "LEFT" -> newX -= 20; // Move left decreases the x-coordinate by 20
-            case "RIGHT" -> newX += 20; // Move right increases the x-coordinate by 20
+            case "UP" -> newY--; // Move up decreases the y-coordinate by 20
+            case "DOWN" -> newY++; // Move down increases the y-coordinate by 20
+            case "LEFT" -> newX--; // Move left decreases the x-coordinate by 20
+            case "RIGHT" -> newX++; // Move right increases the x-coordinate by 20
             default -> {
                 return; // If the direction is not valid, do nothing
             }

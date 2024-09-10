@@ -40,7 +40,7 @@ const App = () => {
             });
             client.subscribe('/topic/gameBoard', (gameBoardUpdate) => {
                 const gameBoard = JSON.parse(gameBoardUpdate.body);
-                setGameBoard(gameBoard);
+                setGameBoard(gameBoard.gameBoard);
             });
             // Request initial game state
             client.send("/app/getState", {});
