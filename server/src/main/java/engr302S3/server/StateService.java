@@ -15,7 +15,7 @@ import java.util.Map;
 public class StateService {
     private final Map<String, Player> playerMap = new HashMap<>();
     private final Map<String, Station> stationMap = new HashMap<>();
-    private final Tile[][] map;
+    private final Tile[][] gameBoard;
 
     StateService(){
         playerMap.put("PM", new ProjectManager(false));
@@ -31,7 +31,7 @@ public class StateService {
         stationMap.put("UNI", new Station(StationType.UNIT_TESTING));
 
 
-        this.map = MapLoader.loadMap( playerMap, stationMap);
+        this.gameBoard = GameBoardLoader.loadGameBoard( playerMap, stationMap);
     }
 
     public void movePlayer(String playerTitle, String direction) {

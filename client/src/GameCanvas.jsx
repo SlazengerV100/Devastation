@@ -4,7 +4,7 @@ import * as PIXI from 'pixi.js';
 import { Stage, Container, Sprite, Graphics , Text} from '@pixi/react';
 
 // eslint-disable-next-line react/prop-types
-const GameCanvas = ({ playerTitle, gameState }) => {
+const GameCanvas = ({ playerTitle, gameState, gameBoard }) => {
     const spriteSize = 80;
 
     const playerImages = {
@@ -30,8 +30,13 @@ const GameCanvas = ({ playerTitle, gameState }) => {
                 active: data.active
             }));
             setPlayers(playerArray);
+
         }
     }, [gameState]);
+
+    useEffect(() => {
+        console.log(gameBoard)
+    }, [gameBoard])
 
     useEffect(() => {
         // Handle window resize

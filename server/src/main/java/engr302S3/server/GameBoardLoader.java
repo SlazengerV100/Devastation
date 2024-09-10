@@ -5,8 +5,8 @@ import engr302S3.server.players.Player;
 import java.io.*;
 import java.util.Map;
 
-public class MapLoader {
-    public static Tile[][] loadMap(Map<String, Player> playerMap, Map<String, Station> stationMap) {
+public class GameBoardLoader {
+    public static Tile[][] loadGameBoard(Map<String, Player> playerMap, Map<String, Station> stationMap) {
         String csvData = readCSV("config/gameMap.csv");
         String[] rows = csvData.split("\n");
         Tile[][] map = new Tile[rows.length][];
@@ -68,7 +68,7 @@ public class MapLoader {
         String line;
 
         // Use the class loader to load the file from resources
-        try (InputStream inputStream = MapLoader.class.getClassLoader().getResourceAsStream(filePath)) {
+        try (InputStream inputStream = GameBoardLoader.class.getClassLoader().getResourceAsStream(filePath)) {
             assert inputStream != null;
             try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
 

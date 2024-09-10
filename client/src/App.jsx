@@ -8,6 +8,7 @@ const App = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [playerTitle, setPlayerTitle] = useState(null);
     const [gameState, setGameState] = useState(null);
+    const [gameBoard, setGameBoard] = useState(null);
 
     const stompClientRef = useRef(null); // Using useRef to store stompClient
 
@@ -37,7 +38,15 @@ const App = () => {
                 const state = JSON.parse(stateUpdate.body);
                 setGameState(state);
             });
+            client.subscribe('/topic/gameBoard', (gameBoardUpdate) => {
+                const gameBoard = JSON.parse(gameBoardUpdate.body);
+                setGameBoard(gameBoard);
+            });
+            // Request initial game state
             client.send("/app/getState", {});
+
+            // Request initial game board data
+            client.send("/app/getGameBoard", {});
         }, (error) => {
             console.error('Connection error:', error);
             setConnected(false);
@@ -113,7 +122,7 @@ const App = () => {
                     ?
                     <HomeScreen setPlayerTitle={setPlayerTitle} isConnected={isConnected} tryReconnect={connect} gameState={gameState} />
                     :
-                    <GameCanvas playerTitle={playerTitle} gameState={gameState}/>
+                    <GameCanvas playerTitle={playerTitle} gameState={gameState} gameBoard={gameBoard}/>
             }
         </div>
     );

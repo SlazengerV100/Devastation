@@ -19,7 +19,7 @@ public class StateController {
         stateService.movePlayer(movementRequest.getPlayerTitle(), movementRequest.getDirection());
 
         //Send back to client
-        return new State(stateService.getPlayerMap(), stateService.getMap());
+        return new State(stateService.getPlayerMap());
     }
 
     @MessageMapping("/activatePlayer")
@@ -34,14 +34,20 @@ public class StateController {
         }
 
         //Send back to client
-        return new State(stateService.getPlayerMap(), stateService.getMap());
+        return new State(stateService.getPlayerMap());
 
     }
 
     @MessageMapping("/getState")
     @SendTo("/topic/state")
     public State getState() {
-        return new State(stateService.getPlayerMap(), stateService.getMap());
+        return new State(stateService.getPlayerMap());
+    }
+
+    @MessageMapping("/getGameBoard")
+    @SendTo("/topic/gameBoard")
+    public GameBoard getGameBoard() {
+        return new GameBoard(stateService.getGameBoard());
     }
 
 }

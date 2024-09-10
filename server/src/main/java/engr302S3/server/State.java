@@ -10,16 +10,10 @@ import java.util.Map;
 public class State {
     private Map<String, Player> playerMap;
     private final Map<String, Station> stationMap = new HashMap<>();
-    private final Tile[][] map;
 
 
-    public State(Tile[][] map) {
-        this.map = map;
-    }
-
-    public State(Map<String, Player> playerMap, Tile[][] map) {
+    public State(Map<String, Player> playerMap) {
         this.playerMap = playerMap;
-        this.map = map;
     }
 }
 
