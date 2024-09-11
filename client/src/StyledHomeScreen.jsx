@@ -3,19 +3,18 @@ import { Stage, Sprite } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import { fetchPlayButton } from './js/spriteFrameGrabber.js';
 
-// Function to fetch the background texture
-const fetchBackgroundTexture = () => {
-    return PIXI.Texture.from('../assets/background.png');
-}
+const fetchBackgroundTexture = () => {return PIXI.Texture.from('../assets/background.png');}
+const fetchTitleTexture = () => {return PIXI.Texture.from('../assets/DEV-A-STATION.png')}
 
 const StyledHomeScreen = () => {
     const [playButtonTexture, setPlayButtonTexture] = useState(null);
     const [backgroundTexture, setBackgroundTexture] = useState(null);
-
+    const [titleTexture, setTitleTexture] = useState(null)
     useEffect(() => {
         // Fetch the textures for the button and background
         setPlayButtonTexture(fetchPlayButton());
         setBackgroundTexture(fetchBackgroundTexture());
+        setTitleTexture(fetchTitleTexture())
     }, []);
 
     const handleMouseOver = (e) => {
@@ -39,6 +38,13 @@ const StyledHomeScreen = () => {
                         y={0}
                         width={window.innerWidth}
                         height={window.innerHeight}
+                    />
+                )}
+                {titleTexture && (
+                    <Sprite
+                    texture={titleTexture}
+                    x={(window.innerWidth / 2) - (titleTexture.width /2)}
+                    y={100}
                     />
                 )}
                 {playButtonTexture && (
