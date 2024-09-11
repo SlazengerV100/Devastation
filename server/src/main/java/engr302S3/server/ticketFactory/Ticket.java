@@ -16,7 +16,7 @@ public class Ticket {
     private final ArrayList<Task> tasks;
     private final String ticketTitle;
     private int totalTime;
-    @Getter @Setter private Position position;
+    @Setter private Position position;
     private final double blowOutProb;
 
     Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
@@ -29,8 +29,7 @@ public class Ticket {
     /**
      * Increments time the Ticket has been active.
      */
-    public void incrementTime(){
+    public void incrementTime() {
         totalTime++;
     }
-
 }

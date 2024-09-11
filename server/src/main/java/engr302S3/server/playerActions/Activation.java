@@ -2,9 +2,9 @@ package engr302S3.server.playerActions;
 
 import lombok.Getter;
 
-
 @Getter
 public class Activation {
+
     private String playerTitle;
     private boolean activate;
 

@@ -15,7 +15,7 @@ class ServerApplicationTests {
 
 	@Test
 	public void testMovement() {
-		Player player = new ProjectManager(new Position(1,1), true);
+		Player player = new ProjectManager(new Position(1,1));
 
 		assert new Position(1, 1).equals(player.getPosition());
 

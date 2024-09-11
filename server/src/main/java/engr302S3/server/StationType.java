@@ -1,4 +1,7 @@
 package engr302S3.server;
+
+import lombok.Getter;
+
 /**
  * Enum representing the different types of Stations, categorised into Tester and Developer.
  */

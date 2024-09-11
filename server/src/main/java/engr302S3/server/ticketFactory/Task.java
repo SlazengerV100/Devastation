@@ -2,7 +2,7 @@ package engr302S3.server.ticketFactory;
 
 import engr302S3.server.StationType;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
+import lombok.Setter;
 
 import java.util.Random;
 
@@ -19,7 +19,7 @@ public class Task {
     private final String title;
     private final StationType type;
     private int completionTime = random.nextInt(MIN_TIME, MAX_TIME);
-    private Boolean completed = false;
+    @Setter private Boolean completed = false;
 
     public Task(StationType type) {
         this.title = type.toString();
