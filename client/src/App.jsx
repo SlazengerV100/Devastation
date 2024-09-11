@@ -112,7 +112,7 @@ const App = () => {
             {
                 !gameStarted
                     ?
-                    <StyledHomeScreen/>
+                    <StyledHomeScreen gameState={gameState} isConnected={isConnected} setPlayerTitle={setPlayerTitle} tryReconnect={connect}/>
                     :
                     <GameCanvas playerTitle={playerTitle} gameState={gameState}/>
             }
