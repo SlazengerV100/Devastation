@@ -1,5 +1,6 @@
 package engr302S3.server.players;
 
+import engr302S3.server.Position;
 import engr302S3.server.ticketFactory.Ticket;
 
 import java.util.Optional;
@@ -11,8 +12,8 @@ public abstract class Techie extends Player {
     private int ticketsInArea;
     private boolean disabled;
 
-    public Techie(Role role, int x, int y, boolean active) {
-        super(role, x, y, active);
+    public Techie(Role role, Position position, boolean active) {
+        super(role, position, active);
         this.ticketsInAreaArray = new Ticket[10];
         this.ticketsInArea = 0;
         this.disabled = false;

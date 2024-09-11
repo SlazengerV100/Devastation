@@ -1,19 +1,10 @@
 package engr302S3.server.players;
 
-import java.util.Optional;
+import engr302S3.server.Position;
 
 public class ProjectManager extends Player {
 
-    public ProjectManager(int x, int y, boolean active) {
-        super(Role.PROJECT_MANAGER, x, y, active);
-    }
-
-    @Override
-    public void dropTicket() {
-        if (this.getHeldTicket().isEmpty()) {
-            return;
-        }
-        this.setHeldTicket(Optional.empty());
-        //TODO
+    public ProjectManager(Position position, boolean active) {
+        super(Role.PROJECT_MANAGER, position, active);
     }
 }

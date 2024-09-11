@@ -33,16 +33,14 @@ public abstract class Player {
     private final Role role;
     @Getter @Setter private Position position;
     @Getter @Setter private Direction direction;
-    @Getter @Setter private int x, y;
     @Getter @Setter private boolean active;
     @Getter @Setter private Optional<Ticket> heldTicket; //setter doubles as pickup (no conditions needed)
 
-    public Player(Role role, int x, int y, boolean active) {
+    public Player(Role role, Position position, boolean active) {
         this.role = role;
-        this.x = x;
-        this.y = y;
-        this.heldTicket = Optional.empty();
+        this.position = position;
         this.active = active;
+        this.heldTicket = Optional.empty();
     }
 
     /**
@@ -68,7 +66,7 @@ public abstract class Player {
 
     @Override
     public String toString() {
-        return "Player role: " + role + ", Position: (" + x + ", " + y + "), Active: " + active;
+        return "Player role: " + role + ", Position: (" + position.x() + ", " + position.y() + "), Active: " + active;
     }
 }
 
