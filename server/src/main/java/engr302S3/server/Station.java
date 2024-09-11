@@ -5,8 +5,8 @@ import lombok.Getter;
 /**
  * Represents a work station in the game.
  */
+@Getter
 public class Station {
-    @Getter
     private final StationType stationType;
     private int progress;
 
@@ -14,9 +14,9 @@ public class Station {
      * Create a work station with no task on it.
      * @param stationType the type of station.
      */
-    Station(StationType stationType) {
+    public Station(StationType stationType) {
         this.stationType = stationType;
-        progress = 0;
+        this.progress = 0;
     }
 
     /**

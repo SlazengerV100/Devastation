@@ -10,15 +10,14 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
-@Service
+@Getter @Service
 public class StateService {
     private final Map<String, Player> playerMap = new HashMap<>();
 
     StateService(){
-        playerMap.put("Project Manager", new ProjectManager(new Position(0, 50), false));
-        playerMap.put("Developer", new Developer(new Position(100, 50), false));
-        playerMap.put("Tester",  new Tester(new Position(200, 50), false));
+        playerMap.put("Project Manager", new ProjectManager(new Position(0, 50)));
+        playerMap.put("Developer", new Developer(new Position(100, 50)));
+        playerMap.put("Tester",  new Tester(new Position(200, 50)));
     }
 
     public void movePlayer(String role, String direction) {

@@ -11,7 +11,6 @@ public class StateController {
 
     @Autowired
     private StateService stateService;
-
     @MessageMapping("/movePlayer")
     @SendTo("/topic/state")
     public State movePlayer(Movement movementRequest) {
@@ -28,14 +27,12 @@ public class StateController {
         // Update game state
         if (activationRequest.isActivate()){
             stateService.activatePlayer(activationRequest.getPlayerTitle());
-        }
-        else{
+        } else {
             stateService.deactivatePlayer(activationRequest.getPlayerTitle());
         }
 
         //Send back to client
         return new State(stateService.getPlayerMap());
-
     }
 
     @MessageMapping("/getState")
@@ -43,6 +40,4 @@ public class StateController {
     public State getState() {
         return new State(stateService.getPlayerMap());
     }
-
 }
-

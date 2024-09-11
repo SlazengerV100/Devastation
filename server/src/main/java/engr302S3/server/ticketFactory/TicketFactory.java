@@ -27,6 +27,7 @@ public class TicketFactory {
     };
 
     public Ticket getTicket(){
+
         ArrayList<Task> tasks = createTasks();
         return new Ticket(generateTitle(), tasks.stream().map(Task::getCompletionTime).reduce(Integer::sum).orElseThrow(), generateBlowOutProb(tasks), tasks);
     }
@@ -67,12 +68,10 @@ public class TicketFactory {
                 .filter(StationType::isTester)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-
         StationType station = devStations.get(random.nextInt(devStations.size())); //there should always be at least one dev room task, so add a random dev station task first
         tasks.add(new Task(station));
         stations.remove(station);
         numStationTypesLeft--;
-
 
         for (int i = 0; i < random.nextInt(StationType.values().length); i++) {
             station = stations.get(--numStationTypesLeft);
