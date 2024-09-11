@@ -2,6 +2,7 @@ package engr302S3.server.ticketFactory;
 
 import engr302S3.server.StationType;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -11,25 +12,32 @@ import java.util.Random;
  */
 @Getter
 public class Task {
-  private final String taskTitle;
-  private final StationType stationType;
-  private int timeToComplete; //2-10 seconds
-  private Boolean completed = false;
 
-  public Task(StationType stationType) {
-    this.taskTitle = stationType.toString();
-    Random random = new Random();
-    this.timeToComplete = random.nextInt(2, 11);
-    this.stationType = stationType;
-  }
+    private static final int MIN_TIME = 2;
+    private static final int MAX_TIME = 11;
+    private final Random random = new Random();
+    private final String title;
+    private final StationType type;
+    private int completionTime = random.nextInt(MIN_TIME, MAX_TIME);
+    private Boolean completed = false;
 
-  /**
-   * Reduce the time to completion, which should occur while this task is being worked at the relevant station
-   */
-  public void updateCompletion() {
-    timeToComplete--;
-    if (timeToComplete <= 0) {
-      completed = true;
+    public Task(StationType type) {
+        this.title = type.toString();
+        this.type = type;
     }
-  }
+
+    /**
+     * Reduce the time to completion, which should occur while this task is being worked at the relevant station
+     */
+    public void updateCompletion() {
+        if (completed) {
+            return;
+        }
+
+        completionTime--;
+
+        if (completionTime <= 0) {
+            completed = true;
+        }
+    }
 }

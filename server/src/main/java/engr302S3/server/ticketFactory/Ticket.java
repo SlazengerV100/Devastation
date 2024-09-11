@@ -13,24 +13,24 @@ import java.util.ArrayList;
 @Getter
 public class Ticket {
 
-  private final ArrayList<Task> tasks;
-  private final String ticketTitle;
-  private int totalTime;
-  @Getter @Setter private Position position;
-  private final double blowOutProb;
+    private final ArrayList<Task> tasks;
+    private final String ticketTitle;
+    private int totalTime;
+    @Getter @Setter private Position position;
+    private final double blowOutProb;
 
-  Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
-    this.ticketTitle = title;
-    this.totalTime = totalTime;
-    this.blowOutProb = blowOutProb;
-    this.tasks = tasks;
-  }
+    Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
+        this.ticketTitle = title;
+        this.totalTime = totalTime;
+        this.blowOutProb = blowOutProb;
+        this.tasks = tasks;
+    }
 
-  /**
-   * Increments time the Ticket has been active.
-   */
-  public void incrementTime(){
-    totalTime++;
-  }
+    /**
+     * Increments time the Ticket has been active.
+     */
+    public void incrementTime(){
+        totalTime++;
+    }
 
 }
