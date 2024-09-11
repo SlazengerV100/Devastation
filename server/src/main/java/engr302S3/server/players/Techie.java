@@ -13,7 +13,7 @@ public abstract class Techie extends Player {
     private boolean disabled;
 
     public Techie(Role role, Position position, boolean active) {
-        super(role, position, active);
+        super(role, position);
         this.ticketsInAreaArray = new Ticket[10];
         this.ticketsInArea = 0;
         this.disabled = false;

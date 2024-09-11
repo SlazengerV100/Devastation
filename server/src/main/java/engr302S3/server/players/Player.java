@@ -3,11 +3,11 @@ package engr302S3.server.players;
 import engr302S3.server.Position;
 import engr302S3.server.ticketFactory.Ticket;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.Optional;
 
-@Getter
 public abstract class Player {
 
     public enum Role {
@@ -36,10 +36,11 @@ public abstract class Player {
     @Getter @Setter private boolean active;
     @Getter @Setter private Optional<Ticket> heldTicket; //setter doubles as pickup (no conditions needed)
 
-    public Player(Role role, Position position, boolean active) {
+    public Player(@NonNull Role role, @NonNull Position position) {
         this.role = role;
         this.position = position;
-        this.active = active;
+        this.direction = Direction.RIGHT;
+        this.active = true;
         this.heldTicket = Optional.empty();
     }
 
@@ -48,12 +49,12 @@ public abstract class Player {
      *
      * @param direction to move player in
      */
-    public void movePlayer(Direction direction) {
+    public void movePlayer(@NonNull Direction direction) {
 
         if (this.direction != direction) {
             setDirection(direction);
         } else {
-            this.setPosition(this.position.add(direction.getTranslation()));
+            this.setPosition(this.position.add(getDirection().getTranslation()));
         }
     }
 
