@@ -69,4 +69,3 @@ public abstract class Player {
         return "Player role: " + role + ", Position: (" + position.x() + ", " + position.y() + "), Active: " + active;
     }
 }
-
