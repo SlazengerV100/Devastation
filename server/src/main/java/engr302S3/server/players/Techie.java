@@ -1,9 +1,12 @@
 package engr302S3.server.players;
 
+import engr302S3.server.Position;
 import engr302S3.server.ticketFactory.Ticket;
+import lombok.Getter;
 
-import java.util.Optional;
+import java.util.Arrays;
 
+@Getter
 public abstract class Techie extends Player {
 
     private int burnout;
@@ -11,8 +14,8 @@ public abstract class Techie extends Player {
     private int ticketsInArea;
     private boolean disabled;
 
-    public Techie(Role role, int x, int y, boolean active) {
-        super(role, x, y, active);
+    public Techie(Role role, Position position) {
+        super(role, position);
         this.ticketsInAreaArray = new Ticket[10];
         this.ticketsInArea = 0;
         this.disabled = false;
@@ -22,12 +25,11 @@ public abstract class Techie extends Player {
      * Increase burnout dependent on amount of tickets in the area
      */
     public void incrementBurnout() {
+
         if (ticketsInArea == ticketsInAreaArray.length) {
             disabled = true;
             ticketsInArea = 0;
-            for (int i = 0; i < ticketsInAreaArray.length; i++) {
-                ticketsInAreaArray[i] = null;
-            }
+            Arrays.fill(ticketsInAreaArray, null);
             //SOME FORM OF SLEEP
         } else if (burnout == 100) {
             disabled = true;
@@ -52,18 +54,6 @@ public abstract class Techie extends Player {
      * tickets in area as an int and do another way.
      */
     public void getTicketsInformation() {
-        //TODO
-    }
-
-    /**
-     * Implement station dependent logic
-     */
-    @Override
-    public void dropTicket() {
-        if (this.getHeldTicket().isEmpty()) {
-            return;
-        }
-        this.setHeldTicket(Optional.empty());
         //TODO
     }
 }

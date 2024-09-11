@@ -1,9 +1,10 @@
 package engr302S3.server.players;
 
+import engr302S3.server.Position;
+
 public class Tester extends Techie {
 
-    public Tester(int x, int y, boolean active) {
-        super(Role.TESTER, x, y, active);
+    public Tester(Position position) {
+        super(Role.TESTER, position);
     }
-
 }

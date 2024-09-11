@@ -1,6 +1,8 @@
 package engr302S3.server.ticketFactory;
 
+import engr302S3.server.Position;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
@@ -11,23 +13,23 @@ import java.util.ArrayList;
 @Getter
 public class Ticket {
 
-  private final ArrayList<Task> tasks;
-  private final String ticketTitle;
-  private int totalTime;
-  private final double blowOutProb;
+    private final ArrayList<Task> tasks;
+    private final String ticketTitle;
+    private int totalTime;
+    @Setter private Position position;
+    private final double blowOutProb;
 
-  Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks){
-    this.ticketTitle = title;
-    this.totalTime = totalTime;
-    this.blowOutProb = blowOutProb;
-    this.tasks = tasks;
-  }
+    Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
+        this.ticketTitle = title;
+        this.totalTime = totalTime;
+        this.blowOutProb = blowOutProb;
+        this.tasks = tasks;
+    }
 
-  /**
-   * Increments time the Ticket has been active.
-   */
-  public void incrementTime(){
-    totalTime++;
-  }
-
+    /**
+     * Increments time the Ticket has been active.
+     */
+    public void incrementTime() {
+        totalTime++;
+    }
 }

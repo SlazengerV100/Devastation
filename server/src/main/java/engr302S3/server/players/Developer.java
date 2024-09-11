@@ -1,9 +1,10 @@
 package engr302S3.server.players;
 
+import engr302S3.server.Position;
+
 public class Developer extends Techie {
 
-    public Developer(int x, int y, boolean active) {
-        super(Role.DEVELOPER, x, y, active);
+    public Developer(Position position) {
+        super(Role.DEVELOPER, position);
     }
-
 }
