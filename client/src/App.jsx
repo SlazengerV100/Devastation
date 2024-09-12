@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Stomp from 'stompjs';
 import GameCanvas from './GameCanvas';
 import HomeScreen from "./HomeScreen.jsx";
+import StyledHomeScreen from "./StyledHomeScreen.jsx";
 
 const App = () => {
     const [isConnected, setConnected] = useState(false);
@@ -111,7 +112,7 @@ const App = () => {
             {
                 !gameStarted
                     ?
-                    <HomeScreen setPlayerTitle={setPlayerTitle} isConnected={isConnected} tryReconnect={connect} gameState={gameState} />
+                    <StyledHomeScreen gameState={gameState} isConnected={isConnected} setPlayerTitle={setPlayerTitle} tryReconnect={connect}/>
                     :
                     <GameCanvas playerTitle={playerTitle} gameState={gameState}/>
             }
