@@ -17,13 +17,18 @@ import java.util.List;
 @Component
 public class Devastation {
   private List<List<Tile>> board; // A 2D list to represent the game board
-  private int boardWidth;         // Width of the game board
-  private int boardHeight;        // Height of the game board
+  private final int boardWidth = 20;         // Width of the game board
+  private final int boardHeight = 20;        // Height of the game board
   @Setter private int score;      // Game score
   @Setter private boolean running;        // Flag to indicate if the game is running
   private int timeLeft = 300;           // Time left for the game (seconds)
   private List<Ticket> activeTickets;
 
+  /**
+   * Ensures that this @Component runs setup() as soon as the Spring Boot Server boots up.
+   * This can be replaced by a @Configuration Class that can not only create this Devastation
+   * Component, but handle other Component/Beans as well.
+   */
   @PostConstruct
   public void init() {
     setup();
@@ -33,15 +38,13 @@ public class Devastation {
    * Initial setup configuration for the game
    */
   public void setup(){
-    this.boardWidth = 10;
-    this.boardHeight = 10;
 
     this.board = new ArrayList<>();
 
     // Initialize the game board with empty tiles.
-    for (int y = 0; y < height; y++) {
+    for (int y = 0; y < boardHeight; y++) {
       List<Tile> row = new ArrayList<>(); // Create a new row for each height level.
-      for (int x = 0; x < width; x++) {
+      for (int x = 0; x < boardWidth; x++) {
         row.add(new Tile(new Point(x, y))); // Create a tile at each point (x, y).
       }
       board.add(row); // Add the row to the board.

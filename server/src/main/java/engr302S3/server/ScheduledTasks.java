@@ -13,6 +13,10 @@ import org.springframework.stereotype.Component;
 public class ScheduledTasks {
   private final Devastation game;
 
+  /**
+   * Injects the devastation component into this component
+   * @param devastation
+   */
   @Autowired
   public ScheduledTasks(Devastation devastation) {
     this.game = devastation;
