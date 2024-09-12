@@ -45,7 +45,7 @@ public class Devastation {
     for (int y = 0; y < boardHeight; y++) {
       List<Tile> row = new ArrayList<>(); // Create a new row for each height level.
       for (int x = 0; x < boardWidth; x++) {
-        row.add(new Tile(new Point(x, y))); // Create a tile at each point (x, y).
+        row.add(new Tile(new Position(x, y))); // Create a tile at each point (x, y).
       }
       board.add(row); // Add the row to the board.
     }

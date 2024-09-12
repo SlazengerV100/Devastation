@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 public class Tile {
-  private final Point position;  // The tile's position on the board (x, y coordinates)
+  private final Position position;  // The tile's position on the board (x, y coordinates)
   private TileType type;         // Enum to define the content type of the tile (e.g., Player, Station)
   private Object content;        // Stores the actual content of the tile (Player, Station, or Ticket)
 
@@ -20,7 +20,7 @@ public class Tile {
    *
    * @param position The position of the tile (x, y coordinates).
    */
-  public Tile(Point position) {
+  public Tile(Position position) {
     this.position = position;
     this.type = TileType.EMPTY; // Initialize the tile as empty
     this.content = null;        // No content initially
