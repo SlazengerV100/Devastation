@@ -1,9 +1,8 @@
+import StageManager from "./managers/StageManager.jsx";
 
 const App = () => {
     return (
-        <div>
-            hi
-        </div>
+        <StageManager/>
     )
 }
 
