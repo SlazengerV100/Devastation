@@ -1,22 +1,17 @@
-import { useEffect, useState } from 'react';
-import { connect, disconnect } from '../managers/connectionManager.js'; // Adjust the import path as necessary
+import { useState } from 'react';
+import { connect, requestState } from '../managers/connectionManager.js'; // Adjust the import path as necessary
 
 const LoadingStage = () => {
-    const [gameState, setGameState] = useState(null);
+    const [gameState] = useState(null);
     const [connectionStatus, setConnectionStatus] = useState('disconnected'); // can be 'disconnected', 'connecting', 'connected'
     const [errorMessage, setErrorMessage] = useState(''); // For displaying errors
-
-    // Define the state update handler
-    const handleStateUpdate = (state) => {
-        setGameState(state);
-    };
 
     // Connect to the WebSocket server
     const attemptConnect = async () => {
         setConnectionStatus('connecting');
         setErrorMessage('');
         try {
-            await connect(handleStateUpdate);
+            await connect();
             setConnectionStatus('connected');
         } catch (error) {
             console.error('Connection failed:', error);
@@ -33,9 +28,10 @@ const LoadingStage = () => {
                     <p>Not connected</p>
                     {errorMessage && <p>Error: {errorMessage}</p>}
                     <button onClick={attemptConnect}>Try Reconnecting</button>
+
                 </div>
             )}
-            {connectionStatus === 'connected' && <p>Loading game state...</p>}
+            {connectionStatus === 'connected' && <button onClick={requestState}>test</button>}
             {gameState && <pre>{JSON.stringify(gameState, null, 2)}</pre>}
         </div>
     );

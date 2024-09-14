@@ -8,39 +8,30 @@ const connect = async () => {
 
     return new Promise((resolve, reject) => {
         stompClient.connect({}, (frame) => {
-            console.log('Connected: ' + frame);
+            console.log('Connected:', frame);
             setupSubscriptions();
             requestState();
             resolve();
         }, (error) => {
             console.error('Connection error:', error);
-            stompClient = null; // Clean up client
+            stompClient = null;
             reject(error);
         });
     });
 };
 
 const setupSubscriptions = () => {
-    stompClient.subscribe('/topic/greetings', (greeting) => {
-        const message = JSON.parse(greeting.body);
-        showGreeting(message);
+    stompClient.subscribe('/topic/greetings', ({ body }) => {
+        console.log(body)
     });
 
-    stompClient.subscribe('/topic/state', (stateUpdate) => {
-        const state = JSON.parse(stateUpdate.body);
+    stompClient.subscribe('/topic/state', ({ body }) => {
+        console.log(JSON.parse(body))
     });
 };
 
-function showGreeting(message) {
-    return ("#greetings").append("<tr><td>" + message.message + "</td></tr>");
-}
-
-const requestState = () => {
-    stompClient.send('/app/getState', {});
+export const requestState = () => {
+    stompClient.send('/app/getState');
 };
-
-export const disconnect = () => {
-
-}
 
 export { connect };
