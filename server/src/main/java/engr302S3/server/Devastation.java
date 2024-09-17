@@ -21,7 +21,7 @@ import java.util.List;
 @Getter
 @Component
 public class Devastation {
-  private List<List<Tile>> board; // A 2D list to represent the game board
+  private Tile[][] board; // A 2D array to represent the game board
   private final int boardWidth = 20;         // Width of the game board
   private final int boardHeight = 20;        // Height of the game board
   @Setter private int score;      // Game score
@@ -48,35 +48,58 @@ public class Devastation {
    * Initial setup configuration for the game
    */
   public void setup(){
+    // Declare the game board as a 2D array
+    this.board = new Tile[boardHeight][boardWidth];
 
-    // Initialise game objects
-    this.board = new ArrayList<>();
+    // Initialize the game board with empty tiles
+    for (int x = 0; x < boardHeight; x++) {
+      for (int y = 0; y < boardWidth; y++) {
+        board[x][y] = new Tile(new Position(x, y)); // Create a tile at each point (x, y)
+      }
+    }
+
+    initialiseObjects();
+
+  }
+
+  /**
+   * initialise starting positions of game objects
+   */
+  public void initialiseObjects(){
     this.activeTickets = new ArrayList<>();
     this.ticketFactory = new TicketFactory();
     this.players = new ArrayList<>();
     this.stations = new ArrayList<>();
 
-    // Initialize the game board with empty tiles.
-    for (int y = 0; y < boardHeight; y++) {
-      List<Tile> row = new ArrayList<>(); // Create a new row for each height level.
-      for (int x = 0; x < boardWidth; x++) {
-        row.add(new Tile(new Position(x, y))); // Create a tile at each point (x, y).
-      }
-      board.add(row); // Add the row to the board.
-    }
-
+    Player projectManager = new ProjectManager(new Position(1, 1));
+    Player developer = new Developer(new Position(2, 1));
+    Player tester = new Tester(new Position(3, 1));
     // Add players
-    this.players.add(new ProjectManager(new Position(1, 1)));
-    this.players.add(new Developer(new Position(2, 1)));
-    this.players.add(new Tester(new Position(3, 1)));
+    this.players.add(projectManager);
+    this.players.add(developer);
+    this.players.add(tester);
 
+    // Initialise player positions to tiles
+    board[1][1].setPlayer(projectManager);
+    board[2][1].setPlayer(developer);
+    board[3][1].setPlayer(tester);
+
+    // Add Stations
     for (StationType type : StationType.values()) {
-      this.stations.add(new Station(type));
+      Station s = new Station(type);
+      this.stations.add(s);
     }
 
-    generateTicket();
+    // Temporary station positions
+    board[9][4].setStation(stations.get(0));
+    board[9][10].setStation(stations.get(1));
+    board[9][16].setStation(stations.get(2));
+    board[16][4].setStation(stations.get(3));
+    board[16][10].setStation(stations.get(4));
+    board[16][16].setStation(stations.get(5));
 
-
+    // Generate one active ticket for testing and set tile to ticket
+    board[2][3].setTicket(generateTicket());
   }
 
   public void decreaseTime(){
@@ -92,12 +115,18 @@ public class Devastation {
    */
   public Tile getTileAt(int x, int y) {
     if (x >= 0 && x < boardWidth && y >= 0 && y < boardHeight) {
-      return board.get(y).get(x); // Return the tile at the specified coordinates.
+      return board[x][y]; // Return the tile at the specified coordinates.
     }
     return null; // Return null if the coordinates are out of bounds.
   }
 
-  public void generateTicket(){
-    activeTickets.add(ticketFactory.getTicket());
+  /**
+   * Generate a ticket and add it to the active tickets
+   */
+  public Ticket generateTicket(){
+    Ticket ticket = ticketFactory.getTicket();
+    activeTickets.add(ticket);
+    return ticket;
   }
+
 }
