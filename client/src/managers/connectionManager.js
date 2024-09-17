@@ -78,4 +78,12 @@ export const sendPlayerMovement = (name, direction) => {
     }
 };
 
+export const fetchActivePlayers = () => {
+    if(stompClient){
+        stompClient.send()
+    } else {
+        console.warn('Cannot send movement: not connected.');
+    }
+}
+
 
