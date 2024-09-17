@@ -1,6 +1,11 @@
 package engr302S3.server;
 
+import engr302S3.server.players.Player;
+import engr302S3.server.players.Developer;
+import engr302S3.server.players.Tester;
+import engr302S3.server.players.ProjectManager;
 import engr302S3.server.ticketFactory.Ticket;
+import engr302S3.server.ticketFactory.TicketFactory;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +27,12 @@ public class Devastation {
   @Setter private int score;      // Game score
   @Setter private boolean running;        // Flag to indicate if the game is running
   private int timeLeft = 300;           // Time left for the game (seconds)
-  private List<Ticket> activeTickets;
+  @Getter private TicketFactory ticketFactory;
+  @Getter private List<Ticket> activeTickets;
+  @Getter private List<Player> players;
+  @Getter private List<Station> stations;
+
+
 
   /**
    * Ensures that this @Component runs setup() as soon as the Spring Boot Server boots up.
@@ -39,7 +49,12 @@ public class Devastation {
    */
   public void setup(){
 
+    // Initialise game objects
     this.board = new ArrayList<>();
+    this.activeTickets = new ArrayList<>();
+    this.ticketFactory = new TicketFactory();
+    this.players = new ArrayList<>();
+    this.stations = new ArrayList<>();
 
     // Initialize the game board with empty tiles.
     for (int y = 0; y < boardHeight; y++) {
@@ -49,6 +64,19 @@ public class Devastation {
       }
       board.add(row); // Add the row to the board.
     }
+
+    // Add players
+    this.players.add(new ProjectManager(new Position(1, 1)));
+    this.players.add(new Developer(new Position(2, 1)));
+    this.players.add(new Tester(new Position(3, 1)));
+
+    for (StationType type : StationType.values()) {
+      this.stations.add(new Station(type));
+    }
+
+    generateTicket();
+
+
   }
 
   public void decreaseTime(){
@@ -67,5 +95,9 @@ public class Devastation {
       return board.get(y).get(x); // Return the tile at the specified coordinates.
     }
     return null; // Return null if the coordinates are out of bounds.
+  }
+
+  public void generateTicket(){
+    activeTickets.add(ticketFactory.getTicket());
   }
 }
