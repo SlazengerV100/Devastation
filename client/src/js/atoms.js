@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
-import {atomWithStorage} from "jotai/vanilla/utils/atomWithStorage";
+import { atomWithStorage } from 'jotai/utils'
 
 export const connectionStatusAtom = atom('disconnected')
 export const localCharacterAtom = atom({
