@@ -1,4 +1,5 @@
 import { atom } from 'jotai'
+import {atomWithStorage} from "jotai/vanilla/utils/atomWithStorage";
 
 export const connectionStatusAtom = atom('disconnected')
 export const localCharacterAtom = atom({
@@ -6,3 +7,11 @@ export const localCharacterAtom = atom({
     characterX: 0,
     characterY: 0
 })
+
+export const playerIDAtom = atomWithStorage('playerID', {
+    id: null,
+    name: '',
+})
+
+export const playerPosition = atom({x: 0, y: 0})
+
