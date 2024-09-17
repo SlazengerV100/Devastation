@@ -33,7 +33,7 @@ public class ScheduledTasks {
     for(Ticket ticket:game.getActiveTickets()){
       ticket.incrementTime();
       for(Task task:ticket.getTasks()){
-        if(false){
+        if(false){ //currently set to not do anything until Tasks are properly implemented
           task.updateCompletion();
         }
       }
