@@ -72,7 +72,6 @@ export const requestState = () => {
 
 export const sendPlayerMovement = (name, direction) => {
     if (stompClient) {
-        console.log("NAME: " + name + " DIR: " + direction )
         stompClient.send("/app/movePlayer", {}, JSON.stringify({ role: name, direction }));
     } else {
         console.warn('Cannot send movement: not connected.');

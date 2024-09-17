@@ -28,8 +28,6 @@ const useUpdatePosition = () => {
                 console.error("Invalid direction");
         }
 
-        console.log( "THE_Y: " + y);
-
         setLocalCharacter({
             characterName: name,
             characterX: x,
