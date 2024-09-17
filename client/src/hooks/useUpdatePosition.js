@@ -6,6 +6,7 @@ const useUpdatePosition = () => {
     const [localCharacter, setLocalCharacter] = useAtom(localCharacterAtom);
 
     const updatePosition = (direction) => {
+
         let x = localCharacter.characterX;
         let y = localCharacter.characterY;
         let name = localCharacter.characterName;
@@ -26,6 +27,8 @@ const useUpdatePosition = () => {
             default:
                 console.error("Invalid direction");
         }
+
+        console.log( "THE_Y: " + y);
 
         setLocalCharacter({
             characterName: name,
