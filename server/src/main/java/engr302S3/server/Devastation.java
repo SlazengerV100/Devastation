@@ -27,10 +27,10 @@ public class Devastation {
   @Setter private int score;      // Game score
   @Setter private boolean running;        // Flag to indicate if the game is running
   private int timeLeft = 300;           // Time left for the game (seconds)
-  @Getter private TicketFactory ticketFactory;
-  @Getter private List<Ticket> activeTickets;
-  @Getter private List<Player> players;
-  @Getter private List<Station> stations;
+  private TicketFactory ticketFactory;
+  private List<Ticket> activeTickets;
+  private List<Player> players;
+  private List<Station> stations;
 
 
 
