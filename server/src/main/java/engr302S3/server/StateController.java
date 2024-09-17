@@ -63,13 +63,8 @@ public class StateController {
         return new State(stateService.getPlayerMap());
     }
 
-    @SendTo("/topic/ticket/move")
-    public void broadcastTicketMove() {
-
-    }
-
-    @SendTo("/topic/ticket/task/complete")
-    public void broadcastTicketTaskComplete() {
+    @SendTo("/topic/scoreUpdate")
+    public void broadcastScoreUpdate() {
 
     }
 
