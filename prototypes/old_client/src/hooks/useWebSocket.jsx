@@ -60,7 +60,7 @@ const useWebSocket = () => {
     };
 
     const requestState = (client) => {
-        client.send("/app/getState", {});
+        client.send("/app/players", {});
     };
 
     const showState = (state) => {

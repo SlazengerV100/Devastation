@@ -64,7 +64,7 @@ const setupSubscriptions = () => {
 
 export const requestState = () => {
     if (stompClient) {
-        stompClient.send('/app/getState');
+        stompClient.send('/app/players');
     } else {
         console.warn('Cannot request state: not connected.');
     }

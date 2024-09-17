@@ -11,8 +11,8 @@ public class StateController {
 
     @Autowired
     private StateService stateService;
-    @MessageMapping("/movePlayer")
-    @SendTo("/topic/state")
+    @MessageMapping("/player/move")
+    @SendTo("/topic/player/move")
     public State movePlayer(Movement movementRequest) {
         // Update game state
         stateService.movePlayer(movementRequest.getRole(), movementRequest.getDirection());
@@ -21,8 +21,8 @@ public class StateController {
         return new State(stateService.getPlayerMap());
     }
 
-    @MessageMapping("/activatePlayer")
-    @SendTo("/topic/state")
+    @MessageMapping("/player/activate")
+    @SendTo("/topic/player/activate")
     public State activatePlayer(Activation activationRequest){
         // Update game state
         if (activationRequest.isActivate()){
@@ -35,9 +35,69 @@ public class StateController {
         return new State(stateService.getPlayerMap());
     }
 
-    @MessageMapping("/getState")
-    @SendTo("/topic/state")
+    @MessageMapping("/player/ticket/pickUp")
+    @SendTo("/topic/player/ticket/pickUp")
+    public State pickUpTicket() {
+        return new State(stateService.getPlayerMap());
+    }
+
+    @MessageMapping("/player/ticket/drop")
+    @SendTo("/topic/player/ticket/drop")
+    public State dropTicket() {
+        return new State(stateService.getPlayerMap());
+    }
+
+    @SendTo("/topic/player/burnOut")
+    public void broadcastPlayerBurnOut() {
+
+    }
+
+    @SendTo("/topic/player/revive")
+    public void broadcastPlayerRevive() {
+
+    }
+
+    @MessageMapping("/players")
+    @SendTo("/topic/players")
     public State getState() {
         return new State(stateService.getPlayerMap());
+    }
+
+    @SendTo("/topic/ticket/move")
+    public void broadcastTicketMove() {
+
+    }
+
+    @SendTo("/topic/ticket/task/complete")
+    public void broadcastTicketTaskComplete() {
+
+    }
+
+    @SendTo("/topic/ticket/create")
+    public void broadcastTicketCreate() {
+
+    }
+
+    @SendTo("/topic/ticket/resolve")
+    public void broadcastTicketResolve() {
+
+    }
+
+    @MessageMapping("/tickets")
+    @SendTo("/topic/tickets")
+    public State getTickets() {
+        return null;
+    }
+
+    @MessageMapping("/stations")
+    @SendTo("/topic/stations")
+    public State getStations() {
+        return null;
+    }
+
+    @MessageMapping("/tiles")
+    @SendTo("/topic/tiles")
+    public State getTiles() {
+        return null;
     }
 }
