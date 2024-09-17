@@ -37,7 +37,7 @@ const App = () => {
                 const state = JSON.parse(stateUpdate.body);
                 setGameState(state);
             });
-            client.send("/app/getState", {});
+            client.send("/app/players", {});
         }, (error) => {
             console.error('Connection error:', error);
             setConnected(false);
@@ -83,10 +83,10 @@ const App = () => {
             }
 
             if (playerTitle) {
-                client.send("/app/movePlayer", {}, JSON.stringify({ playerTitle, direction }));
+                client.send("/app/player/move", {}, JSON.stringify({ playerTitle, direction }));
             } else if (sessionStorage.getItem('playerTitle')) {
                 setPlayerTitle(sessionStorage.getItem('playerTitle'))
-                client.send("/app/movePlayer", {}, JSON.stringify({ playerTitle, direction }));
+                client.send("/app/player/move", {}, JSON.stringify({ playerTitle, direction }));
             } else {
                 console.warn('Player title is not set.');
             }
@@ -101,7 +101,7 @@ const App = () => {
         if (playerTitle && stompClientRef.current && stompClientRef.current.connected) {
             sessionStorage.setItem('playerTitle', playerTitle);
             const activate = true;
-            stompClientRef.current.send("/app/activatePlayer", {}, JSON.stringify({ playerTitle, activate }));
+            stompClientRef.current.send("/app/player/activate", {}, JSON.stringify({ playerTitle, activate }));
             setGameStarted(true);
         }
     }, [playerTitle]);
