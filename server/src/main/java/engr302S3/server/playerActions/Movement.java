@@ -5,13 +5,13 @@ import lombok.Getter;
 @Getter
 public class Movement {
 
-    private String playerTitle;
+    private String role;
     private String direction;
 
     public Movement() {}
 
-    public Movement(String playerTitle, String direction) {
-        this.playerTitle = playerTitle;
+    public Movement(String role, String direction) {
+        this.role = role;
         this.direction = direction;
     }
 }

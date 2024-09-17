@@ -15,7 +15,7 @@ public class StateController {
     @SendTo("/topic/state")
     public State movePlayer(Movement movementRequest) {
         // Update game state
-        stateService.movePlayer(movementRequest.getPlayerTitle(), movementRequest.getDirection());
+        stateService.movePlayer(movementRequest.getRole(), movementRequest.getDirection());
 
         //Send back to client
         return new State(stateService.getPlayerMap());

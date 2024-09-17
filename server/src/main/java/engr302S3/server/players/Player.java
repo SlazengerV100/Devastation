@@ -49,11 +49,10 @@ public abstract class Player {
      * @param direction to move player in
      */
     public void movePlayer(Direction direction) {
-
         if (this.direction != direction) {
             setDirection(direction);
         } else {
-            this.setPosition(this.position.add(getDirection().getTranslation()));
+            this.position = this.position.add(getDirection().getTranslation());
         }
     }
 
