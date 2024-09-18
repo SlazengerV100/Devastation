@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
+import { useAtom } from "jotai";
+import { localCharacterAtom } from "../js/atoms.js";  // Import the atom
 import { requestState, activatePlayer } from "../managers/connectionManager.js";
 
 const CharacterSelectStage = () => {
     const [playerActiveState, setPlayerActiveState] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [, setStoredPlayer] = useAtom(localCharacterAtom); // Use the atom
 
     useEffect(() => {
         updatePlayerSelection();
@@ -29,7 +32,17 @@ const CharacterSelectStage = () => {
         try {
             const updatedState = await activatePlayer(playerName);
             console.log('Player activated:', updatedState);
+
+            // Update session storage
             sessionStorage.setItem('playerID', playerName);
+
+            // Update the atom
+            setStoredPlayer(prev => ({
+                ...prev,
+                playerName: playerName
+            }));
+
+            // Update player selection state
             await updatePlayerSelection();
         } catch (error) {
             console.error('Failed to activate player:', error);

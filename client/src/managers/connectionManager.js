@@ -1,5 +1,4 @@
 import { Stomp } from "@stomp/stompjs";
-import { useAtom } from "jotai";
 import { localCharacterAtom } from '../js/atoms.js';
 import { store } from '../App';
 
