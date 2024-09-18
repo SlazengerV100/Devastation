@@ -2,6 +2,7 @@ package engr302S3.server;
 
 import engr302S3.server.ticketFactory.Task;
 import engr302S3.server.ticketFactory.Ticket;
+import engr302S3.server.ticketFactory.TicketFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -30,14 +31,36 @@ public class ScheduledTasks {
   public void updateGameTime() {
     //update the game clock
     game.decreaseTime();
-    for(Ticket ticket:game.getActiveTickets()){
-      ticket.incrementTime();
-      for(Task task:ticket.getTasks()){
-        if(false){ //currently set to not do anything until Tasks are properly implemented
-          task.updateCompletion();
+    //check each tile for a ticket, and update the ticket timer if there is one
+    for(int y = 0; y<game.getBoardHeight();y++){
+      for(int x = 0; x< game.getBoardWidth(); x++){
+        if(game.getTileAt(x,y).getType() == TileType.TICKET){
+          ((Ticket)game.getTileAt(x,y).getContent()).incrementTime();
         }
       }
     }
+    //update the stations and tasks that they are working on
+    for(Station station: game.getStations()){
+      if(station.progress()){
+        //broadcast an update to clients
+      }
+    }
+  }
 
+  /**
+   * Every 20second try to generate a new ticket if there is room of the board
+   */
+  @Scheduled(fixedRate = 20000)
+  public void createTicket(){
+    for(int i = 0; i<game.getBoardHeight();i++){
+      //check the first column of the board for generated tickets, I am assuming this is where we
+      //will  spawn them
+      Tile tile = game.getTileAt(0,i);
+      if(tile.empty()){
+        tile.setTicket(TicketFactory.getTicket());
+        //broadcast an update to clients
+        break;
+      }
+    }
   }
 }
