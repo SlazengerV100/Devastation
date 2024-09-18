@@ -6,6 +6,9 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
+/**
+ * Tickets related player class which deals with burnout and ticket information
+ */
 @Getter
 public abstract class Techie extends Player {
 

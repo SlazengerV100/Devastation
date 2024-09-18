@@ -7,15 +7,24 @@ import lombok.Setter;
 
 import java.util.Optional;
 
+/**
+ * Abstract class representing players
+ */
 @Getter @Setter
 public abstract class Player {
 
+    /**
+     * Possible roles
+     */
     public enum Role {
         PROJECT_MANAGER,
         DEVELOPER,
         TESTER
     }
 
+    /**
+     * Player movement directions
+     */
     public enum Direction {
         UP, DOWN, LEFT, RIGHT;
 
@@ -35,6 +44,11 @@ public abstract class Player {
     private boolean active;
     private Optional<Ticket> heldTicket; //setter doubles as pickup (no conditions needed)
 
+    /**
+     * Player Constructor
+     * @param role
+     * @param position
+     */
     public Player(Role role, Position position) {
         this.role = role;
         this.position = position;
@@ -49,11 +63,10 @@ public abstract class Player {
      * @param direction to move player in
      */
     public void movePlayer(Direction direction) {
-
         if (this.direction != direction) {
             setDirection(direction);
         } else {
-            this.setPosition(this.position.add(getDirection().getTranslation()));
+            this.position = this.position.add(getDirection().getTranslation());
         }
     }
 

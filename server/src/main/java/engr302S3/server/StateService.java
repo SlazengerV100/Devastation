@@ -26,6 +26,8 @@ public class StateService {
         }
 
         playerMap.get(role).movePlayer(Player.Direction.valueOf(direction.toUpperCase()));
+
+
     }
 
 

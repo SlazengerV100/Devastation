@@ -1,5 +1,10 @@
 package engr302S3.server;
 
+/**
+ * Record for 2D position on a grid
+ * @param x
+ * @param y
+ */
 public record Position(int x, int y) {
 
     //Values not final
