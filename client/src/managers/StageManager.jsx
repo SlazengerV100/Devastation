@@ -12,9 +12,10 @@ const StageManager = () => {
     // using useMemo to avoid unnecessary re-renders
     const currentStage = useMemo(() => {
         if (connectionStatus === 'disconnected') return <LoadingStage />;
-        if(localCharacter.characterName === '') return <CharacterSelectStage/>
+        //if(localCharacter.characterName === '')
+            return <CharacterSelectStage/>
 
-        return <GameStage/>
+        //return <GameStage/>
 
     }, [connectionStatus, localCharacter.characterName]);
 
