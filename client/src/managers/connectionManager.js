@@ -74,6 +74,7 @@ export const requestState = async () => {
         const subscription = stompClient.subscribe('/topic/players', (message) => {
             try {
                 const parsedMessage = JSON.parse(message.body);
+                console.log(parsedMessage)
                 resolve(parsedMessage.playerMap); // Resolve the Promise with the parsed message
             } catch (error) {
                 reject('Failed to parse message');
@@ -93,13 +94,30 @@ export const sendPlayerMovement = (name, direction) => {
     }
 };
 
-export const fetchActivePlayers = () => {
-    if(stompClient){
-        stompClient.send()
-    } else {
-        console.warn('Cannot send movement: not connected.');
+export const activatePlayer = async (playerTitle, activate = true) => {
+    if (!stompClient) {
+        console.warn('Cannot activate player: not connected.');
+        return;
     }
-}
+    console.log(playerTitle)
+    // Send the activation request
+    stompClient.send("/app/player/activate", {}, JSON.stringify({ playerTitle, activate }));
+
+    // Return a Promise that resolves when the server responds
+    return new Promise((resolve, reject) => {
+        const subscription = stompClient.subscribe('/topic/player/activate', (message) => {
+            try {
+                const parsedMessage = JSON.parse(message.body);
+                resolve(parsedMessage); // Resolve the Promise with the updated player map
+            } catch (error) {
+                reject('Failed to parse activation response');
+            }
+
+            // Unsubscribe to avoid memory leaks
+            subscription.unsubscribe();
+        });
+    });
+};
 
 
 
