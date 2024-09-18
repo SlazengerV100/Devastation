@@ -62,12 +62,27 @@ const setupSubscriptions = () => {
     });
 };
 
-export const requestState = () => {
-    if (stompClient) {
-        stompClient.send('/app/players');
-    } else {
+export const requestState = async () => {
+    if (!stompClient) {
         console.warn('Cannot request state: not connected.');
+        return;
     }
+    stompClient.send('/app/players');
+
+    // Return a Promise that resolves from server response
+    return new Promise((resolve, reject) => {
+        const subscription = stompClient.subscribe('/topic/players', (message) => {
+            try {
+                const parsedMessage = JSON.parse(message.body);
+                resolve(parsedMessage.playerMap); // Resolve the Promise with the parsed message
+            } catch (error) {
+                reject('Failed to parse message');
+            }
+
+            // memory leak avoidance
+            subscription.unsubscribe();
+        });
+    });
 };
 
 export const sendPlayerMovement = (name, direction) => {
@@ -85,5 +100,7 @@ export const fetchActivePlayers = () => {
         console.warn('Cannot send movement: not connected.');
     }
 }
+
+
 
 
