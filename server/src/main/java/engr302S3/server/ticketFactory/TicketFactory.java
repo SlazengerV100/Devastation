@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
  */
 public class TicketFactory {
 
-    private final Random random = new Random();
-    private final String[] ticketNames = new String[]{
+    private static final Random random = new Random();
+    private static final String[] ticketNames = new String[]{
             "Bug Bash: Error Hunt",
             "Refactor the Spaghetti",
             "Optimize Algorithm Efficiency",
@@ -26,8 +26,7 @@ public class TicketFactory {
             "Security Vulnerability Patch"
     };
 
-    public Ticket getTicket(){
-
+    public static Ticket getTicket(){
         ArrayList<Task> tasks = createTasks();
         return new Ticket(generateTitle(), tasks.stream().map(Task::getCompletionTime).reduce(Integer::sum).orElseThrow(), generateBlowOutProb(tasks), tasks);
     }
@@ -36,7 +35,7 @@ public class TicketFactory {
      * Choose a random ticket name
      * @return ticketName
      */
-    private String generateTitle(){
+    private static String generateTitle(){
         return ticketNames[random.nextInt(ticketNames.length)];
     }
 
@@ -45,7 +44,7 @@ public class TicketFactory {
      * Currently, the double represent a percentage, but can change to be decimal
      * @return double
      */
-    private int generateBlowOutProb(ArrayList<Task> tasks){
+    private static int generateBlowOutProb(ArrayList<Task> tasks){
         return (100 / ticketNames.length) * tasks.size(); //blowout probability increases the amount of tasks in ticket
     }
 
@@ -55,7 +54,7 @@ public class TicketFactory {
      * Maximum amount is three tasks for developer and three tasks for tester
      * @return ArrayList
      */
-    private ArrayList<Task> createTasks() {
+    private static ArrayList<Task> createTasks() {
 
         ArrayList<Task> tasks = new ArrayList<>();
 
