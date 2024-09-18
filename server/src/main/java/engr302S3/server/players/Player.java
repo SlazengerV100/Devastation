@@ -53,7 +53,7 @@ public abstract class Player {
         this.role = role;
         this.position = position;
         this.direction = Direction.RIGHT;
-        this.active = true;
+        this.active = false;
         this.heldTicket = Optional.empty();
     }
 

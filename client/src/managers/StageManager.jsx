@@ -1,22 +1,42 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingStage from '../stages/LoadingStage.jsx';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useAtom } from 'jotai';
 import { connectionStatusAtom, localCharacterAtom } from '../js/atoms.js';
 import CharacterSelectStage from "../stages/CharacterSelectStage.jsx";
 import GameStage from "../stages/GameStage.jsx";
 
 const StageManager = () => {
     const connectionStatus = useAtomValue(connectionStatusAtom);
-    const localCharacter = useAtomValue(localCharacterAtom)
+    const [storedPlayer, setStoredPlayer] = useAtom(localCharacterAtom);
+    const [currentStage, setCurrentStage] = useState(<LoadingStage />);
 
-    // using useMemo to avoid unnecessary re-renders
-    const currentStage = useMemo(() => {
-        if (connectionStatus === 'disconnected') return <LoadingStage />;
-        if(localCharacter.characterName === '') return <CharacterSelectStage/>
+    useEffect(() => {
+        const checkStoredPlayer = () => {
+            const player = localStorage.getItem('playerID');
+            if(player){
+                setStoredPlayer(prev => ({
+                    ...prev,
+                    playerName: player
+                }));
+            }
+        };
 
-        return <GameStage/>
+        // Check initially when the component mounts
+        checkStoredPlayer();
+    }, [setStoredPlayer]);
 
-    }, [connectionStatus, localCharacter.characterName]);
+    // Trigger stage update based on connection status and storedPlayer changes
+    useEffect(() => {
+        console.log('CHANGED')
+        console.log(storedPlayer)
+        if (connectionStatus === 'disconnected') {
+            setCurrentStage(<LoadingStage />);
+        } else if (storedPlayer.playerName) {
+            setCurrentStage(<GameStage />);
+        } else {
+            setCurrentStage(<CharacterSelectStage />);
+        }
+    }, [connectionStatus, storedPlayer.playerName]); // Effect depends on connectionStatus and storedPlayer
 
     return (
         <>

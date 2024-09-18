@@ -12,7 +12,7 @@ const GameStage = () => {
         <div>
             this is a gameStage
             <div>
-                <h2>Developer X: {localCharacter.characterX}, Y: {localCharacter.characterY}</h2>
+                <h2>{localCharacter.playerName} X: {localCharacter.x}, Y: {localCharacter.y}</h2>
             </div>
             <div>
                 <button onClick={() => {

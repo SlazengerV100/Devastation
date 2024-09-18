@@ -1,5 +1,4 @@
 import { Stomp } from "@stomp/stompjs";
-import { useAtom } from "jotai";
 import { localCharacterAtom } from '../js/atoms.js';
 import { store } from '../App';
 
@@ -62,12 +61,28 @@ const setupSubscriptions = () => {
     });
 };
 
-export const requestState = () => {
-    if (stompClient) {
-        stompClient.send('/app/players');
-    } else {
+export const requestState = async () => {
+    if (!stompClient) {
         console.warn('Cannot request state: not connected.');
+        return;
     }
+    stompClient.send('/app/players');
+
+    // Return a Promise that resolves from server response
+    return new Promise((resolve, reject) => {
+        const subscription = stompClient.subscribe('/topic/players', (message) => {
+            try {
+                const parsedMessage = JSON.parse(message.body);
+                console.log(parsedMessage)
+                resolve(parsedMessage.playerMap); // Resolve the Promise with the parsed message
+            } catch (error) {
+                reject('Failed to parse message');
+            }
+
+            // memory leak avoidance
+            subscription.unsubscribe();
+        });
+    });
 };
 
 export const sendPlayerMovement = (name, direction) => {
@@ -77,5 +92,32 @@ export const sendPlayerMovement = (name, direction) => {
         console.warn('Cannot send movement: not connected.');
     }
 };
+
+export const activatePlayer = async (playerTitle, activate = true) => {
+    if (!stompClient) {
+        console.warn('Cannot activate player: not connected.');
+        return;
+    }
+    console.log(playerTitle)
+    // Send the activation request
+    stompClient.send("/app/player/activate", {}, JSON.stringify({ playerTitle, activate }));
+
+    // Return a Promise that resolves when the server responds
+    return new Promise((resolve, reject) => {
+        const subscription = stompClient.subscribe('/topic/player/activate', (message) => {
+            try {
+                const parsedMessage = JSON.parse(message.body);
+                resolve(parsedMessage); // Resolve the Promise with the updated player map
+            } catch (error) {
+                reject('Failed to parse activation response');
+            }
+
+            // Unsubscribe to avoid memory leaks
+            subscription.unsubscribe();
+        });
+    });
+};
+
+
 
 

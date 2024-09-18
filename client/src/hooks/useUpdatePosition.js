@@ -7,9 +7,9 @@ const useUpdatePosition = () => {
 
     const updatePosition = (direction) => {
 
-        let x = localCharacter.characterX;
-        let y = localCharacter.characterY;
-        let name = localCharacter.characterName;
+        let x = localCharacter.x;
+        let y = localCharacter.y;
+        let name = localCharacter.playerName;
 
         switch (direction) {
             case "UP":
@@ -29,9 +29,9 @@ const useUpdatePosition = () => {
         }
 
         setLocalCharacter({
-            characterName: name,
-            characterX: x,
-            characterY: y
+            playerName: name,
+            x,
+            y
         });
 
         sendPlayerMovement(name, direction);
