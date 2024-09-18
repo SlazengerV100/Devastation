@@ -8,10 +8,5 @@ export const localCharacterAtom = atom({
     characterY: 0
 })
 
-export const playerIDAtom = atomWithStorage('playerID', {
-    id: null,
-    name: '',
-})
-
 export const playerPosition = atom({x: 0, y: 0})
 

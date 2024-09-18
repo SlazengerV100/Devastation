@@ -4,10 +4,11 @@ import { requestState, activatePlayer } from "../managers/connectionManager.js";
 const CharacterSelectStage = () => {
     const [playerActiveState, setPlayerActiveState] = useState(null);
     const [loading, setLoading] = useState(true);
-    //fetches the initial players for current state of the game
-    useEffect(() => { updatePlayerSelection() }, []);
 
-    // Fetch and update player selection
+    useEffect(() => {
+        updatePlayerSelection();
+    }, []);
+
     const updatePlayerSelection = async () => {
         setLoading(true);
         try {
@@ -24,12 +25,12 @@ const CharacterSelectStage = () => {
         }
     };
 
-    // Set player session
     const setSessionPlayer = async (playerName) => {
         try {
             const updatedState = await activatePlayer(playerName);
             console.log('Player activated:', updatedState);
-            await updatePlayerSelection() //just refreshes the buttons to show state
+            sessionStorage.setItem('playerID', playerName);
+            await updatePlayerSelection();
         } catch (error) {
             console.error('Failed to activate player:', error);
         }
@@ -44,7 +45,11 @@ const CharacterSelectStage = () => {
                     <h3>Available Players:</h3>
                     <div>
                         {playerActiveState.map((p) => (
-                            <button disabled={p.active} onClick={() => setSessionPlayer(p.id)} key={p.id}>
+                            <button
+                                disabled={p.active}
+                                onClick={() => setSessionPlayer(p.id)}
+                                key={p.id}
+                            >
                                 {p.id}
                             </button>
                         ))}
