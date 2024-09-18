@@ -1,15 +1,22 @@
 import { useState, useEffect } from "react";
-import { requestState } from "../managers/connectionManager.js";
+import { requestState, activatePlayer } from "../managers/connectionManager.js";
 
 const CharacterSelectStage = () => {
-    const [currentPlayers, setCurrentPlayers] = useState(null);
+    const [playerActiveState, setPlayerActiveState] = useState(null);
     const [loading, setLoading] = useState(true);
+    //fetches the initial players for current state of the game
+    useEffect(() => { updatePlayerSelection() }, []);
 
-    const fetchPlayers = async () => {
+    // Fetch and update player selection
+    const updatePlayerSelection = async () => {
         setLoading(true);
         try {
-            const players = await requestState();
-            setCurrentPlayers(players);
+            const playerMap = await requestState();
+            const activeState = Object.entries(playerMap).map(([name, player]) => ({
+                id: name,
+                active: player.active,
+            }));
+            setPlayerActiveState(activeState);
         } catch (error) {
             console.error('Failed to fetch players:', error);
         } finally {
@@ -17,29 +24,34 @@ const CharacterSelectStage = () => {
         }
     };
 
-    useEffect(() => {
-        fetchPlayers();
-    }, []);
+    // Set player session
+    const setSessionPlayer = async (playerName) => {
+        try {
+            const updatedState = await activatePlayer(playerName);
+            console.log('Player activated:', updatedState);
+            await updatePlayerSelection() //just refreshes the buttons to show state
+        } catch (error) {
+            console.error('Failed to activate player:', error);
+        }
+    };
 
     return (
         <div>
             {loading ? (
                 <p>Loading players...</p>
             ) : (
-                currentPlayers ? (
+                <div>
+                    <h3>Available Players:</h3>
                     <div>
-                        <h3>Available Players:</h3>
-                        <ul>
-                            {Object.keys(currentPlayers).map((player) => (
-                                <li key={player}>{player}</li>
-                            ))}
-                        </ul>
+                        {playerActiveState.map((p) => (
+                            <button disabled={p.active} onClick={() => setSessionPlayer(p.id)} key={p.id}>
+                                {p.id}
+                            </button>
+                        ))}
                     </div>
-                ) : (
-                    <p>No players available yet.</p>
-                )
+                </div>
             )}
-            <button onClick={fetchPlayers}>
+            <button onClick={updatePlayerSelection}>
                 Request Players
             </button>
         </div>
