@@ -1,7 +1,8 @@
-package engr302S3.server;
+package engr302S3.server.map;
 
 import engr302S3.server.ticketFactory.Task;
 import engr302S3.server.ticketFactory.Ticket;
+
 import lombok.Getter;
 
 import java.util.Optional;
@@ -11,6 +12,7 @@ import java.util.Optional;
  */
 @Getter
 public class Station {
+
     private final StationType stationType;
     private int progress;
     private Optional<Ticket> ticketWorkingOn;
@@ -43,6 +45,7 @@ public class Station {
         if (ticketWorkingOn.isEmpty()) {
             return false;
         }
+
         progress++;
         return getRelevantTask(ticketWorkingOn.get()).map(task -> progress >= task.getCompletionTime()).orElse(false);
     }

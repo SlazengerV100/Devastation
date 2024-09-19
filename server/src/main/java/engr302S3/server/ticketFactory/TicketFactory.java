@@ -1,6 +1,6 @@
 package engr302S3.server.ticketFactory;
 
-import engr302S3.server.StationType;
+import engr302S3.server.map.StationType;
 
 import java.util.ArrayList;
 import java.util.List;

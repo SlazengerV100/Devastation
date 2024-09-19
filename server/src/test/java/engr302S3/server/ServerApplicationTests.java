@@ -1,5 +1,7 @@
 package engr302S3.server;
 
+import engr302S3.server.map.Position;
+import engr302S3.server.map.StationType;
 import engr302S3.server.players.Player;
 import engr302S3.server.players.ProjectManager;
 import engr302S3.server.ticketFactory.Ticket;
@@ -40,9 +42,7 @@ class ServerApplicationTests {
 			tickets.add(TicketFactory.getTicket());
 		}
 
-		tickets.forEach(e -> {
-			System.out.println(e.getTasks().size());
-		});
+		tickets.forEach(e -> System.out.println(e.getTasks().size()));
 
 		assert tickets.stream().anyMatch(e -> e.getTasks().size() == 1);
 		assert tickets.stream().anyMatch(e -> e.getTasks().size() == StationType.values().length);

@@ -1,4 +1,4 @@
-package engr302S3.server;
+package engr302S3.server.map;
 
 /**
  * Record for 2D position on a grid

@@ -1,6 +1,6 @@
 package engr302S3.server.players;
 
-import engr302S3.server.Position;
+import engr302S3.server.map.Position;
 
 /**
  * Class for developer player
