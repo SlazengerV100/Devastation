@@ -44,11 +44,11 @@ public class Devastation {
    */
   public void setup(){
     // Declare the game board as a 2D array
-    this.board = new Tile[boardHeight][boardWidth];
+    this.board = new Tile[boardWidth][boardHeight];
 
     // Initialize the game board with empty tiles
-    for (int x = 0; x < boardHeight; x++) {
-      for (int y = 0; y < boardWidth; y++) {
+    for (int y = 0; y < boardHeight; y++) {
+      for (int x = 0; x < boardWidth; x++) {
         board[x][y] = new Tile(new Position(x, y)); // Create a tile at each point (x, y)
       }
     }
