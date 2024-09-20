@@ -4,11 +4,26 @@ import { useAtomValue, useAtom } from 'jotai';
 import { connectionStatusAtom, localCharacterAtom } from '../js/atoms.js';
 import CharacterSelectStage from "../stages/CharacterSelectStage.jsx";
 import GameStage from "../stages/GameStage.jsx";
+import {connect} from "./connectionManager.js";
 
 const StageManager = () => {
-    const connectionStatus = useAtomValue(connectionStatusAtom);
+    const [connectionStatus, setConnectionStatus] = useAtom(connectionStatusAtom);
     const [storedPlayer, setStoredPlayer] = useAtom(localCharacterAtom);
     const [currentStage, setCurrentStage] = useState(<LoadingStage />);
+
+    const attemptConnect = async () => {
+        try {
+            await connect();
+            setConnectionStatus('connected');
+        } catch (error) {
+            console.error('Connection failed:', error);
+            setConnectionStatus('disconnected');
+        }
+    };
+
+    useEffect(() => {
+        attemptConnect().then(r => console.log("Connection established!"))
+    }, []);
 
     useEffect(() => {
         const checkStoredPlayer = () => {
