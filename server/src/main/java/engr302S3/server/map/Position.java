@@ -1,5 +1,7 @@
 package engr302S3.server.map;
 
+import engr302S3.server.Devastation;
+
 /**
  * Record for 2D position on a grid
  * @param x
@@ -7,16 +9,10 @@ package engr302S3.server.map;
  */
 public record Position(int x, int y) {
 
-    //Values not final
-    private static final int minX = 0;
-    private static final int minY = 0;
-    private static final int maxX = 50;
-    private static final int maxY = 50;
-
     public Position {
 
-        if (this.x() < minX || this.x() > maxX || this.y() < minY || this.y() > maxY) {
-            throw new IllegalArgumentException("Position x or y must be within range (" + minX + ", " + maxX + ")");
+        if (this.x() < 0 || this.x() > Board.BOARD_WIDTH || this.y() < 0 || this.y() > Board.BOARD_HEIGHT) {
+            throw new IllegalArgumentException("Position x or y must be within range (" + Board.BOARD_WIDTH + ", " + Board.BOARD_HEIGHT + ")");
         }
     }
 
@@ -28,6 +24,21 @@ public record Position(int x, int y) {
      */
     public Position add(Position position) {
         return new Position(x + position.x(), y + position.y());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Position position = (Position) obj;
+        return x == position.x && y == position.y;
     }
 
     @Override

@@ -1,9 +1,6 @@
 package engr302S3.server;
 
-import engr302S3.server.map.Position;
-import engr302S3.server.map.Station;
-import engr302S3.server.map.Tile;
-import engr302S3.server.map.TileType;
+import engr302S3.server.map.*;
 import engr302S3.server.ticketFactory.Ticket;
 import engr302S3.server.ticketFactory.TicketFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +33,17 @@ public class ScheduledTasks {
         //update the game clock
         game.decreaseTime();
         //check each tile for a ticket, and update the ticket timer if there is one
-        for (int y = 0; y < game.getBoardHeight(); y++) {
+        for (int y = 0; y < Board.BOARD_HEIGHT; y++) {
 
-            for (int x = 0; x < game.getBoardWidth(); x++) {
+            for (int x = 0; x < Board.BOARD_WIDTH; x++) {
 
-                if (game.getTileAt(new Position(x, y)).getType() == TileType.TICKET) {
-                    ((Ticket) game.getTileAt(new Position(x, y)).getContent()).incrementTime();
+                if (game.getBoard().getTileAt(new Position(x, y)).getType() == TileType.TICKET) {
+                    ((Ticket) game.getBoard().getTileAt(new Position(x, y)).getContent()).incrementTime();
                 }
             }
         }
         //update the stations and tasks that they are working on
-        for (Station station : game.getStations()) {
+        for (Station station : game.getBoard().getStations()) {
 
             if (station.progress()) {
                 //broadcast an update to clients
@@ -60,10 +57,10 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = 20000)
     public void createTicket() {
 
-        for (int i = 0; i < game.getBoardHeight(); i++) {
+        for (int i = 0; i < Board.BOARD_HEIGHT; i++) {
             //check the first column of the board for generated tickets, I am assuming this is where we
             //will  spawn them
-            Tile tile = game.getTileAt(new Position(0, i));
+            Tile tile = game.getBoard().getTileAt(new Position(0, i));
 
             if (tile.empty()) {
                 tile.setTicket(TicketFactory.getTicket());

@@ -1,10 +1,12 @@
 package engr302S3.server.players;
 
 import engr302S3.server.map.Position;
+import engr302S3.server.map.Tile;
 import engr302S3.server.ticketFactory.Ticket;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -26,12 +28,15 @@ public abstract class Player {
      * Player movement directions
      */
     public enum Direction {
-        UP, DOWN, LEFT, RIGHT;
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT;
 
         public Position getTranslation() {
             return switch (this) {
                 case LEFT -> new Position(-1, 0);
-                case UP -> new Position(0,-1);
+                case UP -> new Position(0, -1);
                 case DOWN -> new Position(0, 1);
                 case RIGHT -> new Position(1, 0);
             };
@@ -46,6 +51,7 @@ public abstract class Player {
 
     /**
      * Player Constructor
+     *
      * @param role
      * @param position
      */
@@ -68,13 +74,6 @@ public abstract class Player {
         } else {
             this.position = this.position.add(getDirection().getTranslation());
         }
-    }
-
-    /**
-     * Drop currently held ticket, need to implement conditions for dropping at location (dependent on role)
-     */
-    public void dropTicket() {
-        this.heldTicket.ifPresent(ticket -> ticket.setPosition(this.position.add(direction.getTranslation())));
     }
 
     @Override
