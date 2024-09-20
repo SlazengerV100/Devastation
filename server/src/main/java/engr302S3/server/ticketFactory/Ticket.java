@@ -1,6 +1,6 @@
 package engr302S3.server.ticketFactory;
 
-import engr302S3.server.Position;
+import engr302S3.server.map.Position;
 import lombok.Getter;
 import lombok.Setter;
 

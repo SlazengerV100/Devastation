@@ -1,6 +1,4 @@
-package engr302S3.server;
-
-import lombok.Getter;
+package engr302S3.server.map;
 
 /**
  * Enum representing the different types of Stations, categorised into Tester and Developer.
@@ -13,10 +11,7 @@ public enum StationType {
     BACKEND(Room.DEVELOPER),
     API(Room.DEVELOPER);
 
-    /**
-     * Enum to represent the room of the role.
-     */
-    private final Room room;
+    private final Room room; //Enum to represent the room of the role.
 
     /**
      * Constructor to associate a role with a room.
@@ -50,6 +45,6 @@ public enum StationType {
      */
     private enum Room {
         TESTER,
-        DEVELOPER;
+        DEVELOPER
     }
 }
