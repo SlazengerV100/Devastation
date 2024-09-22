@@ -6,7 +6,6 @@ import engr302S3.server.players.ProjectManager;
 import engr302S3.server.players.Tester;
 
 import engr302S3.server.ticketFactory.Ticket;
-import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -70,7 +69,7 @@ public class Board {
      *
      * @param player to requested to pick up item
      */
-    public void pickUpTicket(Player player) { //This can be changed to string etc or some other way to get players
+    public void pickUpTicket(Player player) { //This can be changed to string etc. or some other way to get players
 
         Position position = player.getPosition().add(player.getDirection().getTranslation());
         Tile tile = board[position.x()][position.y()];
@@ -86,10 +85,23 @@ public class Board {
     }
 
     /**
-     * Drop currently held ticket, need to implement conditions for dropping at location (dependent on role)
+     * Drop currently held ticket of player, may change parameter to string for specific player
      */
     public void dropTicket(Player player) {
-        player.getHeldTicket().ifPresent(ticket -> ticket.setPosition(player.getPosition().add(player.getDirection().getTranslation())));
+
+        Position position;
+
+        try {
+            position = player.getPosition().add(player.getDirection().getTranslation());
+        } catch (IllegalArgumentException e) {
+            return; //Do nothing if the position is out of bounds
+        }
+
+        Ticket ticket = player.getHeldTicket().get();
+
+        player.getHeldTicket().ifPresent(x -> x.setPosition(position));
+        player.setHeldTicket(Optional.empty());
+        board[position.x()][position.y()].setTicket(ticket);
     }
 
     /**

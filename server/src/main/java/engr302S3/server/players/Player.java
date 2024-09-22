@@ -1,12 +1,11 @@
 package engr302S3.server.players;
 
 import engr302S3.server.map.Position;
-import engr302S3.server.map.Tile;
 import engr302S3.server.ticketFactory.Ticket;
+
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -52,8 +51,8 @@ public abstract class Player {
     /**
      * Player Constructor
      *
-     * @param role
-     * @param position
+     * @param role of the player
+     * @param position of the player initially
      */
     public Player(Role role, Position position) {
         this.role = role;

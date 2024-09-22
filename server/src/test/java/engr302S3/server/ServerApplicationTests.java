@@ -47,16 +47,13 @@ class ServerApplicationTests {
 
     @Test
     public void testTicketFactory() {
-        TicketFactory ticketFactory = new TicketFactory();
         List<Ticket> tickets = new ArrayList<>();
 
         for (int i = 0; i < 50; i++) {
-            tickets.add(ticketFactory.getTicket());
+            tickets.add(TicketFactory.getTicket());
         }
 
-        tickets.forEach(e -> {
-            System.out.println(e.getTasks().size());
-        });
+        tickets.forEach(e -> System.out.println(e.getTasks().size()));
 
         assert tickets.stream().anyMatch(e -> e.getTasks().size() == 1);
         assert tickets.stream().anyMatch(e -> e.getTasks().size() == StationType.values().length);
@@ -67,21 +64,47 @@ class ServerApplicationTests {
         Devastation devastation = new Devastation();
 
 
-
         Board board = devastation.getBoard();
+        Player player = board.getPlayers().get(0);
 
         board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].setTicket(TicketFactory.getTicket());
-        board.getPlayers().get(0).movePlayer(Player.Direction.LEFT);
+        player.movePlayer(Player.Direction.LEFT);
 
-
-
-        assert board.getPlayers().get(0).getPosition().equals( board.getBoard()[Board.BOARD_WIDTH/4][Board.BOARD_HEIGHT/2].getPosition());
+        assert player.getPosition().equals( board.getBoard()[Board.BOARD_WIDTH/4][Board.BOARD_HEIGHT/2].getPosition());
 
         System.out.println(devastation.getBoard());
 
-        board.pickUpTicket(board.getPlayers().get(0));
+        board.pickUpTicket(player);
 
         System.out.println(devastation.getBoard());
+
+        Position position =  player.getPosition().add(player.getDirection().getTranslation());
+
+        assert !board.getBoard()[position.x()][position.y()].containsTicket();
+    }
+
+    @Test
+    public void testDropTicket() {
+
+        Devastation devastation = new Devastation();
+
+        Board board = devastation.getBoard();
+        Player player = board.getPlayers().get(0);
+
+        board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].setTicket(TicketFactory.getTicket());
+        player.movePlayer(Player.Direction.LEFT);
+
+        board.pickUpTicket(player);
+
+        System.out.println(devastation.getBoard());
+
+        assert !board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].containsTicket();
+
+        board.dropTicket(player);
+
+        System.out.println(devastation.getBoard());
+
+        assert board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].containsTicket();
     }
 
     @Test

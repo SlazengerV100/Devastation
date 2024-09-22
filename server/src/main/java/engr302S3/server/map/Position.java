@@ -1,7 +1,5 @@
 package engr302S3.server.map;
 
-import engr302S3.server.Devastation;
-
 /**
  * Record for 2D position on a grid
  * @param x
