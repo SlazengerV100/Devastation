@@ -37,6 +37,15 @@ public class Tile {
     }
 
     /**
+     * Method to check if the tile contains a ticket.
+     *
+     * @return {@code true} if the tiles contents are a ticket, {@code false} otherwise.
+     */
+    public boolean containsTicket() {
+        return content instanceof Ticket;
+    }
+
+    /**
      * Method to set the tile's content as a Station.
      *
      * @param station The Station object to set on the tile.
@@ -72,5 +81,15 @@ public class Tile {
     public void clearTile() {
         this.type = TileType.EMPTY;
         this.content = null;
+    }
+
+    @Override
+    public String toString() {
+        return switch (type) {
+            case STATION -> "_S_|";
+            case PLAYER -> "_P_|";
+            case TICKET -> "_T_|";
+            case EMPTY -> "_*_|";
+        };
     }
 }
