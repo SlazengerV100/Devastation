@@ -68,10 +68,24 @@ public abstract class Player {
      * @param direction to move player in
      */
     public void movePlayer(Direction direction) {
+
+        if (!active) {
+           return;
+        }
+
         if (this.direction != direction) {
             setDirection(direction);
         } else {
-            this.position = this.position.add(getDirection().getTranslation());
+
+            Position position;
+
+            try {
+                position = this.position.add(getDirection().getTranslation());
+            } catch (IllegalArgumentException e) {
+                return; //cannot move if out of bounds
+            }
+
+            this.setPosition(position);
         }
     }
 
