@@ -49,7 +49,7 @@ class ServerApplicationTests {
     public void testTicketFactory() {
         List<Ticket> tickets = new ArrayList<>();
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 500; i++) {
             tickets.add(TicketFactory.getTicket());
         }
 
