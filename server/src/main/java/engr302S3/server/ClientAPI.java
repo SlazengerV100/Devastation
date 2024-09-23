@@ -14,11 +14,11 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class StateController {
+public class ClientAPI {
     private Devastation devastation;
 
     @Autowired
-    StateController(Devastation devastation) {
+    ClientAPI(Devastation devastation) {
         this.devastation = devastation;
     }
 
