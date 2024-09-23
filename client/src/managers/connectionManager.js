@@ -37,28 +37,6 @@ const setupSubscriptions = () => {
         console.log('Received greeting:', message.body);
     });
 
-    stompClient.subscribe('/topic/state', (message) => {
-        try {
-            const state = JSON.parse(message.body);
-            console.log('Received state:', state);
-            // Extract x and y coordinates from the state
-            let dev = state.playerMap.Developer;
-            let x = dev.position.x;
-            let y = dev.position.y;
-
-            console.log("X: " + x + " Y: " + y)
-
-            // Update localCharacterAtom with new x and y values
-            store.set(localCharacterAtom, (prev) => ({
-                ...prev,
-                characterX: x,
-                characterY: y
-            }));
-
-        } catch (error) {
-            console.error('Failed to parse state:', error);
-        }
-    });
 };
 
 export const requestState = async () => {
@@ -74,7 +52,7 @@ export const requestState = async () => {
             try {
                 const parsedMessage = JSON.parse(message.body);
                 console.log(parsedMessage)
-                resolve(parsedMessage.playerMap); // Resolve the Promise with the parsed message
+                resolve(parsedMessage); // Resolve the Promise with the parsed message
             } catch (error) {
                 reject('Failed to parse message');
             }
@@ -100,20 +78,21 @@ export const sendPlayerMovement = (direction) => {
 
 };
 
-export const activatePlayer = async (playerTitle, activate = true) => {
+export const activatePlayer = async (playerId, activate = true) => {
     if (!stompClient) {
         console.warn('Cannot activate player: not connected.');
         return;
     }
-    console.log(playerTitle)
+    console.log(playerId)
     // Send the activation request
-    stompClient.send("/app/player/activate", {}, JSON.stringify({ playerTitle, activate }));
+    stompClient.send("/app/player/activate", {}, JSON.stringify({ playerId, activate }));
 
     // Return a Promise that resolves when the server responds
     return new Promise((resolve, reject) => {
         const subscription = stompClient.subscribe('/topic/player/activate', (message) => {
             try {
                 const parsedMessage = JSON.parse(message.body);
+                console.log("PLAYER IS NOW: " + parsedMessage)
                 resolve(parsedMessage); // Resolve the Promise with the updated player map
             } catch (error) {
                 reject('Failed to parse activation response');
