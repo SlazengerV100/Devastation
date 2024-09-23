@@ -55,7 +55,7 @@ public class ClientAPI {
     @SendTo("/topic/player/ticket/drop")
     public Player dropTicket(PlayerRequest playerRequest) {
         Player player = devastation.getBoard().getPlayers().get(playerRequest.playerId());
-        devastation.getBoard().dropTicket(player);
+        devastation.getBoard().dropTicket(player, devastation);
         return player;
     }
 
