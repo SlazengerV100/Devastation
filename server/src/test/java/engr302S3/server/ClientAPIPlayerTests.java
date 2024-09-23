@@ -11,6 +11,8 @@ import engr302S3.server.ticketFactory.TicketFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ClientAPIPlayerTests {
@@ -23,7 +25,7 @@ public class ClientAPIPlayerTests {
     public void setUp() {
         devastation = new Devastation();
         api = new ClientAPI(devastation);
-        player = devastation.getBoard().getPlayers().values().stream().findFirst().get();
+        player = devastation.getBoard().getPlayers().values().stream().min(Comparator.comparing(Player::getId)).get();
         initialPosition = player.getPosition();
     }
 
