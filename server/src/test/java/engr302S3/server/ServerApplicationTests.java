@@ -78,7 +78,7 @@ class ServerApplicationTests {
 
         System.out.println(devastation.getBoard());
 
-        Position position =  player.getPosition().add(player.getDirection().getTranslation());
+        Position position =  player.getDirection().getTranslation(player.getPosition());
 
         assert !board.getBoard()[position.x()][position.y()].containsTicket();
     }
@@ -105,6 +105,19 @@ class ServerApplicationTests {
         System.out.println(devastation.getBoard());
 
         assert board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].containsTicket();
+    }
+
+    @Test
+    public void testMovementBelowZero() {
+        Devastation devastation = new Devastation();
+        Board board = devastation.getBoard();
+        Player player = board.getPlayers().get(0);
+
+        for (int i = 0; i < 50; i++) {
+            player.movePlayer(Player.Direction.LEFT);
+        }
+
+        System.out.print(player.getPosition());
     }
 
     @Test

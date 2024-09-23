@@ -1,6 +1,7 @@
 package engr302S3.server;
 
 import engr302S3.server.map.Position;
+import engr302S3.server.map.Board;
 import engr302S3.server.players.Developer;
 import engr302S3.server.players.Player;
 import engr302S3.server.players.ProjectManager;
@@ -20,9 +21,9 @@ public class StateService {
     private final Map<String, Player> playerMap = new HashMap<>();
 
     StateService() {
-        playerMap.put("Project Manager", new ProjectManager(new Position(0, 50)));
-        playerMap.put("Developer", new Developer(new Position(100, 50)));
-        playerMap.put("Tester", new Tester(new Position(200, 50)));
+        playerMap.put("Project Manager", new ProjectManager(new Position(Board.BOARD_WIDTH/4, Board.BOARD_HEIGHT/2)));
+        playerMap.put("Developer", new Developer(new Position(Board.BOARD_WIDTH/2, Board.BOARD_HEIGHT/2)));
+        playerMap.put("Tester", new Tester(new Position((Board.BOARD_WIDTH/4) * 3, Board.BOARD_HEIGHT/2)));
     }
 
     public void movePlayer(String role, String direction) {
