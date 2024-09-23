@@ -1,6 +1,7 @@
 package engr302S3.server;
 
 import engr302S3.server.map.*;
+import engr302S3.server.playerActions.TaskProgressBroadcast;
 import engr302S3.server.ticketFactory.Ticket;
 import engr302S3.server.ticketFactory.TicketFactory;
 
@@ -45,9 +46,8 @@ public class ScheduledTasks {
         }
         //update the stations and tasks that they are working on
         for (Station station : game.getBoard().getStations().values()) {
-
             if (station.progress()) {
-                //broadcast an update to clients
+                ClientAPI.broadcastTaskCompletion(new TaskProgressBroadcast(station.getTicketWorkingOn().get(), station.getStationType()));
             }
         }
     }
@@ -59,15 +59,15 @@ public class ScheduledTasks {
     public void createTicket() {
 
         for (int i = 0; i < Board.BOARD_HEIGHT; i++) {
-            //check the first column of the board for generated tickets, I am assuming this is where we
-            //will  spawn them
+            //check the first column of the board for generated tickets, I am assuming this is
+            //where we will  spawn them
             Tile tile = game.getBoard().getTileAt(new Position(0, i));
 
             if (tile.empty()) {
                 Ticket ticket = TicketFactory.getTicket();
                 tile.setTicket(ticket);
                 game.getBoard().addTicket(ticket.getId(), ticket);
-                //broadcast an update to clients
+                ClientAPI.broadcastTicketCreate(ticket);
                 break;
             }
         }

@@ -1,11 +1,11 @@
 package engr302S3.server;
 
-import engr302S3.server.map.Board;
 import engr302S3.server.map.Station;
 import engr302S3.server.map.Tile;
 import engr302S3.server.playerActions.Activation;
 import engr302S3.server.playerActions.Movement;
 
+import engr302S3.server.playerActions.TaskProgressBroadcast;
 import engr302S3.server.players.Player;
 import engr302S3.server.ticketFactory.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,18 +65,23 @@ public class ClientAPI {
     }
 
     @SendTo("/topic/scoreUpdate")
-    public Board broadcastScoreUpdate() {
-        return null;
+    public static int broadcastScoreUpdate(int score) {
+        return score;
     }
 
     @SendTo("/topic/ticket/create")
-    public Ticket broadcastTicketCreate() {
-        return null;
+    public static Ticket broadcastTicketCreate(Ticket ticket) {
+        return ticket;
     }
 
     @SendTo("/topic/ticket/resolve")
-    public Ticket broadcastTicketResolve() {
-        return null;
+    public static Ticket broadcastTicketResolve(Ticket ticket) {
+        return ticket;
+    }
+
+    @SendTo("/topic/ticket/task/completionUpdate")
+    public static TaskProgressBroadcast broadcastTaskCompletion(TaskProgressBroadcast tpb) {
+        return tpb;
     }
 
     @MessageMapping("/tickets")
