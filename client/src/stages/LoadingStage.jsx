@@ -6,16 +6,6 @@ import {useState, useEffect} from "react";
 const LoadingStage = () => {
     const [connectionStatus, setConnectionStatus] = useAtom(connectionStatusAtom)
 
-    const attemptConnect = async () => {
-        try {
-            await connect();
-            setConnectionStatus('connected');
-        } catch (error) {
-            console.error('Connection failed:', error);
-            setConnectionStatus('disconnected');
-        }
-    };
-
     //TODO make this appealing this stage is minimal at best right now
     return (
         <div>
