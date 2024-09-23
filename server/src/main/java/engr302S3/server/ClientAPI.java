@@ -33,7 +33,9 @@ public class ClientAPI {
     @MessageMapping("/player/activate")
     @SendTo("/topic/player/activate")
     public Player activatePlayer(Activation activationRequest){
-        return null;
+        Player player = devastation.getBoard().getPlayers().get(activationRequest.playerId());
+        player.setActive(activationRequest.activate());
+        return player;
     }
 
     @MessageMapping("/player/ticket/pickUp")
