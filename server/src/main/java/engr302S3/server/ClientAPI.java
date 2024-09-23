@@ -58,7 +58,7 @@ public class ClientAPI {
 
     @MessageMapping("/players")
     @SendTo("/topic/players")
-    public Player[] getState() {
+    public Player[] getPlayers() {
         return null;
     }
 
