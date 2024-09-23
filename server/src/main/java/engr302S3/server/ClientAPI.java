@@ -56,19 +56,19 @@ public class ClientAPI {
     }
 
     @SendTo("/topic/player/burnOut")
-    public Player broadcastPlayerBurnOut() {
-        return null;
+    public Player broadcastPlayerBurnOut(Player player) {
+        return player;
     }
 
     @SendTo("/topic/player/revive")
-    public Player broadcastPlayerRevive() {
-        return null;
+    public Player broadcastPlayerRevive(Player player) {
+        return player;
     }
 
     @MessageMapping("/players")
     @SendTo("/topic/players")
     public Player[] getPlayers() {
-        return null;
+        return devastation.getBoard().getPlayers().values().toArray(new Player[0]);
     }
 
     @SendTo("/topic/scoreUpdate")
@@ -94,18 +94,18 @@ public class ClientAPI {
     @MessageMapping("/tickets")
     @SendTo("/topic/tickets")
     public Ticket[] getTickets() {
-        return null;
+        return devastation.getBoard().getTickets().values().toArray(new Ticket[0]);
     }
 
     @MessageMapping("/stations")
     @SendTo("/topic/stations")
     public Station[] getStations() {
-        return null;
+        return devastation.getBoard().getStations().values().toArray(new Station[0]);
     }
 
     @MessageMapping("/tiles")
     @SendTo("/topic/tiles")
-    public Tile[] getTiles() {
-        return null;
+    public Tile[][] getTiles() {
+        return devastation.getBoard().getBoard();
     }
 }
