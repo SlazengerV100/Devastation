@@ -1,7 +1,5 @@
 import StageManager from "./managers/StageManager.jsx";
-import {createStore, Provider, useAtom} from 'jotai';
-import {connectionStatusAtom} from "./js/atoms.js";
-
+import {createStore, Provider } from 'jotai';
 // Create a store instance
 export const store = createStore();
 
