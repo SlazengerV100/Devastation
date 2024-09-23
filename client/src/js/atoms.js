@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 
 export const connectionStatusAtom = atom('disconnected')
-export const localCharacterAtom = atom({playerName: '', x: 0, y: 0})
+export const localCharacterAtom = atom({playerRole: '', x: 0, y: 0})
 
 

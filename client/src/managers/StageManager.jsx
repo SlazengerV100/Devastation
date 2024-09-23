@@ -83,14 +83,15 @@ const StageManager = () => {
     useEffect(() => {
         console.log('CHANGED')
         console.log(storedPlayer)
+        console.log("connectionStatus" + connectionStatus)
         if (connectionStatus === 'disconnected') {
-            setCurrentStage(<LoadingStage />);
-        } else if (storedPlayer.playerName) {
+            setCurrentStage(<LoadingStage attemptConnect={attemptConnect}/>);
+        } else if (storedPlayer.playerRole) {
             setCurrentStage(<GameStage />);
         } else {
             setCurrentStage(<CharacterSelectStage />);
         }
-    }, [connectionStatus, storedPlayer.playerName]); // Effect depends on connectionStatus and storedPlayer
+    }, [connectionStatus, storedPlayer.playerRole]); // Effect depends on connectionStatus and storedPlayer
 
 
     return (

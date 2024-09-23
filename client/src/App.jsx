@@ -1,6 +1,5 @@
 import StageManager from "./managers/StageManager.jsx";
 import {createStore, Provider, useAtom} from 'jotai';
-import {connectionStatusAtom} from "./js/atoms.js";
 import keyHandler from "./js/keyHandler.js";
 import {useEffect} from "react";
 import {sendPlayerMovement} from './managers/connectionManager.js'

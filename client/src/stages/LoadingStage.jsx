@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import {connectionStatusAtom} from '../js/atoms.js'
 import {useState, useEffect} from "react";
 
-const LoadingStage = () => {
+const LoadingStage = ({attemptConnect}) => {
     const [connectionStatus, setConnectionStatus] = useAtom(connectionStatusAtom)
 
     //TODO make this appealing this stage is minimal at best right now

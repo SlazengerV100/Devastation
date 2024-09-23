@@ -4,7 +4,7 @@ import { localCharacterAtom } from "../js/atoms.js";  // Import the atom
 import { requestState, activatePlayer } from "../managers/connectionManager.js";
 
 const CharacterSelectStage = () => {
-    const [playerActiveState, setPlayerActiveState] = useState(null);
+    const [playerMap, setPlayerMap] = useState(null);
     const [loading, setLoading] = useState(true);
     const [, setStoredPlayer] = useAtom(localCharacterAtom); // Use the atom
 
@@ -16,11 +16,7 @@ const CharacterSelectStage = () => {
         setLoading(true);
         try {
             const playerMap = await requestState();
-            const activeState = Object.entries(playerMap).map(([name, player]) => ({
-                id: name,
-                active: player.active,
-            }));
-            setPlayerActiveState(activeState);
+            setPlayerMap(playerMap);
         } catch (error) {
             console.error('Failed to fetch players:', error);
         } finally {
@@ -28,18 +24,18 @@ const CharacterSelectStage = () => {
         }
     };
 
-    const setSessionPlayer = async (playerName) => {
+    const setSessionPlayer = async (playerId) => {
         try {
-            const updatedState = await activatePlayer(playerName);
-            console.log('Player activated:', updatedState);
+            const player = await activatePlayer(playerId);
+            console.log('Player activated:', player);
 
             // Update session storage
-            sessionStorage.setItem('playerID', playerName);
+            sessionStorage.setItem('playerID', player.id);
 
             // Update the atom
             setStoredPlayer(prev => ({
                 ...prev,
-                playerName: playerName
+                playerRole: player.role
             }));
 
             // Update player selection state
@@ -57,13 +53,13 @@ const CharacterSelectStage = () => {
                 <div>
                     <h3>Available Players:</h3>
                     <div>
-                        {playerActiveState.map((p) => (
+                        {playerMap.map((p) => (
                             <button
                                 disabled={p.active}
                                 onClick={() => setSessionPlayer(p.id)}
                                 key={p.id}
                             >
-                                {p.id}
+                                {p.role}
                             </button>
                         ))}
                     </div>
