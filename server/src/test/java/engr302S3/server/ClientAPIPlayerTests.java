@@ -140,4 +140,28 @@ public class ClientAPIPlayerTests {
         assertEquals(TileType.EMPTY, devastation.getBoard().getTileAt(new Position(initialPosition.x(), initialPosition.y() - 1)).getType());
         assertEquals(TileType.TICKET, devastation.getBoard().getTileAt(ticketPosition).getType());
     }
+
+    @Test
+    public void testDropTicket_valid() {
+        this.testPickUpTicket(player);
+        Ticket ticket = player.getHeldTicket().get();
+        initialPosition = player.getPosition();
+        api.dropTicket(new PlayerRequest(player.getId()));
+        assertEquals(initialPosition, player.getPosition());
+        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        assertTrue(player.getHeldTicket().isEmpty());
+        Position ticketPosition = new Position(initialPosition.x(), initialPosition.y() + 1);
+        assertEquals(ticketPosition, ticket.getPosition());
+        assertEquals(ticket, devastation.getBoard().getTileAt(ticketPosition).getContent());
+    }
+
+    @Test
+    public void testDropTicket_noTicketPresent() {
+        api.dropTicket(new PlayerRequest(player.getId()));
+        assertEquals(initialPosition, player.getPosition());
+        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        assertTrue(player.getHeldTicket().isEmpty());
+        Position noTicketPosition = new Position(initialPosition.x(), initialPosition.y() + 1);
+        assertEquals(TileType.EMPTY, devastation.getBoard().getTileAt(noTicketPosition).getType());
+    }
 }
