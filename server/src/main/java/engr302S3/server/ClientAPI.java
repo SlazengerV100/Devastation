@@ -5,6 +5,7 @@ import engr302S3.server.map.Tile;
 import engr302S3.server.playerActions.Activation;
 import engr302S3.server.playerActions.Movement;
 
+import engr302S3.server.playerActions.PlayerRequest;
 import engr302S3.server.playerActions.TaskProgressBroadcast;
 import engr302S3.server.players.Player;
 import engr302S3.server.ticketFactory.Ticket;
@@ -40,14 +41,18 @@ public class ClientAPI {
 
     @MessageMapping("/player/ticket/pickUp")
     @SendTo("/topic/player/ticket/pickUp")
-    public Player pickUpTicket() {
-        return null;
+    public Player pickUpTicket(PlayerRequest playerRequest) {
+        Player player = devastation.getBoard().getPlayers().get(playerRequest.playerId());
+        devastation.getBoard().pickUpTicket(player);
+        return player;
     }
 
     @MessageMapping("/player/ticket/drop")
     @SendTo("/topic/player/ticket/drop")
-    public Player dropTicket() {
-        return null;
+    public Player dropTicket(PlayerRequest playerRequest) {
+        Player player = devastation.getBoard().getPlayers().get(playerRequest.playerId());
+        devastation.getBoard().dropTicket(player);
+        return player;
     }
 
     @SendTo("/topic/player/burnOut")
