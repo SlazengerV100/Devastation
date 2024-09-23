@@ -76,4 +76,18 @@ public class ClientAPIPlayerTests {
         assertEquals(initialPosition, newPosition);
         assertEquals(Player.Direction.LEFT, player.getDirection());
     }
+
+    @Test
+    public void testActivatePlayer_activate() {
+        Player player = devastation.getBoard().getPlayers().values().stream().findFirst().get();
+        api.activatePlayer(new Activation(player.getId(), true));
+        assertTrue(player.isActive());
+    }
+
+    @Test
+    public void testActivatePlayer_deactivate() {
+        Player player = devastation.getBoard().getPlayers().values().stream().findFirst().get();
+        api.activatePlayer(new Activation(player.getId(), false));
+        assertFalse(player.isActive());
+    }
 }
