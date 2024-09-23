@@ -1,5 +1,6 @@
 package engr302S3.server.map;
 
+import engr302S3.server.Devastation;
 import engr302S3.server.players.Developer;
 import engr302S3.server.players.Player;
 import engr302S3.server.players.ProjectManager;
@@ -102,7 +103,7 @@ public class Board {
     /**
      * Drop currently held ticket of player, may change parameter to string for specific player
      */
-    public void dropTicket(Player player) {
+    public void dropTicket(Player player, Devastation game) {
 
         Position position;
 
@@ -121,6 +122,12 @@ public class Board {
         player.getHeldTicket().ifPresent(x -> x.setPosition(position));
         player.setHeldTicket(Optional.empty());
         board[position.x()][position.y()].setTicket(ticket);
+
+        // If ticket is placed at end of board and it is completed then update the game score and clear the ticket
+        if(position.x() == BOARD_WIDTH && ticket.isComplete()){
+            getTileAt(position).empty();
+            game.updateScore(ticket);
+        }
     }
 
     /**
