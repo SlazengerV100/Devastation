@@ -4,7 +4,9 @@ import { useAtomValue, useAtom } from 'jotai';
 import { connectionStatusAtom, localCharacterAtom } from '../js/atoms.js';
 import CharacterSelectStage from "../stages/CharacterSelectStage.jsx";
 import GameStage from "../stages/GameStage.jsx";
-import {connect} from "./connectionManager.js";
+import { useAtom } from 'jotai';
+import { connectionStatusAtom, localCharacterAtom } from '../js/atoms.js';
+import { connect } from "./connectionManager.js";
 
 const StageManager = () => {
     const [connectionStatus, setConnectionStatus] = useAtom(connectionStatusAtom);
@@ -22,9 +24,10 @@ const StageManager = () => {
     };
 
     useEffect(() => {
-        attemptConnect().then(r => console.log("Connection established!"))
+        attemptConnect().then(() => console.log("Connection established!"));
     }, []);
 
+    // Check for stored player in localStorage
     useEffect(() => {
         const checkStoredPlayer = () => {
             const player = localStorage.getItem('playerID');
@@ -54,9 +57,9 @@ const StageManager = () => {
     }, [connectionStatus, storedPlayer.playerName]); // Effect depends on connectionStatus and storedPlayer
 
     return (
-        <>
-            {currentStage}
-        </>
+       <>
+           {currentStage}
+       </>
     );
 };
 
