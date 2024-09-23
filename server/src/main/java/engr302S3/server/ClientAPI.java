@@ -25,7 +25,9 @@ public class ClientAPI {
     @MessageMapping("/player/move")
     @SendTo("/topic/player/move")
     public Player movePlayer(Movement movementRequest) {
-        return null;
+        Player player = devastation.getBoard().getPlayers().get(movementRequest.playerId());
+        player.movePlayer(movementRequest.direction());
+        return player;
     }
 
     @MessageMapping("/player/activate")
