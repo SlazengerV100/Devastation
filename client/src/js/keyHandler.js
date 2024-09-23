@@ -13,7 +13,8 @@ export default function keyHandler(sendPlayerMovement) {
                     ...prev,
                     y: prev.y - 1,
                 }));
-                //sendPlayerMovement('up'); // Send movement to backend
+
+                sendPlayerMovement('UP'); // Send movement to backend
                 break;
             case 'a':
                 // Move player left
@@ -22,7 +23,8 @@ export default function keyHandler(sendPlayerMovement) {
                     ...prev,
                     x: prev.x - 1,
                 }));
-                //sendPlayerMovement('left');
+
+                sendPlayerMovement('LEFT');
                 break;
             case 's':
                 // Move player down
@@ -31,7 +33,8 @@ export default function keyHandler(sendPlayerMovement) {
                     ...prev,
                     y: prev.y + 1,
                 }));
-                //sendPlayerMovement('down');
+
+                sendPlayerMovement('DOWN');
                 break;
             case 'd':
                 // Move player right
@@ -40,17 +43,18 @@ export default function keyHandler(sendPlayerMovement) {
                     ...prev,
                     x: prev.x + 1,
                 }));
-                //sendPlayerMovement('right');
+
+                sendPlayerMovement('RIGHT');
                 break;
             case 'o':
                 // Pick up ticket
                 console.log("O pressed")
-                //sendPlayerMovement('ticketPickUp'); // Replace with your actual backend action
+                //sendPlayerAction('PICKUP'); // Replace with your actual backend action
                 break;
             case 'p':
                 // Pick drop
                 console.log("P pressed")
-                //sendPlayerMovement('ticketDrop'); // Replace with your actual backend action
+                //sendPlayerAction('DROP'); // Replace with your actual backend action
                 break;
             default:
                 break;

@@ -14,7 +14,6 @@ const App = () => {
     useEffect(() => {
         const cleanup = keyHandler(sendPlayerMovement);
 
-        // Cleanup event listeners on unmount
         return () => {
             cleanup();
         };
