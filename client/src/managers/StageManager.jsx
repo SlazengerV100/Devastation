@@ -53,6 +53,7 @@ const StageManager = () => {
         }
     }, [connectionStatus, storedPlayer.playerName]); // Effect depends on connectionStatus and storedPlayer
 
+
     return (
         <>
             {currentStage}
