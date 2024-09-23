@@ -42,6 +42,8 @@ public abstract class Player {
         }
     }
 
+    private static long idTracker = 1;
+    private final long id;
     private final Role role;
     private Position position;
     private Direction direction;
@@ -55,6 +57,7 @@ public abstract class Player {
      * @param position of the player initially
      */
     public Player(Role role, Position position) {
+        id = idTracker++;
         this.role = role;
         this.position = position;
         this.direction = Direction.RIGHT;
