@@ -71,7 +71,7 @@ public class Board {
      */
     public void pickUpTicket(Player player) { //This can be changed to string etc. or some other way to get players
 
-        Position position = player.getPosition().add(player.getDirection().getTranslation());
+        Position position = player.getDirection().getTranslation(player.getPosition());
         Tile tile = board[position.x()][position.y()];
 
         if (tile.empty() || !tile.containsTicket()) {
@@ -92,7 +92,7 @@ public class Board {
         Position position;
 
         try {
-            position = player.getPosition().add(player.getDirection().getTranslation());
+            position = player.getDirection().getTranslation(player.getPosition());
         } catch (IllegalArgumentException e) {
             return; //Do nothing if the position is out of bounds
         }

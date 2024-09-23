@@ -32,12 +32,12 @@ public abstract class Player {
         LEFT,
         RIGHT;
 
-        public Position getTranslation() {
+        public Position getTranslation(Position position) {
             return switch (this) {
-                case LEFT -> new Position(-1, 0);
-                case UP -> new Position(0, -1);
-                case DOWN -> new Position(0, 1);
-                case RIGHT -> new Position(1, 0);
+                case LEFT -> new Position(position.x() - 1, position.y());
+                case UP -> new Position(position.x(), position.y() - 1);
+                case DOWN -> new Position(position.x(), position.y() + 1);
+                case RIGHT -> new Position(position.x() + 1, position.y());
             };
         }
     }
@@ -80,7 +80,7 @@ public abstract class Player {
             Position position;
 
             try {
-                position = this.position.add(getDirection().getTranslation());
+                position = getDirection().getTranslation(this.position);
             } catch (IllegalArgumentException e) {
                 return; //cannot move if out of bounds
             }

@@ -45,7 +45,7 @@ public abstract class Techie extends Player {
             Position position;
 
             try {
-                position = super.getPosition().add(getDirection().getTranslation());
+                position = super.getDirection().getTranslation(super.getPosition());
             } catch (IllegalArgumentException e) {
                 return; //cannot move if out of bounds
             }
