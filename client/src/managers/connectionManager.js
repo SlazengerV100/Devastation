@@ -85,12 +85,19 @@ export const requestState = async () => {
     });
 };
 
-export const sendPlayerMovement = (name, direction) => {
-    if (stompClient) {
-        stompClient.send("/app/movePlayer", {}, JSON.stringify({ role: name, direction }));
-    } else {
+export const sendPlayerMovement = (direction) => {
+    if (!stompClient){
         console.warn('Cannot send movement: not connected.');
+        return
     }
+    name = sessionStorage.getItem("playerID");
+    if (name == null){
+        console.warn('Cannot send movement: playerID not set');
+    }
+
+    console.log("/app/movePlayer -> " + JSON.stringify({ role: name, direction }))
+    stompClient.send("/app/movePlayer", {}, JSON.stringify({ role: name, direction }));
+
 };
 
 export const activatePlayer = async (playerTitle, activate = true) => {
