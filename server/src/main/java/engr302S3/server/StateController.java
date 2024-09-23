@@ -1,8 +1,13 @@
 package engr302S3.server;
 
+import engr302S3.server.map.Board;
+import engr302S3.server.map.Station;
+import engr302S3.server.map.Tile;
 import engr302S3.server.playerActions.Activation;
 import engr302S3.server.playerActions.Movement;
 
+import engr302S3.server.players.Player;
+import engr302S3.server.ticketFactory.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -10,91 +15,83 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class StateController {
+    private Devastation devastation;
 
     @Autowired
-    private StateService stateService;
+    StateController(Devastation devastation) {
+        this.devastation = devastation;
+    }
+
     @MessageMapping("/player/move")
     @SendTo("/topic/player/move")
-    public State movePlayer(Movement movementRequest) {
-        // Update game state
-        stateService.movePlayer(movementRequest.getRole(), movementRequest.getDirection());
-
-        //Send back to client
-        return new State(stateService.getPlayerMap());
+    public Player movePlayer(Movement movementRequest) {
+        return null;
     }
 
     @MessageMapping("/player/activate")
     @SendTo("/topic/player/activate")
-    public State activatePlayer(Activation activationRequest){
-        // Update game state
-        if (activationRequest.isActivate()){
-            stateService.activatePlayer(activationRequest.getPlayerTitle());
-        } else {
-            stateService.deactivatePlayer(activationRequest.getPlayerTitle());
-        }
-
-        //Send back to client
-        return new State(stateService.getPlayerMap());
+    public Player activatePlayer(Activation activationRequest){
+        return null;
     }
 
     @MessageMapping("/player/ticket/pickUp")
     @SendTo("/topic/player/ticket/pickUp")
-    public State pickUpTicket() {
-        return new State(stateService.getPlayerMap());
+    public Player pickUpTicket() {
+        return null;
     }
 
     @MessageMapping("/player/ticket/drop")
     @SendTo("/topic/player/ticket/drop")
-    public State dropTicket() {
-        return new State(stateService.getPlayerMap());
+    public Player dropTicket() {
+        return null;
     }
 
     @SendTo("/topic/player/burnOut")
-    public void broadcastPlayerBurnOut() {
-
+    public Player broadcastPlayerBurnOut() {
+        return null;
     }
 
     @SendTo("/topic/player/revive")
-    public void broadcastPlayerRevive() {
-
+    public Player broadcastPlayerRevive() {
+        return null;
     }
 
     @MessageMapping("/players")
     @SendTo("/topic/players")
-    public State getState() {
-        return new State(stateService.getPlayerMap());
+    public Player[] getState() {
+        return null;
     }
 
     @SendTo("/topic/scoreUpdate")
-    public void broadcastScoreUpdate() {
-
+    public Board broadcastScoreUpdate() {
+        return null;
     }
 
     @SendTo("/topic/ticket/create")
-    public void broadcastTicketCreate() {
-
+    public Ticket broadcastTicketCreate() {
+        return null;
     }
 
     @SendTo("/topic/ticket/resolve")
-    public void broadcastTicketResolve() {
-
+    public Ticket broadcastTicketResolve() {
+        return null;
     }
 
     @MessageMapping("/tickets")
     @SendTo("/topic/tickets")
-    public State getTickets() {
+    public Ticket[] getTickets() {
         return null;
     }
 
     @MessageMapping("/stations")
     @SendTo("/topic/stations")
-    public State getStations() {
+    public Station[] getStations() {
         return null;
     }
 
     @MessageMapping("/tiles")
     @SendTo("/topic/tiles")
-    public State getTiles() {
+    public Tile[] getTiles() {
         return null;
     }
 }
