@@ -13,7 +13,8 @@ import java.util.ArrayList;
  */
 @Getter
 public class Ticket {
-
+    private static long idTracker = 1;
+    private final long id;
     private final ArrayList<Task> tasks;
     private final String ticketTitle;
     private int totalTime;
@@ -21,6 +22,7 @@ public class Ticket {
     private final double blowOutProb;
 
     Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
+        id = idTracker++;
         this.ticketTitle = title;
         this.totalTime = totalTime;
         this.blowOutProb = blowOutProb;

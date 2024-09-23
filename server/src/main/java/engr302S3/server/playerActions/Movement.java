@@ -1,17 +1,5 @@
 package engr302S3.server.playerActions;
 
-import lombok.Getter;
+import engr302S3.server.players.Player;
 
-@Getter
-public class Movement {
-
-    private String role;
-    private String direction;
-
-    public Movement() {}
-
-    public Movement(String role, String direction) {
-        this.role = role;
-        this.direction = direction;
-    }
-}
+public record Movement(long playerId, Player.Direction direction) {}
