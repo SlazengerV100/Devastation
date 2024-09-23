@@ -44,7 +44,7 @@ public class ScheduledTasks {
             }
         }
         //update the stations and tasks that they are working on
-        for (Station station : game.getBoard().getStations()) {
+        for (Station station : game.getBoard().getStations().values()) {
 
             if (station.progress()) {
                 //broadcast an update to clients
@@ -64,7 +64,9 @@ public class ScheduledTasks {
             Tile tile = game.getBoard().getTileAt(new Position(0, i));
 
             if (tile.empty()) {
-                tile.setTicket(TicketFactory.getTicket());
+                Ticket ticket = TicketFactory.getTicket();
+                tile.setTicket(ticket);
+                game.getBoard().addTicket(ticket.getId(), ticket);
                 //broadcast an update to clients
                 break;
             }

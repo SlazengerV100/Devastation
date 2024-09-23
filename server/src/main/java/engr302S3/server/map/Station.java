@@ -13,6 +13,8 @@ import java.util.Optional;
 @Getter
 public class Station {
 
+    private static long idTracker;
+    private final long id;
     private final StationType stationType;
     private int progress;
     private Optional<Ticket> ticketWorkingOn;
@@ -23,6 +25,7 @@ public class Station {
      * @param stationType the type of station.
      */
     public Station(StationType stationType) {
+        id = idTracker++;
         this.stationType = stationType;
         this.progress = 0;
     }

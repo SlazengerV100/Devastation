@@ -9,6 +9,8 @@ import engr302S3.server.ticketFactory.Ticket;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Getter
@@ -18,8 +20,9 @@ public class Board {
     public static final int BOARD_HEIGHT = 20;
 
     private final Tile[][] board;
-    private final ArrayList<Player> players; //changed to map dependent on information from frontend
-    private final ArrayList<Station> stations;
+    private final Map<Long, Player> players;
+    private final Map<Long, Station> stations;
+    private final Map<Long, Ticket> tickets;
 
     public Board() {
         this.board = new Tile[BOARD_WIDTH][BOARD_HEIGHT];
@@ -30,8 +33,9 @@ public class Board {
             }
         }
 
-        this.players = new ArrayList<>(3);
-        this.stations = new ArrayList<>(StationType.values().length);
+        this.players = new HashMap<>();
+        this.stations = new HashMap<>();
+        this.tickets = new HashMap<>();
         setup();
     }
 
@@ -40,28 +44,40 @@ public class Board {
      */
     private void setup() {
 
-        // Add players to list
-        this.players.add(new ProjectManager(new Position(BOARD_WIDTH/4, BOARD_HEIGHT/2)));
-        this.players.add(new Developer(new Position(BOARD_WIDTH/2, BOARD_HEIGHT/2)));
-        this.players.add(new Tester(new Position((BOARD_WIDTH/4) * 3, BOARD_HEIGHT/2)));
+        // Add players
+        ProjectManager projectManager = new ProjectManager(new Position(BOARD_WIDTH/4, BOARD_HEIGHT/2));
+        Developer developer = new Developer(new Position(BOARD_WIDTH/2, BOARD_HEIGHT/2));
+        Tester tester = new Tester(new Position((BOARD_WIDTH/4) * 3, BOARD_HEIGHT/2));
+        this.players.put(projectManager.getId(), projectManager);
+        this.players.put(developer.getId(), developer);
+        this.players.put(tester.getId(), tester);
 
         // Initialise player positions to tiles
-        board[BOARD_WIDTH/4][BOARD_HEIGHT/2].setPlayer(players.get(0));
-        board[BOARD_WIDTH/2][BOARD_HEIGHT/2].setPlayer(players.get(1));
-        board[(BOARD_WIDTH/4) * 3][BOARD_HEIGHT/2].setPlayer(players.get(2));
+        board[BOARD_WIDTH/4][BOARD_HEIGHT/2].setPlayer(projectManager);
+        board[BOARD_WIDTH/2][BOARD_HEIGHT/2].setPlayer(developer);
+        board[(BOARD_WIDTH/4) * 3][BOARD_HEIGHT/2].setPlayer(tester);
 
-        // Add Stations
-        for (StationType type : StationType.values()) {
-            this.stations.add(new Station(type));
-        }
+        // Add stations
+        Station frontEnd = new Station(StationType.FRONTEND);
+        Station backEnd = new Station(StationType.BACKEND);
+        Station api = new Station(StationType.API);
+        Station unitTesting = new Station(StationType.UNIT_TESTING);
+        Station coverageTesting = new Station(StationType.COVERAGE_TESTING);
+        Station staticAnalysis = new Station(StationType.STATIC_ANALYSIS);
+        this.stations.put(frontEnd.getId(), frontEnd);
+        this.stations.put(backEnd.getId(), backEnd);
+        this.stations.put(api.getId(), api);
+        this.stations.put(unitTesting.getId(), unitTesting);
+        this.stations.put(coverageTesting.getId(), coverageTesting);
+        this.stations.put(staticAnalysis.getId(), staticAnalysis);
 
-        // Station positions
-        board[BOARD_WIDTH/2][BOARD_HEIGHT /3].setStation(stations.get(0));
-        board[BOARD_WIDTH/2 + 1][BOARD_HEIGHT /2].setStation(stations.get(1));
-        board[BOARD_WIDTH/2][BOARD_HEIGHT *2/3].setStation(stations.get(2));
-        board[BOARD_WIDTH*2/3][BOARD_HEIGHT /3].setStation(stations.get(3));
-        board[BOARD_WIDTH*2/3][BOARD_HEIGHT /2].setStation(stations.get(4));
-        board[BOARD_WIDTH*2/3][BOARD_HEIGHT *2/3].setStation(stations.get(5));
+        // Initialise station positions to tiles
+        board[BOARD_WIDTH/2][BOARD_HEIGHT /3].setStation(frontEnd);
+        board[BOARD_WIDTH/2 + 1][BOARD_HEIGHT /2].setStation(backEnd);
+        board[BOARD_WIDTH/2][BOARD_HEIGHT *2/3].setStation(api);
+        board[BOARD_WIDTH*2/3][BOARD_HEIGHT /3].setStation(unitTesting);
+        board[BOARD_WIDTH*2/3][BOARD_HEIGHT /2].setStation(coverageTesting);
+        board[BOARD_WIDTH*2/3][BOARD_HEIGHT *2/3].setStation(staticAnalysis);
     }
 
     /**
@@ -102,6 +118,15 @@ public class Board {
         player.getHeldTicket().ifPresent(x -> x.setPosition(position));
         player.setHeldTicket(Optional.empty());
         board[position.x()][position.y()].setTicket(ticket);
+    }
+
+    /**
+     * Add a ticket to the board
+     * @param id the ticket ID
+     * @param ticket the ticket Object
+     */
+    public void addTicket(long id, Ticket ticket) {
+        tickets.put(id, ticket);
     }
 
     /**
