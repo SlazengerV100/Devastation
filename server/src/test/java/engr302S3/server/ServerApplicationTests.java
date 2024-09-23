@@ -100,7 +100,7 @@ class ServerApplicationTests {
 
         assert !board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].containsTicket();
 
-        board.dropTicket(player);
+        board.dropTicket(player, devastation);
 
         System.out.println(devastation.getBoard());
 
