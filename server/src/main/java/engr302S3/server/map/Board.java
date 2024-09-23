@@ -113,6 +113,9 @@ public class Board {
             return; //Do nothing if the position is out of bounds
         }
 
+        if (player.getHeldTicket().isEmpty()) {
+            return;
+        }
         Ticket ticket = player.getHeldTicket().get();
 
         player.getHeldTicket().ifPresent(x -> x.setPosition(position));
