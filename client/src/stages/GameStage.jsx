@@ -1,34 +1,43 @@
-import {Stage, Sprite, AnimatedSprite} from '@pixi/react'; // Import Stage and Sprite from @pixi/react
+import { Stage, Sprite, AnimatedSprite } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import { localCharacterAtom } from "../js/atoms.js";
+import { playerMap, localPlayerId } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
-import useUpdatePosition from '../hooks/useUpdatePosition.js';
-import {textures} from '../js/spriteFrameGrabber.js'
+import { textures } from '../js/spriteFrameGrabber.js';
 
 const GameStage = () => {
-    const localCharacter = useAtomValue(localCharacterAtom);
-    const updatePosition = useUpdatePosition();
+    const players = useAtomValue(playerMap);
+    const localPlayerIdValue = useAtomValue(localPlayerId);
+    const localCharacter = players[localPlayerIdValue];
 
+    console.log(localCharacter)
     return (
         <Stage
             options={{ backgroundColor: 0x1099bb }}
             width={window.innerWidth}
             height={window.innerHeight}
         >
+            {/* Render the map */}
             <Sprite
                 image={map}
                 x={window.innerWidth / 2}
                 y={window.innerHeight / 2}
                 anchor={0.5}
+            />
 
-            />
-            <AnimatedSprite
-                isPlaying={true}
-                textures={textures.running.DOWN}
-                animationSpeed={0.15}
-            />
+            {/* Render the local player */}
+            {localCharacter && (
+                <AnimatedSprite
+                    isPlaying={true}
+                    textures={textures.running[localCharacter.direction]} // Use the direction from localCharacter
+                    animationSpeed={0.15}
+                    x={localCharacter.x} // Position based on player's x
+                    y={localCharacter.y} // Position based on player's y
+                    anchor={0.5}
+                />
+            )}
         </Stage>
     );
 };
 
 export default GameStage;
+

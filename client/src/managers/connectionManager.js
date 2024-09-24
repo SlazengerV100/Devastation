@@ -1,6 +1,6 @@
 import { Stomp } from "@stomp/stompjs";
-import { localCharacterAtom } from '../js/atoms.js';
-import { store } from '../App';
+import {localPlayerId, playerMap} from "../js/atoms.js";
+import { store } from '../App'
 
 let stompClient;
 
@@ -33,8 +33,23 @@ export const connect = async () => {
 const setupSubscriptions = () => {
     if (!stompClient) return;
 
-    stompClient.subscribe('/topic/greetings', (message) => {
-        console.log('Received greeting:', message.body);
+    stompClient.subscribe('/topic/player/move', (message) => {
+        try {
+            const parsedMessage = JSON.parse(message.body); // Parse the incoming message
+            const { id, position, direction } = parsedMessage;
+
+            // Update the specific player in playerMap using the ID
+            store.set(playerMap, (prev) => ({
+                ...prev,
+                [id]: {
+                    ...prev[id], // Keep any existing data not in the message
+                    position,
+                    direction,
+                },
+            }));
+        } catch (error) {
+            console.error('Failed to parse or update playerMap:', error);
+        }
     });
 
 };
@@ -52,6 +67,29 @@ export const requestState = async () => {
             try {
                 const parsedMessage = JSON.parse(message.body);
                 console.log(parsedMessage)
+                // Update the playerMap with the parsedMessage
+                const updatedPlayerMap = {
+                    1: {
+                        playerRole: parsedMessage[0].role,
+                        direction: parsedMessage[0].direction,
+                        x: parsedMessage[0].position.x,
+                        y: parsedMessage[0].position.y,
+                    },
+                    2: {
+                        playerRole: parsedMessage[1].role,
+                        direction: parsedMessage[1].direction,
+                        x: parsedMessage[1].position.x,
+                        y: parsedMessage[1].position.y,
+                    },
+                    3: {
+                        playerRole: parsedMessage[2].role,
+                        direction: parsedMessage[2].direction,
+                        x: parsedMessage[2].position.x,
+                        y: parsedMessage[2].position.y,
+                    },
+                };
+                store.set(playerMap, updatedPlayerMap);
+
                 resolve(parsedMessage); // Resolve the Promise with the parsed message
             } catch (error) {
                 reject('Failed to parse message');
@@ -68,14 +106,14 @@ export const sendPlayerMovement = (direction) => {
         console.warn('Cannot send movement: not connected.');
         return
     }
-    name = sessionStorage.getItem("playerID");
-    if (name == null){
+    const playerId = store.get(localPlayerId)
+
+    if (playerId === -1){
         console.warn('Cannot send movement: playerID not set');
     }
 
-    console.log("/app/movePlayer -> " + JSON.stringify({ role: name, direction }))
-    stompClient.send("/app/movePlayer", {}, JSON.stringify({ role: name, direction }));
-
+    console.log("app/player/move -> " + JSON.stringify({ playerId, direction }))
+    stompClient.send("/app//player/move", {}, JSON.stringify({ playerId, direction }));
 };
 
 export const activatePlayer = async (playerId, activate = true) => {
