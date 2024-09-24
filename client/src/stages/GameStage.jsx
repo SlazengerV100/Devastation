@@ -9,6 +9,14 @@ const GameStage = () => {
     const localPlayerIdValue = useAtomValue(localPlayerId);
     const localCharacter = players[localPlayerIdValue];
 
+    const boardWidth = 30
+    const boardHeight = 15
+
+    const tilePixelWidth = 50
+
+    const mapPixelWidth = boardWidth*tilePixelWidth
+    const mapPixelHeight = boardHeight*tilePixelWidth
+
     console.log(localCharacter)
     return (
         <Stage
@@ -19,9 +27,10 @@ const GameStage = () => {
             {/* Render the map */}
             <Sprite
                 image={map}
-                x={window.innerWidth / 2}
-                y={window.innerHeight / 2}
-                anchor={0.5}
+                width={mapPixelWidth}
+                height={mapPixelHeight}
+                x={0}
+                y={0}
             />
 
             {/* Render the local player */}
@@ -30,9 +39,8 @@ const GameStage = () => {
                     isPlaying={true}
                     textures={textures.running[localCharacter.direction]} // Use the direction from localCharacter
                     animationSpeed={0.15}
-                    x={localCharacter.x} // Position based on player's x
-                    y={localCharacter.y} // Position based on player's y
-                    anchor={0.5}
+                    x={localCharacter.x * tilePixelWidth} // Position based on player's x
+                    y={localCharacter.y * tilePixelWidth} // Position based on player's y
                 />
             )}
         </Stage>
