@@ -4,11 +4,10 @@ import engr302S3.server.players.Developer;
 import engr302S3.server.players.Player;
 import engr302S3.server.players.ProjectManager;
 import engr302S3.server.players.Tester;
-
 import engr302S3.server.ticketFactory.Ticket;
+
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -116,6 +115,7 @@ public class Board {
         if (player.getHeldTicket().isEmpty()) {
             return;
         }
+
         Ticket ticket = player.getHeldTicket().get();
 
         player.getHeldTicket().ifPresent(x -> x.setPosition(position));

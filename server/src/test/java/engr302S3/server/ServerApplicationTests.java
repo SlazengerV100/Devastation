@@ -63,9 +63,9 @@ class ServerApplicationTests {
     public void testDevastationMap() {
         Devastation devastation = new Devastation();
 
-
         Board board = devastation.getBoard();
-        Player player = board.getPlayers().get(0);
+        long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
+        Player player = board.getPlayers().get(key);
 
         board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].setTicket(TicketFactory.getTicket());
         player.movePlayer(Player.Direction.LEFT);
@@ -89,7 +89,8 @@ class ServerApplicationTests {
         Devastation devastation = new Devastation();
 
         Board board = devastation.getBoard();
-        Player player = board.getPlayers().get(0);
+        long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
+        Player player = board.getPlayers().get(key);
 
         board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].setTicket(TicketFactory.getTicket());
         player.movePlayer(Player.Direction.LEFT);
@@ -111,7 +112,8 @@ class ServerApplicationTests {
     public void testMovementBelowZero() {
         Devastation devastation = new Devastation();
         Board board = devastation.getBoard();
-        Player player = board.getPlayers().get(0);
+        long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
+        Player player = board.getPlayers().get(key);
 
         for (int i = 0; i < 50; i++) {
             player.movePlayer(Player.Direction.LEFT);
