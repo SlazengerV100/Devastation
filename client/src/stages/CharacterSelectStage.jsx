@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
-import { localCharacterAtom } from "../js/atoms.js";  // Import the atom
+import {localPlayerId} from "../js/atoms.js";  // Import the atom
 import { requestState, activatePlayer } from "../managers/connectionManager.js";
+import {store} from "../App.jsx";
 
 const CharacterSelectStage = () => {
     const [playerMap, setPlayerMap] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [, setStoredPlayer] = useAtom(localCharacterAtom); // Use the atom
 
     useEffect(() => {
         updatePlayerSelection();
@@ -32,11 +32,7 @@ const CharacterSelectStage = () => {
             // Update session storage
             sessionStorage.setItem('playerID', player.id);
 
-            // Update the atom
-            setStoredPlayer(prev => ({
-                ...prev,
-                playerRole: player.role
-            }));
+            store.set(localPlayerId, player.id)
 
             // Update player selection state
             await updatePlayerSelection();
