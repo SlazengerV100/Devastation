@@ -9,15 +9,13 @@ const GameStage = () => {
     const localPlayerIdValue = useAtomValue(localPlayerId);
     const localCharacter = players[localPlayerIdValue];
 
-    const boardWidth = 30
-    const boardHeight = 15
+    const boardWidth = 30;
+    const boardHeight = 15;
+    const tilePixelWidth = 50;
 
-    const tilePixelWidth = 50
+    const mapPixelWidth = boardWidth * tilePixelWidth;
+    const mapPixelHeight = boardHeight * tilePixelWidth;
 
-    const mapPixelWidth = boardWidth*tilePixelWidth
-    const mapPixelHeight = boardHeight*tilePixelWidth
-
-    console.log(localCharacter)
     return (
         <Stage
             options={{ backgroundColor: 0x1099bb }}
@@ -33,19 +31,21 @@ const GameStage = () => {
                 y={0}
             />
 
-            {/* Render the local player */}
-            {localCharacter && (
+            {/* Render all players */}
+            {Object.values(players).map((player) => (
                 <AnimatedSprite
+                    key={player.id} // Ensure unique key for each player
                     isPlaying={true}
-                    textures={textures.running[localCharacter.direction]} // Use the direction from localCharacter
+                    textures={textures.running[player.direction]} // Use the direction from the player
                     animationSpeed={0.15}
-                    x={localCharacter.x * tilePixelWidth} // Position based on player's x
-                    y={localCharacter.y * tilePixelWidth} // Position based on player's y
+                    x={player.x * tilePixelWidth}
+                    y={player.y * tilePixelWidth}
                 />
-            )}
+            ))}
         </Stage>
     );
 };
 
 export default GameStage;
+
 
