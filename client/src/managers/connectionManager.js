@@ -36,17 +36,22 @@ const setupSubscriptions = () => {
     stompClient.subscribe('/topic/player/move', (message) => {
         try {
             const parsedMessage = JSON.parse(message.body); // Parse the incoming message
-            const { id, position, direction } = parsedMessage;
 
+            const { id, position, direction } = parsedMessage;
+            console.log("Player movement: id: " + id + " position: X: " + position.x + " Y: " + position.y + " direction: " + direction)
             // Update the specific player in playerMap using the ID
             store.set(playerMap, (prev) => ({
                 ...prev,
                 [id]: {
-                    ...prev[id], // Keep any existing data not in the message
-                    position,
-                    direction,
+                    ...prev[id], // Keep any existing data for the player
+                    x: position.x, // Directly update x from position
+                    y: position.y, // Directly update y from position
+                    direction, // Update the direction
                 },
             }));
+
+            const players = store.get(playerMap)
+            console.log(players[id])
         } catch (error) {
             console.error('Failed to parse or update playerMap:', error);
         }
@@ -113,7 +118,7 @@ export const sendPlayerMovement = (direction) => {
     }
 
     console.log("app/player/move -> " + JSON.stringify({ playerId, direction }))
-    stompClient.send("/app//player/move", {}, JSON.stringify({ playerId, direction }));
+    stompClient.send("/app/player/move", {}, JSON.stringify({ playerId, direction }));
 };
 
 export const activatePlayer = async (playerId, activate = true) => {
