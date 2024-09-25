@@ -72,7 +72,7 @@ public abstract class Player {
      */
     public void movePlayer(Direction direction) {
 
-        if (active) {
+        if (!active) {
            return;
         }
 
