@@ -1,9 +1,7 @@
-import { useAtomValue } from 'jotai';
 import { store } from '../App';
 import { playerMap, localPlayerId } from "./atoms.js";
 
 export default function keyHandler(sendPlayerMovement) {
-
 
     // Helper function to handle key actions
     const handleKeyPress = (key) => {
@@ -23,25 +21,21 @@ export default function keyHandler(sendPlayerMovement) {
             case 'w':
                 // Move player up
                 console.log("W pressed");
-                newPosition.y -= 1;
                 sendPlayerMovement('UP');
                 break;
             case 'a':
                 // Move player left
                 console.log("A pressed");
-                newPosition.x -= 1;
                 sendPlayerMovement('LEFT');
                 break;
             case 's':
                 // Move player down
                 console.log("S pressed");
-                newPosition.y += 1;
                 sendPlayerMovement('DOWN');
                 break;
             case 'd':
                 // Move player right
                 console.log("D pressed");
-                newPosition.x += 1;
                 sendPlayerMovement('RIGHT');
                 break;
             case 'o':
