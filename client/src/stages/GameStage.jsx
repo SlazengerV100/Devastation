@@ -1,13 +1,11 @@
 import { Stage, Sprite, AnimatedSprite } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import { playerMap, localPlayerId } from "../js/atoms.js";
+import { playerMap } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
 import { textures } from '../js/spriteFrameGrabber.js';
 
 const GameStage = () => {
     const players = useAtomValue(playerMap);
-    const localPlayerIdValue = useAtomValue(localPlayerId);
-    const localCharacter = players[localPlayerIdValue];
 
     const boardWidth = 30;
     const boardHeight = 15;
