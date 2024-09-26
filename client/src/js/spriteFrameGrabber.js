@@ -14,6 +14,9 @@ const SPRITES_PER_DIRECTION = 6; // Number of frames per animation
 const DAMAGE_FRAMES = 3;
 const spriteTexture = PIXI.BaseTexture.from(spriteSheetURL);
 
+//tile dimensions
+export const TILE_WIDTH = 48;
+
 export const textures = {};
 
 export const init = () => {
