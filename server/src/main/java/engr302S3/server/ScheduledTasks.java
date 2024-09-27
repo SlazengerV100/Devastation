@@ -32,6 +32,7 @@ public class ScheduledTasks {
      */
     @Scheduled(fixedRate = 1000)
     public void updateGameTime() {
+        if (!game.isRunning()) {return;}
         //update the game clock
         game.decreaseTime();
         //check each tile for a ticket, and update the ticket timer if there is one
@@ -55,15 +56,16 @@ public class ScheduledTasks {
     /**
      * Every 20second try to generate a new ticket if there is room of the board
      */
-    @Scheduled(fixedRate = 20000)
+    @Scheduled(fixedRate = 1000)
     public void createTicket() {
-
+        if (!game.isRunning()) {return;}
         for (int i = 0; i < Board.BOARD_HEIGHT; i++) {
             //check the first column of the board for generated tickets, I am assuming this is
             //where we will  spawn them
             Tile tile = game.getBoard().getTileAt(new Position(0, i));
 
             if (tile.empty()) {
+                System.out.println("creating ticket");
                 Ticket ticket = TicketFactory.getTicket();
                 tile.setTicket(ticket);
                 game.getBoard().addTicket(ticket.getId(), ticket);

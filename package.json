@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start-client": "cd client && yarn run dev",
-    "start-server": "cd server && mvn spring-boot:run",
+    "start-server": "cd server && mvn clean install && mvn spring-boot:run",
     "start-all": "concurrently \"yarn run start-client\" \"yarn run start-server\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -23,6 +23,7 @@ public class Devastation {
 
 
     public Devastation() {
+        this.running = true;
         this.board = new Board();
     }
 
