@@ -78,6 +78,8 @@ public class ClientAPI {
 
     @SendTo("/topic/ticket/create")
     public static Ticket broadcastTicketCreate(Ticket ticket) {
+        System.out.println("Broadcasting");
+        System.out.println(ticket.toString());
         return ticket;
     }
 

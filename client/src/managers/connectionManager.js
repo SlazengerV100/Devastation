@@ -33,6 +33,11 @@ export const connect = async () => {
 const setupSubscriptions = () => {
     if (!stompClient) return;
 
+    stompClient.subscribe('/topic/ticket/create', (message) => {
+        console.log("recieved a message")
+        onTicketReceived(message);
+    });
+
     stompClient.subscribe('/topic/player/move', (message) => {
         try {
             const parsedMessage = JSON.parse(message.body); // Parse the incoming message
@@ -58,6 +63,17 @@ const setupSubscriptions = () => {
     });
 
 };
+
+const onTicketReceived = (message) => {
+    console.log("CALLLLEEDDD")
+    try {
+        const parsedMessage = JSON.parse(message.body); // Parse the incoming message
+        console.log(parsedMessage)
+    }catch(e){
+        console.error(e)
+    }
+
+}
 
 export const requestState = async () => {
     if (!stompClient) {
