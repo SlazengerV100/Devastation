@@ -1,7 +1,7 @@
 stages:
   - test
 
-test-job:
+server:
   stage: test
   script:
     - cd server
