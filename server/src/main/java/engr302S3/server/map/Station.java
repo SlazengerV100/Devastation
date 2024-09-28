@@ -4,6 +4,7 @@ import engr302S3.server.ticketFactory.Task;
 import engr302S3.server.ticketFactory.Ticket;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class Station {
     private final long id;
     private final StationType stationType;
     private int progress;
-    private Optional<Ticket> ticketWorkingOn;
+    @Setter private Optional<Ticket> ticketWorkingOn;
 
     /**
      * Create a work station with no task on it.
