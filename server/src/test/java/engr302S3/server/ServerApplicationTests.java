@@ -22,6 +22,7 @@ class ServerApplicationTests {
     public void testMovement() {
 
         Player player = new ProjectManager(new Position(1, 1));
+        player.setActive(true);
 
         assert new Position(1, 1).equals(player.getPosition());
 
@@ -91,7 +92,7 @@ class ServerApplicationTests {
         Board board = devastation.getBoard();
         long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
         Player player = board.getPlayers().get(key);
-
+        player.setActive(true);
         board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].setTicket(TicketFactory.getTicket());
         player.movePlayer(Player.Direction.LEFT);
 
