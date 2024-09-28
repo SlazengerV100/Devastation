@@ -26,6 +26,7 @@ public class ClientAPIPlayerTests {
         devastation = new Devastation();
         api = new ClientAPI(devastation);
         player = devastation.getBoard().getPlayers().values().stream().min(Comparator.comparing(Player::getId)).get();
+        player.setActive(true);
         initialPosition = player.getPosition();
     }
 
