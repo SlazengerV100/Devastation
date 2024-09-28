@@ -124,7 +124,7 @@ public class Board {
         board[position.x()][position.y()].setTicket(ticket);
 
         // If ticket is placed at end of board and it is completed then update the game score and clear the ticket
-        if(position.x() == BOARD_WIDTH && ticket.isComplete()){
+        if(position.x() == (BOARD_WIDTH-1) && ticket.isComplete()){
             getTileAt(position).empty();
             game.updateScore(ticket);
         }
