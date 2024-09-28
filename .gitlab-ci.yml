@@ -6,3 +6,5 @@ server:
   script:
     - cd server
     - mvn test
+  tags:
+    - docker
