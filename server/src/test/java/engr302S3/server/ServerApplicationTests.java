@@ -12,16 +12,41 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @SpringBootTest
 class ServerApplicationTests {
 
     @Test
+    public void testPrintBoard() {
+        File file = new File("src/main/resources/map._TempStations.csv");
+
+
+        try {
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                System.out.println(line);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Devastation devastation = new Devastation();
+
+        System.out.println(devastation.getBoard());
+    }
+
+    @Test
     public void testMovement() {
 
         Player player = new ProjectManager(new Position(1, 1));
+        player.setActive(true);
 
         assert new Position(1, 1).equals(player.getPosition());
 
@@ -91,21 +116,22 @@ class ServerApplicationTests {
         Board board = devastation.getBoard();
         long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
         Player player = board.getPlayers().get(key);
+        player.setActive(true);
 
-        board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].setTicket(TicketFactory.getTicket());
+        board.getBoard()[Board.BOARD_WIDTH/2 - 1][Board.BOARD_HEIGHT/6].setTicket(TicketFactory.getTicket());
+
+        assert board.getBoard()[Board.BOARD_WIDTH/2 - 1][Board.BOARD_HEIGHT/6].containsTicket();
+
         player.movePlayer(Player.Direction.LEFT);
-
         board.pickUpTicket(player);
 
-        System.out.println(devastation.getBoard());
-
-        assert !board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].containsTicket();
+        assert !board.getBoard()[Board.BOARD_WIDTH/2 - 1][Board.BOARD_HEIGHT/6].containsTicket();
 
         board.dropTicket(player);
 
         System.out.println(devastation.getBoard());
 
-        assert board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].containsTicket();
+        assert board.getBoard()[Board.BOARD_WIDTH/2 - 1][Board.BOARD_HEIGHT/6].containsTicket();
     }
 
     @Test
@@ -125,5 +151,4 @@ class ServerApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

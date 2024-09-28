@@ -28,6 +28,19 @@ public class Tile {
     }
 
     /**
+     * Constructor to create a tile at the given position.
+     * Initializes the tile as empty with no content.
+     *
+     * @param position The position of the tile (x, y coordinates).
+     * @param type the type of tile to be constructed.
+     */
+    public Tile(Position position, TileType type) {
+        this.position = position;
+        this.type = type;
+        this.content = null;
+    }
+
+    /**
      * Method to check if the tile is empty.
      *
      * @return {@code true} if the tile is empty, {@code false} otherwise.
@@ -90,6 +103,7 @@ public class Tile {
             case PLAYER -> "_P_|";
             case TICKET -> "_T_|";
             case EMPTY -> "_*_|";
+            case WALL -> "_W_|";
         };
     }
 }

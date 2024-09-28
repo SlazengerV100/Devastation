@@ -7,5 +7,6 @@ public enum TileType {
     EMPTY,
     STATION,
     PLAYER,
-    TICKET
+    TICKET,
+    WALL
 }
