@@ -14,4 +14,4 @@ export const players = atom({
 export const localPlayerId = atom(-1);
 
 // Tickets atom
-export const ticketsAtom = atom([]); // Initialize with an empty array
+export const ticketsAtom = atom([]);

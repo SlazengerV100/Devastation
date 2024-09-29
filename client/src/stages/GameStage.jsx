@@ -11,7 +11,6 @@ const GameStage = () => {
     const players = useAtomValue(playerAtoms);
     const tickets = useAtomValue(ticketsAtom)
 
-    // Map size (replace with your actual map's width and height)
     const MAP_WIDTH = 30 * TILE_WIDTH;
     const MAP_HEIGHT = 15 * TILE_WIDTH; // Example height
 
@@ -36,8 +35,6 @@ const GameStage = () => {
         };
     }, []);
 
-
-    // Calculate the top-left corner position of the map to center it on the screen
     const mapPosition = {
         x: TILE_WIDTH,
         y: (windowSize.height - MAP_HEIGHT) / 2
@@ -53,7 +50,7 @@ const GameStage = () => {
             {/* Render the map centered */}
             <Sprite image={map} x={mapPosition.x} y={mapPosition.y} width={MAP_WIDTH} height={MAP_HEIGHT}/>
 
-            {/* Render all players, positioning them relative to the map */}
+            {/* Render all players*/}
             {Object.values(players).map((player, index) => (
                 <Player
                     player={player}
@@ -62,6 +59,7 @@ const GameStage = () => {
                 />
             ))}
 
+            {/* Render all tickets*/}
             {Object.values(tickets).map((ticket, index) => (
                     <Ticket
                         ticket={ticket}
