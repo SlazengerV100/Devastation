@@ -3,7 +3,7 @@ import LoadingStage from '../stages/LoadingStage.jsx';
 import CharacterSelectStage from "../stages/CharacterSelectStage.jsx";
 import GameStage from "../stages/GameStage.jsx";
 import { useAtom } from 'jotai';
-import { connectionStatusAtom, playerMap, localPlayerId } from '../js/atoms.js';
+import { connectionStatusAtom, localPlayerId } from '../js/atoms.js';
 import { connect } from "./connectionManager.js";
 import {init} from "../js/spriteFrameGrabber.js";
 

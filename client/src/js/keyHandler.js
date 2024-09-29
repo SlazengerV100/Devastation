@@ -1,12 +1,12 @@
 import { store } from '../App';
-import { playerMap, localPlayerId } from "./atoms.js";
+import { players as playerAtoms, localPlayerId } from "./atoms.js";
 
 export default function keyHandler(sendPlayerMovement) {
 
     // Helper function to handle key actions
     const handleKeyPress = (key) => {
         // Get the player map state
-        const players = store.get(playerMap);
+        const players = store.get(playerAtoms);
         const localPlayerIdValue = store.get(localPlayerId);
         const localCharacter = players[localPlayerIdValue]; // Get the local player's data
 
@@ -53,7 +53,7 @@ export default function keyHandler(sendPlayerMovement) {
         }
 
         // Update the playerMap with the new position
-        store.set(playerMap, (prev) => ({
+        store.set(players, (prev) => ({
             ...prev,
             [localPlayerIdValue]: newPosition,
         }));

@@ -1,5 +1,5 @@
 import { Stomp } from "@stomp/stompjs";
-import {localPlayerId, playerMap} from "../js/atoms.js";
+import {localPlayerId, players} from "../js/atoms.js";
 import { store } from '../App'
 
 let stompClient;
@@ -34,27 +34,11 @@ const setupSubscriptions = () => {
     if (!stompClient) return;
 
     stompClient.subscribe('/topic/player/move', (message) => {
-        try {
-            const parsedMessage = JSON.parse(message.body); // Parse the incoming message
+        updatePlayerPosition(message)
+    });
 
-            const { id, position, direction } = parsedMessage;
-            console.log("Player movement: id: " + id + " position: X: " + position.x + " Y: " + position.y + " direction: " + direction)
-            // Update the specific player in playerMap using the ID
-            store.set(playerMap, (prev) => ({
-                ...prev,
-                [id]: {
-                    ...prev[id], // Keep any existing data for the player
-                    x: position.x, // Directly update x from position
-                    y: position.y, // Directly update y from position
-                    direction, // Update the direction
-                },
-            }));
-
-            const players = store.get(playerMap)
-            console.log(players[id])
-        } catch (error) {
-            console.error('Failed to parse or update playerMap:', error);
-        }
+    stompClient.subscribe('/topic/ticket/create', (message) => {
+        updateNewTicket(message)
     });
 
 };
@@ -73,7 +57,7 @@ export const requestState = async () => {
                 const parsedMessage = JSON.parse(message.body);
                 console.log(parsedMessage)
                 // Update the playerMap with the parsedMessage
-                const updatedPlayerMap = {
+                const updatedPlayers = {
                     1: {
                         playerRole: parsedMessage[0].role,
                         direction: parsedMessage[0].direction,
@@ -93,7 +77,7 @@ export const requestState = async () => {
                         y: parsedMessage[2].position.y,
                     },
                 };
-                store.set(playerMap, updatedPlayerMap);
+                store.set(players, updatedPlayers);
 
                 resolve(parsedMessage); // Resolve the Promise with the parsed message
             } catch (error) {
@@ -146,6 +130,41 @@ export const activatePlayer = async (playerId, activate = true) => {
         });
     });
 };
+
+const updatePlayerPosition = (message) => {
+    try {
+        const parsedMessage = JSON.parse(message.body);
+
+        const { id, position, direction } = parsedMessage;
+        console.log("Player movement: id: " + id + " position: X: " + position.x + " Y: " + position.y + " direction: " + direction)
+        // Update the specific player in playerMap using the ID
+        store.set(players, (prev) => ({
+            ...prev,
+            [id]: {
+                ...prev[id], // Keep any existing data for the player
+                x: position.x, // Directly update x from position
+                y: position.y, // Directly update y from position
+                direction, // Update the direction
+            },
+        }));
+
+
+    } catch (error) {
+        console.error('Failed to parse or update playerMap:', error);
+    }
+}
+
+const updateNewTicket = (message) => {
+    try {
+        const parsedMessage = JSON.parse(message.body);
+        const { id, position, ticketTitle} = parsedMessage;
+        console.log("Ticket received: " + "ID: " + id + " X: " + position.x + " Y: " + position.y + " Title: " + ticketTitle);
+
+
+    } catch (error){
+        console.error('Failed to parse ticket:', error);
+    }
+}
 
 
 

@@ -1,13 +1,13 @@
 import { Stage, Sprite } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import { playerMap } from "../js/atoms.js";
+import { players as playerAtoms } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
 import Player from "../Player.jsx";
 import { useState, useEffect } from 'react';
 import {TILE_WIDTH } from "../js/spriteFrameGrabber.js";
 
 const GameStage = () => {
-    const players = useAtomValue(playerMap);
+    const players = useAtomValue(playerAtoms);
 
     // Map size (replace with your actual map's width and height)
     const MAP_WIDTH = 30 * TILE_WIDTH;
