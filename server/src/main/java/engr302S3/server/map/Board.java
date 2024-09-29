@@ -8,15 +8,15 @@ import engr302S3.server.ticketFactory.Ticket;
 
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 @Getter
 public class Board {
 
-    public static final int BOARD_WIDTH = 30;
-    public static final int BOARD_HEIGHT = 20;
+    public static int BOARD_WIDTH;
+    public static int BOARD_HEIGHT;
 
     private final Tile[][] board;
     private final Map<Long, Player> players;
@@ -24,59 +24,133 @@ public class Board {
     private final Map<Long, Ticket> tickets;
 
     public Board() {
-        this.board = new Tile[BOARD_WIDTH][BOARD_HEIGHT];
-
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_HEIGHT; y++) {
-                board[x][y] = new Tile(new Position(x, y)); // Create a tile at each point (x, y)
-            }
-        }
+        this.board = createBoard();
 
         this.players = new HashMap<>();
         this.stations = new HashMap<>();
         this.tickets = new HashMap<>();
-        setup();
+
+        createPlayers();
+        createStations();
     }
 
     /**
-     * Set up the board with positions of developers and stations
+     * Create the board with different tiles.
+     *
+     * @return the board
      */
-    private void setup() {
+    public Tile[][] createBoard() {
 
+        ArrayList<String[]> stations = loadFiles("src/main/resources/map._TempStations.csv");
+        ArrayList<String[]> walls = loadFiles("src/main/resources/map._Wall.csv");
+
+        BOARD_WIDTH = walls.size();
+        BOARD_HEIGHT = walls.get(0).length;
+
+        String[][] combined = new String[BOARD_WIDTH][BOARD_HEIGHT];
+
+        for (int x = 0; x < BOARD_WIDTH; x++) {
+            for (int y = 0; y < BOARD_HEIGHT; y++) {
+                String tile = Objects.equals(walls.get(x)[y], "160") ? walls.get(x)[y] : stations.get(x)[y];
+                combined[x][y] = tile;
+            }
+        }
+
+        Tile[][] board = new Tile[BOARD_WIDTH][BOARD_HEIGHT];
+
+        for (int x = 0; x < BOARD_WIDTH; x++) {
+            for (int y = 0; y < BOARD_HEIGHT; y++) {
+                switch (combined[x][y]) {
+                    case "-1" -> board[x][y] = new Tile(new Position(x, y));
+                    case "33" -> board[x][y] = new Tile(new Position(x, y), TileType.STATION);
+                    case "160" -> board[x][y] = new Tile(new Position(x, y), TileType.WALL);
+                }
+            }
+        }
+
+        return board;
+    }
+
+    /**
+     * Load a csv and scan it.
+     *
+     * @param path of the file
+     * @return the csv in arraylist format
+     */
+    private ArrayList<String[]> loadFiles(String path) {
+
+        ArrayList<String[]> lines = new ArrayList<>();
+
+        try {
+
+            File file = new File(path);
+            Scanner scanner = new Scanner(file);
+
+            while(scanner.hasNextLine()) {
+                lines.add(scanner.nextLine().split(","));
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+
+        return lines;
+    }
+
+    /**
+     * Set up the board with positions of developers.
+     */
+    private void createPlayers() {
         // Add players
-        ProjectManager projectManager = new ProjectManager(new Position(BOARD_WIDTH/4, BOARD_HEIGHT/2));
-        Developer developer = new Developer(new Position(BOARD_WIDTH/2, BOARD_HEIGHT/2));
-        Tester tester = new Tester(new Position((BOARD_WIDTH/4) * 3, BOARD_HEIGHT/2));
+        ProjectManager projectManager = new ProjectManager(new Position(BOARD_WIDTH/2,BOARD_HEIGHT/6));
+        Developer developer = new Developer(new Position(BOARD_WIDTH/2,BOARD_HEIGHT/2));
+        Tester tester = new Tester(new Position(BOARD_WIDTH/2,(BOARD_HEIGHT/6) * 5));
         this.players.put(projectManager.getId(), projectManager);
         this.players.put(developer.getId(), developer);
         this.players.put(tester.getId(), tester);
 
         // Initialise player positions to tiles
-        board[BOARD_WIDTH/4][BOARD_HEIGHT/2].setPlayer(projectManager);
+        board[BOARD_WIDTH/2][BOARD_HEIGHT/6].setPlayer(projectManager);
         board[BOARD_WIDTH/2][BOARD_HEIGHT/2].setPlayer(developer);
-        board[(BOARD_WIDTH/4) * 3][BOARD_HEIGHT/2].setPlayer(tester);
+        board[BOARD_WIDTH/2][(BOARD_HEIGHT/6) * 5].setPlayer(tester);
+    }
 
-        // Add stations
-        Station frontEnd = new Station(StationType.FRONTEND);
-        Station backEnd = new Station(StationType.BACKEND);
-        Station api = new Station(StationType.API);
-        Station unitTesting = new Station(StationType.UNIT_TESTING);
-        Station coverageTesting = new Station(StationType.COVERAGE_TESTING);
-        Station staticAnalysis = new Station(StationType.STATIC_ANALYSIS);
-        this.stations.put(frontEnd.getId(), frontEnd);
-        this.stations.put(backEnd.getId(), backEnd);
-        this.stations.put(api.getId(), api);
-        this.stations.put(unitTesting.getId(), unitTesting);
-        this.stations.put(coverageTesting.getId(), coverageTesting);
-        this.stations.put(staticAnalysis.getId(), staticAnalysis);
+    /**
+     * Create stations in a 2*2 radius of a Station tile on map.
+     */
+    public void createStations() {
 
-        // Initialise station positions to tiles
-        board[BOARD_WIDTH/2][BOARD_HEIGHT /3].setStation(frontEnd);
-        board[BOARD_WIDTH/2 + 1][BOARD_HEIGHT /2].setStation(backEnd);
-        board[BOARD_WIDTH/2][BOARD_HEIGHT *2/3].setStation(api);
-        board[BOARD_WIDTH*2/3][BOARD_HEIGHT /3].setStation(unitTesting);
-        board[BOARD_WIDTH*2/3][BOARD_HEIGHT /2].setStation(coverageTesting);
-        board[BOARD_WIDTH*2/3][BOARD_HEIGHT *2/3].setStation(staticAnalysis);
+        Set<Position> finishedStations = new HashSet<>();
+
+        for (StationType type : StationType.values()) {
+            Station station = new Station(type);
+            this.stations.put(station.getId(), station);
+        }
+
+        long id = 0;
+
+        for (int x = 0; x < BOARD_WIDTH; x++) {
+            for (int y = 0; y < BOARD_HEIGHT; y++) {
+
+                if (finishedStations.contains(new Position(x, y))) {
+                    continue;
+                }
+
+                if (board[x][y].getType() == TileType.STATION) {
+
+                    board[x][y].setStation(stations.get(id));
+                    board[x + 1][y].setStation(stations.get(id));
+                    board[x][y + 1].setStation(stations.get(id));
+                    board[x + 1][y + 1].setStation(stations.get(id));
+
+                    finishedStations.add(new Position(x + 1, y));
+                    finishedStations.add(new Position(x, y + 1));
+                    finishedStations.add(new Position(x + 1, y + 1));
+
+                    id++;
+                }
+            }
+        }
     }
 
     /**
@@ -151,9 +225,9 @@ public class Board {
 
         sb.append("\n");
 
-        for (int y = 0; y < BOARD_HEIGHT; y++) {
+        for (int x = 0; x < BOARD_WIDTH; x++) {
             sb.append("|");
-            for (int x = 0; x < BOARD_WIDTH; x++) {
+            for (int y = 0; y < BOARD_HEIGHT; y++) {
                 sb.append(board[x][y].toString());
             }
             sb.append("\n");
