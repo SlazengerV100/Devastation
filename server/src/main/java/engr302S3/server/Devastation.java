@@ -22,10 +22,12 @@ public class Devastation {
     @Setter private int score;      // Game score
     @Setter private boolean running;        // Flag to indicate if the game is running
     @Getter(AccessLevel.NONE) private int timeLeft = 300;           // Time left for the game (seconds)
+    private ClientAPI clientAPI;
 
 
     public Devastation() {
         this.board = new Board();
+        this.clientAPI = new ClientAPI(this);
     }
 
     public void decreaseTime() {
@@ -52,8 +54,8 @@ public class Devastation {
         ticketScore = Math.max(maxScore - (ticket.getTotalTime()*5), 0);
         score += ticketScore;
 
-        ClientAPI.broadcastTicketResolve(ticket);
-        ClientAPI.broadcastScoreUpdate(score);
+        clientAPI.broadcastTicketResolve(ticket);
+        clientAPI.broadcastScoreUpdate(score);
     }
 
 }
