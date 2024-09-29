@@ -1,13 +1,15 @@
 import { Stage, Sprite } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import { players as playerAtoms } from "../js/atoms.js";
+import { players as playerAtoms, ticketsAtom } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
-import Player from "../Player.jsx";
+import Player from "../components/Player.jsx";
 import { useState, useEffect } from 'react';
 import {TILE_WIDTH } from "../js/spriteFrameGrabber.js";
+import Ticket from "../components/Ticket.jsx";
 
 const GameStage = () => {
     const players = useAtomValue(playerAtoms);
+    const tickets = useAtomValue(ticketsAtom)
 
     // Map size (replace with your actual map's width and height)
     const MAP_WIDTH = 30 * TILE_WIDTH;
@@ -56,9 +58,17 @@ const GameStage = () => {
                 <Player
                     player={player}
                     key={index}
-                    mapPosition={mapPosition} // Pass the map position to adjust player rendering
+                    mapPosition={mapPosition}
                 />
             ))}
+
+            {Object.values(tickets).map((ticket, index) => (
+                    <Ticket
+                        ticket={ticket}
+                        key={index}
+                        mapPosition={mapPosition}
+                    />
+                ))}
         </Stage>
     );
 };
