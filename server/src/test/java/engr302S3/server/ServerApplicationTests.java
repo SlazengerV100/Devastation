@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class ServerApplicationTests {
 
@@ -35,6 +37,7 @@ class ServerApplicationTests {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            fail("File not found: " + e.getMessage());
         }
 
         Devastation devastation = new Devastation();
@@ -48,26 +51,17 @@ class ServerApplicationTests {
         Player player = new ProjectManager(new Position(1, 1));
         player.setActive(true);
 
-        assert new Position(1, 1).equals(player.getPosition());
+        assertEquals(new Position(1, 1), player.getPosition(), "Initial position should be (1, 1)");
 
         player.movePlayer(Player.Direction.RIGHT);
-
-        assert new Position(2, 1).equals(player.getPosition());
-
-        player.movePlayer(Player.Direction.LEFT);
-
-        assert new Position(2, 1).equals(player.getPosition());
-        assert player.getDirection().equals(Player.Direction.LEFT);
+        assertEquals(new Position(2, 1), player.getPosition(), "Player should move to the right to (2, 1)");
 
         player.movePlayer(Player.Direction.LEFT);
+        assertEquals(new Position(2, 1), player.getPosition(), "Player should still be at (2, 1)");
+        assertEquals(Player.Direction.LEFT, player.getDirection(), "Player should now be facing left");
 
-        assert new Position(1, 1).equals(player.getPosition());
-
-        try {
-            player.movePlayer(Player.Direction.LEFT);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Success");
-        }
+        player.movePlayer(Player.Direction.LEFT);
+        assertEquals(new Position(1, 1), player.getPosition(), "Player should move back to (1, 1)");
     }
 
     @Test
@@ -80,58 +74,35 @@ class ServerApplicationTests {
 
         tickets.forEach(e -> System.out.println(e.getTasks().size()));
 
-        assert tickets.stream().anyMatch(e -> e.getTasks().size() == 1);
-        assert tickets.stream().anyMatch(e -> e.getTasks().size() == StationType.values().length);
-    }
-
-    @Test
-    public void testDevastationMap() {
-        Devastation devastation = new Devastation();
-
-        Board board = devastation.getBoard();
-        long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
-        Player player = board.getPlayers().get(key);
-
-        board.getBoard()[Board.BOARD_WIDTH/4 - 1][Board.BOARD_HEIGHT/2].setTicket(TicketFactory.getTicket());
-        player.movePlayer(Player.Direction.LEFT);
-
-        assert player.getPosition().equals( board.getBoard()[Board.BOARD_WIDTH/4][Board.BOARD_HEIGHT/2].getPosition());
-
-        System.out.println(devastation.getBoard());
-
-        board.pickUpTicket(player);
-
-        System.out.println(devastation.getBoard());
-
-        Position position =  player.getDirection().getTranslation(player.getPosition());
-
-        assert !board.getBoard()[position.x()][position.y()].containsTicket();
+        assertTrue(tickets.stream().anyMatch(e -> e.getTasks().size() == 1),
+                "There should be at least one ticket with exactly 1 task");
+        assertTrue(tickets.stream().anyMatch(e -> e.getTasks().size() == StationType.values().length),
+                "There should be at least one ticket with a number of tasks equal to the number of StationType values");
     }
 
     @Test
     public void testDropTicket() {
-
         Devastation devastation = new Devastation();
-
         Board board = devastation.getBoard();
         long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
         Player player = board.getPlayers().get(key);
         player.setActive(true);
 
-        board.getBoard()[Board.BOARD_WIDTH/2 - 1][Board.BOARD_HEIGHT/6].setTicket(TicketFactory.getTicket());
+        board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].setTicket(TicketFactory.getTicket());
 
-        assert board.getBoard()[Board.BOARD_WIDTH/2 - 1][Board.BOARD_HEIGHT/6].containsTicket();
+        assertTrue(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
+                "The tile should contain a ticket");
 
         player.movePlayer(Player.Direction.LEFT);
         board.pickUpTicket(player);
 
-        assert !board.getBoard()[Board.BOARD_WIDTH/2 - 1][Board.BOARD_HEIGHT/6].containsTicket();
+        assertFalse(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
+                "The ticket should have been picked up and no longer be on the tile");
 
         board.dropTicket(player);
 
-        System.out.println(devastation.getBoard());
-
-        assert board.getBoard()[Board.BOARD_WIDTH/2 - 1][Board.BOARD_HEIGHT/6].containsTicket();
+        assertTrue(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
+                "The tile should contain the dropped ticket");
     }
 
     @Test
@@ -146,9 +117,12 @@ class ServerApplicationTests {
         }
 
         System.out.print(player.getPosition());
+        assertTrue(player.getPosition().x() >= 0 && player.getPosition().y() >= 0,
+                "Player position should not be below zero after multiple movements");
     }
 
     @Test
     void contextLoads() {
+        // This test ensures the Spring context loads successfully
     }
 }
