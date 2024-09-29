@@ -1,4 +1,4 @@
-import { Stage, Sprite } from '@pixi/react';
+import { Stage, Sprite, Text } from '@pixi/react';
 import { useAtomValue } from 'jotai';
 import { players as playerAtoms, ticketsAtom } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
@@ -6,6 +6,8 @@ import Player from "../components/Player.jsx";
 import { useState, useEffect } from 'react';
 import {TILE_WIDTH } from "../js/spriteFrameGrabber.js";
 import Ticket from "../components/Ticket.jsx";
+import HeldTicket from "../components/HeldTicket.jsx";
+
 
 const GameStage = () => {
     const players = useAtomValue(playerAtoms);
@@ -41,33 +43,35 @@ const GameStage = () => {
     };
 
     return (
-        <Stage
-            options={{ backgroundColor: 0xf4f3ef }}
-            width={windowSize.width}
-            height={windowSize.height}
-            style={{ position: 'absolute', top: 0, left: 0 }}
-        >
-            {/* Render the map centered */}
-            <Sprite image={map} x={mapPosition.x} y={mapPosition.y} width={MAP_WIDTH} height={MAP_HEIGHT}/>
+            <Stage
+                options={{backgroundColor: 0xf4f3ef}}
+                width={windowSize.width}
+                height={windowSize.height}
+                style={{position: 'absolute', top: 0, left: 0}}
+            >
+                {/* Render the map centered */}
+                <Sprite image={map} x={mapPosition.x} y={mapPosition.y} width={MAP_WIDTH} height={MAP_HEIGHT}/>
 
-            {/* Render all players*/}
-            {Object.values(players).map((player, index) => (
-                <Player
-                    player={player}
-                    key={index}
-                    mapPosition={mapPosition}
-                />
-            ))}
+                {/* Render all players*/}
+                {Object.values(players).map((player, index) => (
+                    <Player
+                        player={player}
+                        key={index}
+                        mapPosition={mapPosition}
+                    />
+                ))}
 
-            {/* Render all tickets*/}
-            {Object.values(tickets).map((ticket, index) => (
+                {/* Render all tickets*/}
+                {Object.values(tickets).map((ticket, index) => (
                     <Ticket
                         ticket={ticket}
                         key={index}
                         mapPosition={mapPosition}
                     />
                 ))}
-        </Stage>
+                <HeldTicket mapPosition={mapPosition} mapWidth={MAP_WIDTH}/>
+            </Stage>
+
     );
 };
 

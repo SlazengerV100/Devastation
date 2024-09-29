@@ -1,13 +1,15 @@
 import { store } from '../App';
-import { players as playerAtoms, localPlayerId } from "./atoms.js";
+import {players as playerAtoms, localPlayerId, localHeldTicket} from "./atoms.js";
+import {sendPlayerMovement, sendPlayerAction} from '../managers/connectionManager.js'
 
-export default function keyHandler(sendPlayerMovement) {
+export default function keyHandler() {
 
     // Helper function to handle key actions
     const handleKeyPress = (key) => {
         // Get the player map state
         const players = store.get(playerAtoms);
         const localPlayerIdValue = store.get(localPlayerId);
+        const heldTicket = store.get(localHeldTicket);
         const localCharacter = players[localPlayerIdValue]; // Get the local player's data
 
         if (!localCharacter) {
@@ -17,6 +19,7 @@ export default function keyHandler(sendPlayerMovement) {
 
         let newPosition = { ...localCharacter };
 
+        console.log("KEY : [" + key + "]")
         switch (key) {
             case 'w':
                 // Move player up
@@ -38,32 +41,22 @@ export default function keyHandler(sendPlayerMovement) {
                 console.log("D pressed");
                 sendPlayerMovement('RIGHT');
                 break;
-            case 'o':
+            case ' ':
                 // Pick up ticket
-                console.log("O pressed");
-                // sendPlayerAction('PICKUP'); // Replace with your actual backend action
-                break;
-            case 'p':
-                // Pick drop
-                console.log("P pressed");
-                // sendPlayerAction('DROP'); // Replace with your actual backend action
+                console.log("SPACE pressed");
+                if (Object.keys(heldTicket).length !== 0) { return} // can only hold one ticket at a time
+                sendPlayerAction('PICKUP'); // Replace with your actual backend action
                 break;
             default:
                 return; // Exit if the key is not handled
         }
-
-        // Update the playerMap with the new position
-        store.set(players, (prev) => ({
-            ...prev,
-            [localPlayerIdValue]: newPosition,
-        }));
     };
 
     // Keydown event listener
     const onKeyDown = (event) => {
         const key = event.key.toLowerCase();
         console.log("keyDown:" + event.type);
-        if (['w', 'a', 's', 'd', 'o', 'p'].includes(key)) {
+        if (['w', 'a', 's', 'd', ' '].includes(key)) {
             handleKeyPress(key);
         }
     };

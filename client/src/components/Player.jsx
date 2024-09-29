@@ -15,8 +15,10 @@ const Player = ({ player, mapPosition }) => {
     }, [player.direction]);
 
     // Adjust player's position relative to the centered map
-    const playerPositionX = mapPosition.x + player.x * TILE_WIDTH;
-    const playerPositionY = mapPosition.y + player.y * TILE_WIDTH;
+    const playerPositionX = mapPosition.x + (player.x * TILE_WIDTH);
+    const playerPositionY = mapPosition.y + (player.y * TILE_WIDTH) - TILE_WIDTH;
+
+    console.log(player.x + " " + player.y)
 
     return (
         <AnimatedSprite
@@ -25,8 +27,8 @@ const Player = ({ player, mapPosition }) => {
             isPlaying={true}
             textures={textures.running[player.direction]} // Use the correct direction for textures
             animationSpeed={0.15}
-            x={playerPositionX} // Adjust position
-            y={playerPositionY} // Adjust position
+            x={playerPositionX}
+            y={playerPositionY}
         />
     );
 };
