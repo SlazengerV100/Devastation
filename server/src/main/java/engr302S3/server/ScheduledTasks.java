@@ -68,6 +68,7 @@ public class ScheduledTasks {
 
             if (tile.empty()) {
                 Ticket ticket = TicketFactory.getTicket();
+                ticket.setPosition(tile.getPosition());
                 tile.setTicket(ticket);
                 game.getBoard().addTicket(ticket.getId(), ticket);
                 clientAPI.broadcastTicketCreate(ticket);
