@@ -1,5 +1,5 @@
 import { Stomp } from "@stomp/stompjs";
-import {localPlayerId, players, ticketsAtom} from "../js/atoms.js";
+import {localHeldTicket, localPlayerId, players, ticketsAtom} from "../js/atoms.js";
 import { store } from '../App'
 
 let stompClient;
@@ -40,6 +40,10 @@ const setupSubscriptions = () => {
     stompClient.subscribe('/topic/ticket/create', (message) => {
         updateNewTicket(message)
     });
+
+    stompClient.subscribe('/topic/player/ticket/pickUp', (message) => {
+        updateTicketPickUp(message)
+    })
 
 };
 
@@ -95,6 +99,7 @@ export const sendPlayerMovement = (direction) => {
         console.warn('Cannot send movement: not connected.');
         return
     }
+
     const playerId = store.get(localPlayerId)
 
     if (playerId === -1){
@@ -104,6 +109,17 @@ export const sendPlayerMovement = (direction) => {
     console.log("app/player/move -> " + JSON.stringify({ playerId, direction }))
     stompClient.send("/app/player/move", {}, JSON.stringify({ playerId, direction }));
 };
+
+export const sendPlayerAction = (actionType) => {
+    if (!stompClient){
+        console.warn('Cannot send movement: not connected.');
+        return
+    }
+
+    const playerId = store.get(localPlayerId)
+
+    console.log("/topic/player/ticket/pickUp -> " + JSON.stringify({ playerId, actionType }))
+}
 
 export const activatePlayer = async (playerId, activate = true) => {
     if (!stompClient) {
@@ -139,10 +155,10 @@ const updatePlayerPosition = (message) => {
         store.set(players, (prev) => ({
             ...prev,
             [id]: {
-                ...prev[id], // Keep any existing data for the player
-                x: position.x, // Directly update x from position
-                y: position.y, // Directly update y from position
-                direction, // Update the direction
+                ...prev[id],
+                x: position.x,
+                y: position.y,
+                direction,
             },
         }));
 
@@ -164,6 +180,20 @@ const updateNewTicket = (message) => {
 
     } catch (error){
         console.error('Failed to parse ticket:', error);
+    }
+}
+
+const updateTicketPickUp = (message) => {
+    try {
+        const parsedMessage = JSON.parse(message.body);
+        const { id, heldTicket} = parsedMessage;
+
+        console.log("Ticket pick up: " + " Player ID: " + id + " Held ticket: " + heldTicket)
+
+        store.set(localHeldTicket, heldTicket);
+
+    } catch (error){
+        console.error('Failed to parse player that attempted to pick up ticket:', error);
     }
 }
 
