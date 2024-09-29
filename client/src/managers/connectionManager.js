@@ -212,14 +212,13 @@ const updateTicketPickUp = (message) => {
             },
         }));
 
+        console.log("TICKET PLAYER ID: " + id + " MY ID: " + store.get(localPlayerId))
         // If this picket up update is for the local player then update their localHeldTicket
         if (id === store.get(localPlayerId)){
+            console.log("HELD TICKET TO STORE: " + JSON.stringify(heldTicket))
             store.set(localHeldTicket, heldTicket);
         }
-
-        console.log("Tickets are now:", JSON.stringify(store.get(ticketsAtom), null, 2));
-
-
+        console.log("Updated localHeldTicket:", store.get(localHeldTicket));
 
     } catch (error){
         console.error('Failed to parse player that attempted to pick up ticket:', error);
