@@ -56,9 +56,9 @@ public class ScheduledTasks {
     }
 
     /**
-     * Every 20second try to generate a new ticket if there is room of the board
+     * Every 5second try to generate a new ticket if there is room of the board
      */
-    @Scheduled(fixedRate = 20000)
+    @Scheduled(fixedRate = 5000)
     public void createTicket() {
 
         for (int i = 0; i < Board.BOARD_HEIGHT; i++) {
