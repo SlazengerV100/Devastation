@@ -118,7 +118,15 @@ export const sendPlayerAction = (actionType) => {
 
     const playerId = store.get(localPlayerId)
 
-    console.log("/topic/player/ticket/pickUp -> " + JSON.stringify({ playerId, actionType }))
+    switch (actionType){
+        case 'PICKUP':
+            stompClient.send("/app/player/ticket/pickUp", {}, JSON.stringify({playerId}));
+            break;
+        default:
+            console.error("Action type not recognised")
+    }
+
+
 }
 
 export const activatePlayer = async (playerId, activate = true) => {
@@ -135,7 +143,6 @@ export const activatePlayer = async (playerId, activate = true) => {
         const subscription = stompClient.subscribe('/topic/player/activate', (message) => {
             try {
                 const parsedMessage = JSON.parse(message.body);
-                console.log("PLAYER IS NOW: " + parsedMessage)
                 resolve(parsedMessage); // Resolve the Promise with the updated player map
             } catch (error) {
                 reject('Failed to parse activation response');
@@ -173,10 +180,10 @@ const updateNewTicket = (message) => {
         const parsedMessage = JSON.parse(message.body);
         const { id, position, ticketTitle} = parsedMessage;
 
-        store.set(ticketsAtom, (prevTickets) => [
+        store.set(ticketsAtom, (prevTickets) => ({
             ...prevTickets,
-            { id: id, x: position.x, y: position.y, title: ticketTitle },
-        ]);
+            [id]: { id: id, x: position.x, y: position.y, title: ticketTitle, held: false },
+        }));
 
     } catch (error){
         console.error('Failed to parse ticket:', error);
@@ -188,9 +195,31 @@ const updateTicketPickUp = (message) => {
         const parsedMessage = JSON.parse(message.body);
         const { id, heldTicket} = parsedMessage;
 
-        console.log("Ticket pick up: " + " Player ID: " + id + " Held ticket: " + heldTicket)
+        if (heldTicket === null){
+            console.log("No ticket to pickup")
+            return;
+        }
+        console.log("Ticket pick up: " + " Player ID: " + id + " Held ticket: " + heldTicket.ticketTitle)
 
-        store.set(localHeldTicket, heldTicket);
+        const ticketHeldId = heldTicket.id
+
+        // Update the ticketsAtom to set the held field of the specified ticket to true
+        store.set(ticketsAtom, (prevTickets) => ({
+            ...prevTickets,
+            [ticketHeldId]: {
+                ...prevTickets[ticketHeldId], // Keep existing ticket data
+                held: true, // Set the held field to true
+            },
+        }));
+
+        // If this picket up update is for the local player then update their localHeldTicket
+        if (id === store.get(localPlayerId)){
+            store.set(localHeldTicket, heldTicket);
+        }
+
+        console.log("Tickets are now:", JSON.stringify(store.get(ticketsAtom), null, 2));
+
+
 
     } catch (error){
         console.error('Failed to parse player that attempted to pick up ticket:', error);

@@ -6,15 +6,22 @@ const Ticket = ({ ticket, mapPosition }) => {
     const ticketPositionX = mapPosition.x + ticket.x * TILE_WIDTH;
     const ticketPositionY = mapPosition.y + ticket.y * TILE_WIDTH;
 
+
+    console.log("Ticket " + ticket.held);
+
     return (
-        <Sprite
-            key={ticket.id}
-            image={'../../assets/ticket.png'}
-            x={ticketPositionX}
-            y={ticketPositionY}
-            width={TILE_WIDTH}
-            height={TILE_WIDTH}
-        />
+        ticket.held
+            ?
+                < ></>
+            :
+                <Sprite
+                    key={ticket.id}
+                    image={'../../assets/ticket.png'}
+                    x={ticketPositionX}
+                    y={ticketPositionY}
+                    width={TILE_WIDTH}
+                    height={TILE_WIDTH}
+                />
     );
 };
 
