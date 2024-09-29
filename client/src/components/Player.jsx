@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { AnimatedSprite } from '@pixi/react';
-import { textures, TILE_WIDTH } from "./js/spriteFrameGrabber.js";
+import { textures, TILE_WIDTH } from "../js/spriteFrameGrabber.js";
 
 // eslint-disable-next-line react/prop-types
 const Player = ({ player, mapPosition }) => {

@@ -1,5 +1,5 @@
 import { Stomp } from "@stomp/stompjs";
-import {localPlayerId, players} from "../js/atoms.js";
+import {localPlayerId, players, ticketsAtom} from "../js/atoms.js";
 import { store } from '../App'
 
 let stompClient;
@@ -134,10 +134,8 @@ export const activatePlayer = async (playerId, activate = true) => {
 const updatePlayerPosition = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
-
         const { id, position, direction } = parsedMessage;
-        console.log("Player movement: id: " + id + " position: X: " + position.x + " Y: " + position.y + " direction: " + direction)
-        // Update the specific player in playerMap using the ID
+
         store.set(players, (prev) => ({
             ...prev,
             [id]: {
@@ -158,8 +156,11 @@ const updateNewTicket = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
         const { id, position, ticketTitle} = parsedMessage;
-        console.log("Ticket received: " + "ID: " + id + " X: " + position.x + " Y: " + position.y + " Title: " + ticketTitle);
 
+        store.set(ticketsAtom, (prevTickets) => [
+            ...prevTickets,
+            { id: id, x: position.x, y: position.y, title: ticketTitle },
+        ]);
 
     } catch (error){
         console.error('Failed to parse ticket:', error);

@@ -1,15 +1,16 @@
 import { Stage, Sprite } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import { players as playerAtoms } from "../js/atoms.js";
+import { players as playerAtoms, ticketsAtom } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
-import Player from "../Player.jsx";
+import Player from "../components/Player.jsx";
 import { useState, useEffect } from 'react';
 import {TILE_WIDTH } from "../js/spriteFrameGrabber.js";
+import Ticket from "../components/Ticket.jsx";
 
 const GameStage = () => {
     const players = useAtomValue(playerAtoms);
+    const tickets = useAtomValue(ticketsAtom)
 
-    // Map size (replace with your actual map's width and height)
     const MAP_WIDTH = 30 * TILE_WIDTH;
     const MAP_HEIGHT = 15 * TILE_WIDTH; // Example height
 
@@ -34,8 +35,6 @@ const GameStage = () => {
         };
     }, []);
 
-
-    // Calculate the top-left corner position of the map to center it on the screen
     const mapPosition = {
         x: TILE_WIDTH,
         y: (windowSize.height - MAP_HEIGHT) / 2
@@ -51,14 +50,23 @@ const GameStage = () => {
             {/* Render the map centered */}
             <Sprite image={map} x={mapPosition.x} y={mapPosition.y} width={MAP_WIDTH} height={MAP_HEIGHT}/>
 
-            {/* Render all players, positioning them relative to the map */}
+            {/* Render all players*/}
             {Object.values(players).map((player, index) => (
                 <Player
                     player={player}
                     key={index}
-                    mapPosition={mapPosition} // Pass the map position to adjust player rendering
+                    mapPosition={mapPosition}
                 />
             ))}
+
+            {/* Render all tickets*/}
+            {Object.values(tickets).map((ticket, index) => (
+                    <Ticket
+                        ticket={ticket}
+                        key={index}
+                        mapPosition={mapPosition}
+                    />
+                ))}
         </Stage>
     );
 };
