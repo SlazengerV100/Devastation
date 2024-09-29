@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduledTasks {
     private final Devastation game;
+    private final ClientAPI clientAPI;
 
     /**
      * Injects the devastation component into this component
@@ -22,7 +23,8 @@ public class ScheduledTasks {
      * @param devastation
      */
     @Autowired
-    public ScheduledTasks(Devastation devastation) {
+    public ScheduledTasks(Devastation devastation, ClientAPI clientAPI) {
+        this.clientAPI = clientAPI;
         this.game = devastation;
     }
 
@@ -47,7 +49,7 @@ public class ScheduledTasks {
         //update the stations and tasks that they are working on
         for (Station station : game.getBoard().getStations().values()) {
             if (station.progress()) {
-                ClientAPI.broadcastTaskCompletion(new TaskProgressBroadcast(station.getTicketWorkingOn().get(), station.getStationType()));
+                clientAPI.broadcastTaskCompletion(new TaskProgressBroadcast(station.getTicketWorkingOn().get(), station.getStationType()));
             }
         }
     }
@@ -67,7 +69,7 @@ public class ScheduledTasks {
                 Ticket ticket = TicketFactory.getTicket();
                 tile.setTicket(ticket);
                 game.getBoard().addTicket(ticket.getId(), ticket);
-                ClientAPI.broadcastTicketCreate(ticket);
+                clientAPI.broadcastTicketCreate(ticket);
                 break;
             }
         }
