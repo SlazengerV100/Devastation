@@ -12,15 +12,11 @@ import engr302S3.server.ticketFactory.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class ClientAPI {
     private Devastation devastation;
-
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
     ClientAPI(Devastation devastation) {
@@ -76,26 +72,22 @@ public class ClientAPI {
     }
 
     @SendTo("/topic/scoreUpdate")
-    public int broadcastScoreUpdate(int score) {
-        messagingTemplate.convertAndSend("/topic/scoreUpdate", score);
+    public static int broadcastScoreUpdate(int score) {
         return score;
     }
 
     @SendTo("/topic/ticket/create")
-    public Ticket broadcastTicketCreate(Ticket ticket) {
-        messagingTemplate.convertAndSend("/topic/ticket/create", ticket);
+    public static Ticket broadcastTicketCreate(Ticket ticket) {
         return ticket;
     }
 
     @SendTo("/topic/ticket/resolve")
-    public Ticket broadcastTicketResolve(Ticket ticket) {
-        messagingTemplate.convertAndSend("/topic/ticket/resolve", ticket);
+    public static Ticket broadcastTicketResolve(Ticket ticket) {
         return ticket;
     }
 
     @SendTo("/topic/ticket/task/completionUpdate")
-    public TaskProgressBroadcast broadcastTaskCompletion(TaskProgressBroadcast tpb) {
-        messagingTemplate.convertAndSend("/topic/ticket/task/completionUpdate", tpb);
+    public static TaskProgressBroadcast broadcastTaskCompletion(TaskProgressBroadcast tpb) {
         return tpb;
     }
 
