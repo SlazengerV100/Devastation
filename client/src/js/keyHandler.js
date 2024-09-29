@@ -1,5 +1,5 @@
 import { store } from '../App';
-import { players as playerAtoms, localPlayerId } from "./atoms.js";
+import {players as playerAtoms, localPlayerId, localHeldTicket} from "./atoms.js";
 import {sendPlayerMovement, sendPlayerAction} from '../managers/connectionManager.js'
 
 export default function keyHandler() {
@@ -9,6 +9,7 @@ export default function keyHandler() {
         // Get the player map state
         const players = store.get(playerAtoms);
         const localPlayerIdValue = store.get(localPlayerId);
+        const heldTicket = store.get(localHeldTicket);
         const localCharacter = players[localPlayerIdValue]; // Get the local player's data
 
         if (!localCharacter) {
@@ -43,6 +44,7 @@ export default function keyHandler() {
             case ' ':
                 // Pick up ticket
                 console.log("SPACE pressed");
+                if (Object.keys(heldTicket).length !== 0) { return} // can only hold one ticket at a time
                 sendPlayerAction('PICKUP'); // Replace with your actual backend action
                 break;
             default:
