@@ -10,35 +10,36 @@ import {init} from "../js/spriteFrameGrabber.js";
 const StageManager = () => {
     const [connectionStatus, setConnectionStatus] = useAtom(connectionStatusAtom);
     const [localPlayerIdValue, setLocalPlayerIdValue] = useAtom(localPlayerId);
-
     const [currentStage, setCurrentStage] = useState(<GameStage />);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
+
     // Initial useEffect for asset initialization and connection attempt
     useEffect(() => {
         const initialize = async () => {
-            setLoading(true)
-            await init();
-            setLoading(false)
-            await attemptConnect();
-            console.log("Connection established!");
+            setLoading(true); // Start loading
+
+            try {
+                // Initialize assets
+                await init();
+
+                // Attempt connection
+                await attemptConnect();
+                console.log("Connection established!");
+
+                // Check for playerID in session storage and set if exists
+                const storedPlayerID = sessionStorage.getItem("playerID");
+                if (storedPlayerID) {
+                    setLocalPlayerIdValue(Number(storedPlayerID));
+                }
+            } catch (error) {
+                console.error("Error during initialization or connection:", error);
+            } finally {
+                setLoading(false); // Stop loading after everything is done
+            }
         };
-
         initialize();
-    }, []);
+    }, []); // Dependency array left empty to run only once on mount
 
-    // Check for stored player in localStorage
-    // useEffect(() => {
-    //     const checkStoredPlayer = () => {
-    //         const player = localStorage.getItem('playerID');
-    //         if (player) {
-    //             setStoredPlayer(prev => ({
-    //                 ...prev,
-    //                 playerName: player
-    //             }));
-    //         }
-    //     };
-    //     checkStoredPlayer();
-    // }, [setStoredPlayer]);
 
     const attemptConnect = async () => {
         try {
@@ -50,48 +51,32 @@ const StageManager = () => {
         }
     };
 
-    useEffect(() => {
-        attemptConnect().then(r => console.log("Connection established!"))
-    }, []);
-
-    // useEffect(() => {
-    //     const checkStoredPlayer = () => {
-    //         const player = localStorage.getItem('playerID');
-    //         if(player){
-    //             setStoredPlayer(prev => ({
-    //                 ...prev,
-    //                 playerName: player
-    //             }));
-    //         }
-    //     };
-    //
-    //     // Check initially when the component mounts
-    //     checkStoredPlayer();
-    // }, [setStoredPlayer]);
-
     // Trigger stage update based on connection status and storedPlayer changes
     useEffect(() => {
-        console.log('CHANGED')
-        console.log("connectionStatus" + connectionStatus)
         if (connectionStatus === 'disconnected') {
             setCurrentStage(<LoadingStage attemptConnect={attemptConnect}/>);
-        } else if (localPlayerIdValue !== -1) {
+        }
+
+        else if (localPlayerIdValue !== -1) {
             setCurrentStage(<GameStage />);
-        } else {
+        }
+
+        else {
             setCurrentStage(<CharacterSelectStage />);
         }
     }, [connectionStatus, localPlayerIdValue]); // Effect depends on connectionStatus and storedPlayer
 
 
     return (
-       <>
-           {
-               loading ?
-               <h1>Loading assets TODO fix this, its ugly</h1>
-               :
-               currentStage
-           }
-       </>
+        <>
+            {
+                loading ?
+                    <h1>Loading assets TODO fix this, its ugly</h1>
+                    :
+                    currentStage
+            }
+        </>
+
     );
 };
 
