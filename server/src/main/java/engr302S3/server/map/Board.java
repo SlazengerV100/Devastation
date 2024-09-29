@@ -41,36 +41,52 @@ public class Board {
      * @return the board
      */
     public Tile[][] createBoard() {
-
         ArrayList<String[]> stations = loadFiles("src/main/resources/map._TempStations.csv");
         ArrayList<String[]> walls = loadFiles("src/main/resources/map._Wall.csv");
 
-        BOARD_WIDTH = walls.size();
-        BOARD_HEIGHT = walls.get(0).length;
+        // Assuming both walls and stations are guaranteed to have the same dimensions
+        BOARD_HEIGHT = walls.size();
+        BOARD_WIDTH = walls.get(0).length;
+
+        System.out.println(BOARD_WIDTH + " " + BOARD_HEIGHT);
 
         String[][] combined = new String[BOARD_WIDTH][BOARD_HEIGHT];
 
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_HEIGHT; y++) {
-                String tile = Objects.equals(walls.get(x)[y], "160") ? walls.get(x)[y] : stations.get(x)[y];
-                combined[x][y] = tile;
+        for (int y = 0; y < BOARD_HEIGHT; y++) {
+            for (int x = 0; x < BOARD_WIDTH; x++) {
+                //.get here needs to be y,x to be read as intended
+                String wallTile = walls.get(y)[x];
+                String stationTile = stations.get(y)[x];
+
+                // Prioritise wall tiles over station tiles if present
+                combined[x][y] = wallTile.equals("160") ? wallTile : stationTile;
             }
         }
 
         Tile[][] board = new Tile[BOARD_WIDTH][BOARD_HEIGHT];
 
+        //load initial tiles
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_HEIGHT; y++) {
                 switch (combined[x][y]) {
-                    case "-1" -> board[x][y] = new Tile(new Position(x, y));
-                    case "33" -> board[x][y] = new Tile(new Position(x, y), TileType.STATION);
-                    case "160" -> board[x][y] = new Tile(new Position(x, y), TileType.WALL);
+                    case "-1" -> board[x][y] = new Tile(new Position(x, y)); // Empty tile
+                    case "33" -> board[x][y] = new Tile(new Position(x, y), TileType.STATION); // Station tile
+                    case "160" -> board[x][y] = new Tile(new Position(x, y), TileType.WALL);  // Wall tile
                 }
             }
         }
 
+        // Print the board for debugging
+        for (int y = 0; y < BOARD_HEIGHT; y++) {
+            for (int x = 0; x < BOARD_WIDTH; x++) {
+                System.out.print(board[x][y] + " ");
+            }
+            System.out.println();  // New line after each row
+        }
+
         return board;
     }
+
 
     /**
      * Load a csv and scan it.
