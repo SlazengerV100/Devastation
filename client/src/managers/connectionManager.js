@@ -134,10 +134,8 @@ export const activatePlayer = async (playerId, activate = true) => {
 const updatePlayerPosition = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
-
         const { id, position, direction } = parsedMessage;
-        console.log("Player movement: id: " + id + " position: X: " + position.x + " Y: " + position.y + " direction: " + direction)
-        // Update the specific player in playerMap using the ID
+
         store.set(players, (prev) => ({
             ...prev,
             [id]: {
@@ -158,9 +156,7 @@ const updateNewTicket = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
         const { id, position, ticketTitle} = parsedMessage;
-        console.log("Ticket received: " + "ID: " + id + " X: " + position.x + " Y: " + position.y + " Title: " + ticketTitle);
 
-        // Add the new ticket to the ticketsAtom
         store.set(ticketsAtom, (prevTickets) => [
             ...prevTickets,
             { id: id, x: position.x, y: position.y, title: ticketTitle },
