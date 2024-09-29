@@ -28,6 +28,7 @@ public class Station {
         id = idTracker++;
         this.stationType = stationType;
         this.progress = 0;
+        ticketWorkingOn = Optional.empty();
     }
 
     /**
