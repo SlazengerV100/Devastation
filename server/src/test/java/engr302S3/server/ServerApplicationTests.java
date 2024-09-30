@@ -3,6 +3,7 @@ package engr302S3.server;
 import engr302S3.server.map.Board;
 import engr302S3.server.map.Position;
 import engr302S3.server.map.StationType;
+import engr302S3.server.map.TileType;
 import engr302S3.server.players.Player;
 import engr302S3.server.players.ProjectManager;
 import engr302S3.server.ticketFactory.Ticket;
@@ -119,6 +120,30 @@ class ServerApplicationTests {
         System.out.print(player.getPosition());
         assertTrue(player.getPosition().x() >= 0 && player.getPosition().y() >= 0,
                 "Player position should not be below zero after multiple movements");
+    }
+
+    @Test
+    public void testBoardMovePlayer() {
+        Devastation devastation = new Devastation();
+
+        Board board = devastation.getBoard();
+        long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
+        Player player = board.getPlayers().get(key);
+
+        player.setActive(true);
+
+        board.movePlayer(player, Player.Direction.LEFT);
+
+        assertSame(board.getBoard()[Board.BOARD_WIDTH / 2][Board.BOARD_HEIGHT / 6].getType(), TileType.PLAYER,
+                "Player position should be the same as its spawn location");
+
+        board.movePlayer(player, Player.Direction.LEFT);
+
+        assertSame(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].getType(), TileType.PLAYER,
+                "Player position should have moved one to the left");
+
+        assertSame(board.getBoard()[Board.BOARD_WIDTH / 2][Board.BOARD_HEIGHT / 6].getType(), TileType.EMPTY,
+                "previous tile should be empty");
     }
 
     @Test

@@ -70,14 +70,15 @@ public abstract class Player {
      *
      * @param direction to move player in
      */
-    public void movePlayer(Direction direction) {
+    public Position movePlayer(Direction direction) {
 
         if (!active) {
-           return;
+           return this.position;
         }
 
         if (this.direction != direction) {
             setDirection(direction);
+            return this.position;
         } else {
 
             Position position;
@@ -85,11 +86,13 @@ public abstract class Player {
             try {
                 position = getDirection().getTranslation(this.position);
             } catch (IllegalArgumentException e) {
-                return; //cannot move if out of bounds
+                return this.position; //cannot move if out of bounds
             }
 
             this.setPosition(position);
         }
+
+        return this.position;
     }
 
     @Override
