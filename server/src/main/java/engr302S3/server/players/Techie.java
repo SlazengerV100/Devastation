@@ -25,6 +25,35 @@ public abstract class Techie extends Player {
         this.disabled = false;
     }
 
+
+    /**
+     * If player is not facing direction specified first input will face him that direction
+     *
+     * @param direction to move player in
+     */
+    @Override
+    public void movePlayer(Direction direction) {
+
+        if (!super.isActive() || this.disabled) {
+            return;
+        }
+
+        if (super.getDirection() != direction) {
+            setDirection(direction);
+        } else {
+
+            Position position;
+
+            try {
+                position = super.getDirection().getTranslation(super.getPosition());
+            } catch (IllegalArgumentException e) {
+                return; //cannot move if out of bounds
+            }
+
+            this.setPosition(position);
+        }
+    }
+
     /**
      * Increase burnout dependent on amount of tickets in the area
      */
