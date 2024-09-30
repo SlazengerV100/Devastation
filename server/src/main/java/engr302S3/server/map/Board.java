@@ -97,7 +97,9 @@ public class Board {
         player.setHeldTicket(Optional.ofNullable(ticket));
         player.getHeldTicket().get().setPosition(player.getPosition());
 
+        // If ticket is being worked on set the station it is at
         if(tile.getType().equals(TileType.STATION)){
+            ticket.setStation(Optional.empty());
         }
 
         tile.clearTile();
@@ -130,6 +132,7 @@ public class Board {
             Station station = (Station) getTileAt(position).getContent();
             if(!station.inUse()){
                 station.setTicketWorkingOn(Optional.of(ticket));
+                ticket.setStation(Optional.of(station));
             }
         }
 
