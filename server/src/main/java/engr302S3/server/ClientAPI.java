@@ -15,6 +15,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.util.Optional;
+
 @Controller
 public class ClientAPI {
     private Devastation devastation;
@@ -55,7 +57,12 @@ public class ClientAPI {
     @SendTo("/topic/player/ticket/drop")
     public Player dropTicket(PlayerRequest playerRequest) {
         Player player = devastation.getBoard().getPlayers().get(playerRequest.playerId());
-        devastation.getBoard().dropTicket(player);
+        Optional<Ticket> ticket = player.getHeldTicket();
+        devastation.getBoard().dropTicket(player, devastation);
+        if(ticket.isPresent() && ticket.get().isComplete()){
+            this.broadcastScoreUpdate(devastation.getScore());
+            this.broadcastTicketResolve(ticket.get());
+        }
         return player;
     }
 
