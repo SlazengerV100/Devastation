@@ -118,26 +118,19 @@ public class Board {
      * Set up the board with positions of developers.
      */
     private void createPlayers() {
-        // Define player positions
-        Position projectManagerPosition = new Position(BOARD_WIDTH / 4, BOARD_HEIGHT / 2);
-        Position developerPosition = new Position(BOARD_WIDTH / 2, BOARD_HEIGHT / 2);
-        Position testerPosition = new Position(BOARD_WIDTH - 3, BOARD_HEIGHT / 2);
-
-        ProjectManager projectManager = new ProjectManager(projectManagerPosition);
-        Developer developer = new Developer(developerPosition);
-        Tester tester = new Tester(testerPosition);
-
-        // Add players to the players map
+        // Add players
+        ProjectManager projectManager = new ProjectManager(new Position(BOARD_WIDTH/2,BOARD_HEIGHT/6));
+        Developer developer = new Developer(new Position(BOARD_WIDTH/2,BOARD_HEIGHT/2));
+        Tester tester = new Tester(new Position(BOARD_WIDTH/2,(BOARD_HEIGHT/6) * 5));
         this.players.put(projectManager.getId(), projectManager);
         this.players.put(developer.getId(), developer);
         this.players.put(tester.getId(), tester);
 
-        // Initialise player positions on the board
-        board[projectManagerPosition.x()][projectManagerPosition.y()].setPlayer(projectManager);
-        board[developerPosition.x()][developerPosition.y()].setPlayer(developer);
-        board[testerPosition.x()][testerPosition.y()].setPlayer(tester);
+        // Initialise player positions to tiles
+        board[BOARD_WIDTH/2][BOARD_HEIGHT/6].setPlayer(projectManager);
+        board[BOARD_WIDTH/2][BOARD_HEIGHT/2].setPlayer(developer);
+        board[BOARD_WIDTH/2][(BOARD_HEIGHT/6) * 5].setPlayer(tester);
     }
-
 
     /**
      * Create stations in a 2*2 radius of a Station tile on map.

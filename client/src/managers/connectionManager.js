@@ -129,31 +129,6 @@ export const sendPlayerAction = (actionType) => {
 
 }
 
-export const fetchAllTickets = async () => {
-    if (!stompClient) {
-        console.warn('Cannot fetch tickets: not connected.');
-        return;
-    }
-
-    stompClient.send("/app/tickets", {});
-
-    return new Promise((resolve, reject) => {
-        const subscription = stompClient.subscribe('/topic/tickets', (message) => {
-            try {
-                const tickets = JSON.parse(message.body);
-                console.log(tickets)
-                resolve(tickets); // Resolve with the list of tickets
-            } catch (error) {
-                reject('Failed to parse ticket response');
-            }
-
-            subscription.unsubscribe();
-        });
-    });
-};
-
-
-
 export const activatePlayer = async (playerId, activate = true) => {
     if (!stompClient) {
         console.warn('Cannot activate player: not connected.');
@@ -165,18 +140,10 @@ export const activatePlayer = async (playerId, activate = true) => {
 
     // Return a Promise that resolves when the server responds
     return new Promise((resolve, reject) => {
-        const subscription = stompClient.subscribe('/topic/player/activate', async (message) => {
+        const subscription = stompClient.subscribe('/topic/player/activate', (message) => {
             try {
                 const parsedMessage = JSON.parse(message.body);
                 resolve(parsedMessage); // Resolve the Promise with the updated player map
-                const tickets = await fetchAllTickets();
-                tickets.forEach(t =>{
-                    store.set(ticketsAtom, (prevTickets) => ({
-                        ...prevTickets,
-                        [t.id]: { id: t.id, x: t.position.x, y: t.position.y, title: t.ticketTitle, held: false },
-                    }));
-                })
-                console.log(tickets)
             } catch (error) {
                 reject('Failed to parse activation response');
             }
