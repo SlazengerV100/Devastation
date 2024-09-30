@@ -235,7 +235,7 @@ public class Board {
             return; //Do nothing if position is out of bounds
         }
 
-        if (board[position.x()][position.y()].getType()== TileType.WALL || board[position.x()][position.y()].getType()== TileType.STATION ) {
+        if (board[position.x()][position.y()].getType() == TileType.WALL || board[position.x()][position.y()].getType() == TileType.STATION || board[position.x()][position.y()].getType() == TileType.TICKET) {
             return;
         }
 
