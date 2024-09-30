@@ -41,36 +41,52 @@ public class Board {
      * @return the board
      */
     public Tile[][] createBoard() {
-
         ArrayList<String[]> stations = loadFiles("src/main/resources/map._TempStations.csv");
         ArrayList<String[]> walls = loadFiles("src/main/resources/map._Wall.csv");
 
-        BOARD_WIDTH = walls.size();
-        BOARD_HEIGHT = walls.get(0).length;
+        // Assuming both walls and stations are guaranteed to have the same dimensions
+        BOARD_HEIGHT = walls.size();
+        BOARD_WIDTH = walls.get(0).length;
+
+        System.out.println(BOARD_WIDTH + " " + BOARD_HEIGHT);
 
         String[][] combined = new String[BOARD_WIDTH][BOARD_HEIGHT];
 
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_HEIGHT; y++) {
-                String tile = Objects.equals(walls.get(x)[y], "160") ? walls.get(x)[y] : stations.get(x)[y];
-                combined[x][y] = tile;
+        for (int y = 0; y < BOARD_HEIGHT; y++) {
+            for (int x = 0; x < BOARD_WIDTH; x++) {
+                //.get here needs to be y,x to be read as intended
+                String wallTile = walls.get(y)[x];
+                String stationTile = stations.get(y)[x];
+
+                // Prioritise wall tiles over station tiles if present
+                combined[x][y] = wallTile.equals("160") ? wallTile : stationTile;
             }
         }
 
         Tile[][] board = new Tile[BOARD_WIDTH][BOARD_HEIGHT];
 
+        //load initial tiles
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_HEIGHT; y++) {
                 switch (combined[x][y]) {
-                    case "-1" -> board[x][y] = new Tile(new Position(x, y));
-                    case "33" -> board[x][y] = new Tile(new Position(x, y), TileType.STATION);
-                    case "160" -> board[x][y] = new Tile(new Position(x, y), TileType.WALL);
+                    case "-1" -> board[x][y] = new Tile(new Position(x, y)); // Empty tile
+                    case "33" -> board[x][y] = new Tile(new Position(x, y), TileType.STATION); // Station tile
+                    case "160" -> board[x][y] = new Tile(new Position(x, y), TileType.WALL);  // Wall tile
                 }
             }
         }
 
+        // Print the board for debugging
+        for (int y = 0; y < BOARD_HEIGHT; y++) {
+            for (int x = 0; x < BOARD_WIDTH; x++) {
+                System.out.print(board[x][y] + " ");
+            }
+            System.out.println();  // New line after each row
+        }
+
         return board;
     }
+
 
     /**
      * Load a csv and scan it.
@@ -102,19 +118,26 @@ public class Board {
      * Set up the board with positions of developers.
      */
     private void createPlayers() {
-        // Add players
-        ProjectManager projectManager = new ProjectManager(new Position(BOARD_WIDTH/2,BOARD_HEIGHT/6));
-        Developer developer = new Developer(new Position(BOARD_WIDTH/2,BOARD_HEIGHT/2));
-        Tester tester = new Tester(new Position(BOARD_WIDTH/2,(BOARD_HEIGHT/6) * 5));
+        // Define player positions
+        Position projectManagerPosition = new Position(BOARD_WIDTH / 4, BOARD_HEIGHT / 2);
+        Position developerPosition = new Position(BOARD_WIDTH / 2, BOARD_HEIGHT / 2);
+        Position testerPosition = new Position(BOARD_WIDTH - 3, BOARD_HEIGHT / 2);
+
+        ProjectManager projectManager = new ProjectManager(projectManagerPosition);
+        Developer developer = new Developer(developerPosition);
+        Tester tester = new Tester(testerPosition);
+
+        // Add players to the players map
         this.players.put(projectManager.getId(), projectManager);
         this.players.put(developer.getId(), developer);
         this.players.put(tester.getId(), tester);
 
-        // Initialise player positions to tiles
-        board[BOARD_WIDTH/2][BOARD_HEIGHT/6].setPlayer(projectManager);
-        board[BOARD_WIDTH/2][BOARD_HEIGHT/2].setPlayer(developer);
-        board[BOARD_WIDTH/2][(BOARD_HEIGHT/6) * 5].setPlayer(tester);
+        // Initialise player positions on the board
+        board[projectManagerPosition.x()][projectManagerPosition.y()].setPlayer(projectManager);
+        board[developerPosition.x()][developerPosition.y()].setPlayer(developer);
+        board[testerPosition.x()][testerPosition.y()].setPlayer(tester);
     }
+
 
     /**
      * Create stations in a 2*2 radius of a Station tile on map.
@@ -181,14 +204,14 @@ public class Board {
 
         Position position;
 
+        if (player.getHeldTicket().isEmpty()) {
+            return;
+        }
+
         try {
             position = player.getDirection().getTranslation(player.getPosition());
         } catch (IllegalArgumentException e) {
             return; //Do nothing if the position is out of bounds
-        }
-
-        if (player.getHeldTicket().isEmpty()) {
-            return;
         }
 
         Ticket ticket = player.getHeldTicket().get();
@@ -204,13 +227,44 @@ public class Board {
         }
     }
 
+    public void movePlayer(Player player, Player.Direction direction) {
+
+        Position previous = player.getPosition();
+        Position position;
+
+        try {
+            if (direction == player.getDirection()) {
+                position = direction.getTranslation(player.getPosition());
+            } else {
+                position = player.getPosition();
+            }
+        } catch (IllegalArgumentException e) {
+            return; //Do nothing if position is out of bounds
+        }
+
+        if (board[position.x()][position.y()].getType() == TileType.WALL || board[position.x()][position.y()].getType() == TileType.STATION || board[position.x()][position.y()].getType() == TileType.TICKET) {
+            return;
+        }
+
+        position = player.movePlayer(direction);
+
+        board[previous.x()][previous.y()].clearTile();
+        board[position.x()][position.y()].setPlayer(player); //will not change player location if only direction is changed
+    }
+
     /**
      * Add a ticket to the board
      * @param id the ticket ID
      * @param ticket the ticket Object
      */
-    public void addTicket(long id, Ticket ticket) {
-        tickets.put(id, ticket);
+    public boolean addTicket(long id, Ticket ticket) {
+        Tile t = this.getTileAt(ticket.getPosition());
+        if (t.empty()) {
+            t.setTicket(ticket);
+            tickets.put(id, ticket);
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -9,17 +9,18 @@ import engr302S3.server.playerActions.TaskProgressBroadcast;
 import engr302S3.server.players.Player;
 import engr302S3.server.ticketFactory.Ticket;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import java.util.Optional;
+import java.util.Map;
 
 @Controller
 public class ClientAPI {
-    private Devastation devastation;
+    @Getter private Devastation devastation;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -33,7 +34,7 @@ public class ClientAPI {
     @SendTo("/topic/player/move")
     public Player movePlayer(Movement movementRequest) {
         Player player = devastation.getBoard().getPlayers().get(movementRequest.playerId());
-        player.movePlayer(movementRequest.direction());
+        devastation.getBoard().movePlayer(player, movementRequest.direction());
         return player;
     }
 
@@ -86,6 +87,12 @@ public class ClientAPI {
     public int broadcastScoreUpdate(int score) {
         messagingTemplate.convertAndSend("/topic/scoreUpdate", score);
         return score;
+    }
+
+    @SendTo("topic/tickets/all")
+    @MessageMapping("/tickets/all")
+    public Map<Long, Ticket> broadcastAllTickets() {
+       return devastation.getBoard().getTickets();
     }
 
     @SendTo("/topic/ticket/create")

@@ -15,18 +15,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ScheduledTasks {
-    private final Devastation game;
     private final ClientAPI clientAPI;
 
     /**
-     * Injects the devastation component into this component
+     * Injects the ClientAPI Controller into this component
      *
-     * @param devastation
      */
     @Autowired
-    public ScheduledTasks(Devastation devastation, ClientAPI clientAPI) {
+    public ScheduledTasks(ClientAPI clientAPI) {
         this.clientAPI = clientAPI;
-        this.game = devastation;
     }
 
     /**
@@ -36,19 +33,19 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = 1000)
     public void updateGameTime() {
         //update the game clock
-        game.decreaseTime();
+        clientAPI.getDevastation().decreaseTime();
         //check each tile for a ticket, and update the ticket timer if there is one
         for (int y = 0; y < Board.BOARD_HEIGHT; y++) {
 
             for (int x = 0; x < Board.BOARD_WIDTH; x++) {
 
-                if (game.getBoard().getTileAt(new Position(x, y)).getType() == TileType.TICKET) {
-                    ((Ticket) game.getBoard().getTileAt(new Position(x, y)).getContent()).incrementTime();
+                if (clientAPI.getDevastation().getBoard().getTileAt(new Position(x, y)).getType() == TileType.TICKET) {
+                    ((Ticket) clientAPI.getDevastation().getBoard().getTileAt(new Position(x, y)).getContent()).incrementTime();
                 }
             }
         }
         //update the stations and tasks that they are working on
-        for (Station station : game.getBoard().getStations().values()) {
+        for (Station station : clientAPI.getDevastation().getBoard().getStations().values()) {
             if (station.progress()) {
                 clientAPI.broadcastTaskCompletion(new TaskProgressBroadcast(station.getTicketWorkingOn().get(), station.getStationType()));
             }
@@ -58,22 +55,24 @@ public class ScheduledTasks {
     /**
      * Every 5second try to generate a new ticket if there is room of the board
      */
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 8000)
     public void createTicket() {
+        // Generate random x and y coordinates within the project manager area
+        int randomX = 1 + (int) (Math.random() * 8);
+        int randomY = 1 + (int) (Math.random() * 13);
 
-        for (int i = 0; i < Board.BOARD_HEIGHT; i++) {
-            //check the first column of the board for generated tickets, I am assuming this is
-            //where we will  spawn them
-            Tile tile = game.getBoard().getTileAt(new Position(0, i));
+        // Get the tile at the random position
+        Tile tile = clientAPI.getDevastation().getBoard().getTileAt(new Position(randomX, randomY));
+        Ticket ticket = TicketFactory.getTicket();
+        ticket.setPosition(tile.getPosition());
+        // Try to add the ticket to the board
+        if (clientAPI.getDevastation().getBoard().addTicket(ticket.getId(), ticket)) {
 
-            if (tile.empty()) {
-                Ticket ticket = TicketFactory.getTicket();
-                ticket.setPosition(tile.getPosition());
-                tile.setTicket(ticket);
-                game.getBoard().addTicket(ticket.getId(), ticket);
-                clientAPI.broadcastTicketCreate(ticket);
-                break;
-            }
+            tile.setTicket(ticket);
+            clientAPI.broadcastTicketCreate(ticket);
+        } else {
+            //tile is not free
+            System.out.println("Tile at (" + randomX + ", " + randomY + ") is not empty. Ticket not created.");
         }
     }
 }
