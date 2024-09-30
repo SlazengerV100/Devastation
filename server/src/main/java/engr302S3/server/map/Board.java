@@ -196,14 +196,14 @@ public class Board {
 
         Position position;
 
+        if (player.getHeldTicket().isEmpty()) {
+            return;
+        }
+
         try {
             position = player.getDirection().getTranslation(player.getPosition());
         } catch (IllegalArgumentException e) {
             return; //Do nothing if the position is out of bounds
-        }
-
-        if (player.getHeldTicket().isEmpty()) {
-            return;
         }
 
         Ticket ticket = player.getHeldTicket().get();
@@ -211,6 +211,21 @@ public class Board {
         player.getHeldTicket().ifPresent(x -> x.setPosition(position));
         player.setHeldTicket(Optional.empty());
         board[position.x()][position.y()].setTicket(ticket);
+    }
+
+    public void movePlayer(Player player, Player.Direction direction) {
+
+        Position previous = player.getPosition();
+        Position position;
+
+        try {
+            position = player.movePlayer(direction);
+        } catch (IllegalArgumentException e) {
+            return; //Do nothing if position is out of bounds
+        }
+
+        board[previous.x()][previous.y()].clearTile();
+        board[position.x()][position.y()].setPlayer(player); //will not change player location if only direction is changed
     }
 
     /**
