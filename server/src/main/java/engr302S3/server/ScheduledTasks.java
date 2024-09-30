@@ -18,7 +18,7 @@ public class ScheduledTasks {
     private final ClientAPI clientAPI;
 
     /**
-     * Injects the devastation component into this component
+     * Injects the ClientAPI component into this component
      *
      */
     @Autowired
@@ -55,24 +55,22 @@ public class ScheduledTasks {
     /**
      * Every 5second try to generate a new ticket if there is room of the board
      */
-    @Scheduled(fixedRate = 8000)
+    @Scheduled(fixedRate = 5000)
     public void createTicket() {
-        // Generate random x and y coordinates within the project manager area
-        int randomX = 1 + (int) (Math.random() * 8);
-        int randomY = 1 + (int) (Math.random() * 13);
 
-        // Get the tile at the random position
-        Tile tile = clientAPI.getDevastation().getBoard().getTileAt(new Position(randomX, randomY));
-        Ticket ticket = TicketFactory.getTicket();
-        ticket.setPosition(tile.getPosition());
-        // Try to add the ticket to the board
-        if (clientAPI.getDevastation().getBoard().addTicket(ticket.getId(), ticket)) {
+        for (int i = 0; i < Board.BOARD_HEIGHT; i++) {
+            //check the first column of the board for generated tickets, I am assuming this is
+            //where we will  spawn them
+            Tile tile = clientAPI.getDevastation().getBoard().getTileAt(new Position(0, i));
 
-            tile.setTicket(ticket);
-            clientAPI.broadcastTicketCreate(ticket);
-        } else {
-            //tile is not free
-            System.out.println("Tile at (" + randomX + ", " + randomY + ") is not empty. Ticket not created.");
+            if (tile.empty()) {
+                Ticket ticket = TicketFactory.getTicket();
+                ticket.setPosition(tile.getPosition());
+                tile.setTicket(ticket);
+                clientAPI.getDevastation().getBoard().addTicket(ticket.getId(), ticket);
+                clientAPI.broadcastTicketCreate(ticket);
+                break;
+            }
         }
     }
 }
