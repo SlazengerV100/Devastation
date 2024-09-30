@@ -61,6 +61,7 @@ public class ClientAPI {
         Player player = devastation.getBoard().getPlayers().get(playerRequest.playerId());
         Optional<Ticket> ticket = player.getHeldTicket();
         devastation.getBoard().dropTicket(player, devastation);
+        // If the ticket is completed broadcast updates to score and ticket
         if(ticket.isPresent() && ticket.get().isComplete()){
             this.broadcastScoreUpdate(devastation.getScore());
             this.broadcastTicketResolve(ticket.get());
