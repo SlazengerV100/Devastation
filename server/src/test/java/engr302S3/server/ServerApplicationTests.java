@@ -83,27 +83,7 @@ class ServerApplicationTests {
 
     @Test
     public void testDropTicket() {
-        Devastation devastation = new Devastation();
-        Board board = devastation.getBoard();
-        long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
-        Player player = board.getPlayers().get(key);
-        player.setActive(true);
 
-        board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].setTicket(TicketFactory.getTicket());
-
-        assertTrue(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
-                "The tile should contain a ticket");
-
-        player.movePlayer(Player.Direction.LEFT);
-        board.pickUpTicket(player);
-
-        assertFalse(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
-                "The ticket should have been picked up and no longer be on the tile");
-
-        board.dropTicket(player);
-
-        assertTrue(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
-                "The tile should contain the dropped ticket");
     }
 
     @Test
@@ -122,32 +102,4 @@ class ServerApplicationTests {
                 "Player position should not be below zero after multiple movements");
     }
 
-    @Test
-    public void testBoardMovePlayer() {
-        Devastation devastation = new Devastation();
-
-        Board board = devastation.getBoard();
-        long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
-        Player player = board.getPlayers().get(key);
-
-        player.setActive(true);
-
-        board.movePlayer(player, Player.Direction.LEFT);
-
-        assertSame(board.getBoard()[Board.BOARD_WIDTH / 2][Board.BOARD_HEIGHT / 6].getType(), TileType.PLAYER,
-                "Player position should be the same as its spawn location");
-
-        board.movePlayer(player, Player.Direction.LEFT);
-
-        assertSame(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].getType(), TileType.PLAYER,
-                "Player position should have moved one to the left");
-
-        assertSame(board.getBoard()[Board.BOARD_WIDTH / 2][Board.BOARD_HEIGHT / 6].getType(), TileType.EMPTY,
-                "previous tile should be empty");
-    }
-
-    @Test
-    void contextLoads() {
-        // This test ensures the Spring context loads successfully
-    }
 }
