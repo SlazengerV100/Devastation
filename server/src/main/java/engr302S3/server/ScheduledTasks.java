@@ -60,20 +60,22 @@ public class ScheduledTasks {
      */
     @Scheduled(fixedRate = 5000)
     public void createTicket() {
+        // Generate random x and y coordinates within the project manager area
+        int randomX = 1 + (int) (Math.random() * 8);
+        int randomY = 1 + (int) (Math.random() * 13);
 
-        for (int i = 0; i < Board.BOARD_HEIGHT; i++) {
-            //check the first column of the board for generated tickets, I am assuming this is
-            //where we will  spawn them
-            Tile tile = game.getBoard().getTileAt(new Position(0, i));
+        // Get the tile at the random position
+        Tile tile = game.getBoard().getTileAt(new Position(randomX, randomY));
+        Ticket ticket = TicketFactory.getTicket();
+        ticket.setPosition(tile.getPosition());
+        // Try to add the ticket to the board
+        if (game.getBoard().addTicket(ticket.getId(), ticket)) {
 
-            if (tile.empty()) {
-                Ticket ticket = TicketFactory.getTicket();
-                ticket.setPosition(tile.getPosition());
-                tile.setTicket(ticket);
-                game.getBoard().addTicket(ticket.getId(), ticket);
-                clientAPI.broadcastTicketCreate(ticket);
-                break;
-            }
+            tile.setTicket(ticket);
+            clientAPI.broadcastTicketCreate(ticket);
+        } else {
+            //tile is not free
+            System.out.println("Tile at (" + randomX + ", " + randomY + ") is not empty. Ticket not created.");
         }
     }
 }
