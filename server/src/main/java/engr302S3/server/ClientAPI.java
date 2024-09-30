@@ -9,6 +9,7 @@ import engr302S3.server.playerActions.TaskProgressBroadcast;
 import engr302S3.server.players.Player;
 import engr302S3.server.ticketFactory.Ticket;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 @Controller
 public class ClientAPI {
-    private Devastation devastation;
+    @Getter private Devastation devastation;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
