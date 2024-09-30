@@ -42,9 +42,9 @@ export default function keyHandler() {
                 sendPlayerMovement('RIGHT');
                 break;
             case ' ':
-                // Pick up ticket
+                // Pick / drop ticket
                 console.log("SPACE pressed");
-                if (Object.keys(heldTicket).length !== 0) { return} // can only hold one ticket at a time
+                if (heldTicket !== null) { sendPlayerAction('DROP') }
                 sendPlayerAction('PICKUP'); // Replace with your actual backend action
                 break;
             default:

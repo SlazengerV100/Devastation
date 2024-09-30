@@ -45,6 +45,9 @@ const setupSubscriptions = () => {
         updateTicketPickUp(message)
     })
 
+    stompClient.subscribe('/topic/player/ticket/drop', (message) => {
+        updateTicketDrop(message)
+    })
 };
 
 export const requestState = async () => {
@@ -121,6 +124,9 @@ export const sendPlayerAction = (actionType) => {
     switch (actionType){
         case 'PICKUP':
             stompClient.send("/app/player/ticket/pickUp", {}, JSON.stringify({playerId}));
+            break;
+        case 'DROP':
+            stompClient.send("/app/player/ticket/drop", {}, JSON.stringify({playerId}))
             break;
         default:
             console.error("Action type not recognised")
@@ -257,6 +263,30 @@ const updateTicketPickUp = (message) => {
         console.error('Failed to parse player that attempted to pick up ticket:', error);
     }
 }
+
+const updateTicketDrop = (message) => {
+    try {
+        const parsedMessage = JSON.parse(message.body);
+        const { id } = parsedMessage; // Get the ticket ID from the dropped ticket message
+
+        console.log("Ticket dropped: " + " Ticket ID: " + id);
+
+        // Remove the dropped ticket from the ticketsAtom
+        store.set(ticketsAtom, (prevTickets) => {
+            const { [id]: removedTicket, ...remainingTickets } = prevTickets; // Destructure to remove the dropped ticket
+            return remainingTickets; // Return the updated tickets without the dropped ticket
+        });
+
+        //clear help ticket
+       // if (id === store.get(localHeldTicket)?.id) {
+            store.set(localHeldTicket, null);
+        //}
+
+    } catch (error) {
+        console.error('Failed to parse ticket drop message:', error);
+    }
+};
+
 
 
 
