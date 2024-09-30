@@ -33,7 +33,7 @@ public class ClientAPI {
     @SendTo("/topic/player/move")
     public Player movePlayer(Movement movementRequest) {
         Player player = devastation.getBoard().getPlayers().get(movementRequest.playerId());
-        player.movePlayer(movementRequest.direction());
+        devastation.getBoard().movePlayer(player, movementRequest.direction());
         return player;
     }
 
