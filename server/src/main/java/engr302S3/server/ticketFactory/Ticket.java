@@ -35,4 +35,12 @@ public class Ticket {
     public void incrementTime() {
         totalTime++;
     }
+    /**
+     * Method to check if all tasks are completed and update ticket status
+     * @return if all tasks completed
+     */
+    public boolean isComplete() {
+        boolean allTasksCompleted = tasks.stream().allMatch(Task::getCompleted);
+        return allTasksCompleted;
+    }
 }
