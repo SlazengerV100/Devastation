@@ -96,6 +96,7 @@ public class ClientAPI {
 
     @SendTo("/topic/ticket/create")
     public Ticket broadcastTicketCreate(Ticket ticket) {
+        System.out.println(ticket);
         messagingTemplate.convertAndSend("/topic/ticket/create", ticket);
         return ticket;
     }

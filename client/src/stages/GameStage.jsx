@@ -13,6 +13,10 @@ const GameStage = () => {
     const players = useAtomValue(playerAtoms);
     const tickets = useAtomValue(ticketsAtom)
 
+    useEffect(() => {
+        console.log(tickets)
+    }, [tickets]);
+
     const MAP_WIDTH = 30 * TILE_WIDTH;
     const MAP_HEIGHT = 15 * TILE_WIDTH; // Example height
 
