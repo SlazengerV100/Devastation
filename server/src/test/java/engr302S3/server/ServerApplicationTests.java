@@ -99,7 +99,7 @@ class ServerApplicationTests {
         assertFalse(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
                 "The ticket should have been picked up and no longer be on the tile");
 
-        board.dropTicket(player);
+        board.dropTicket(player, devastation);
 
         assertTrue(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
                 "The tile should contain the dropped ticket");
