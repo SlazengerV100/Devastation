@@ -226,20 +226,10 @@ public class Board {
         Position position;
 
         try {
-            if (direction == player.getDirection()) {
-                position = direction.getTranslation(player.getPosition());
-            } else {
-                position = player.getPosition();
-            }
+            position = player.movePlayer(direction);
         } catch (IllegalArgumentException e) {
             return; //Do nothing if position is out of bounds
         }
-
-        if (board[position.x()][position.y()].getType()== TileType.WALL || board[position.x()][position.y()].getType()== TileType.STATION ) {
-            return;
-        }
-
-        position = player.movePlayer(direction);
 
         board[previous.x()][previous.y()].clearTile();
         board[position.x()][position.y()].setPlayer(player); //will not change player location if only direction is changed
