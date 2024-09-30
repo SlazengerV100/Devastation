@@ -55,7 +55,7 @@ public class ScheduledTasks {
     /**
      * Every 5second try to generate a new ticket if there is room of the board
      */
-    @Scheduled(fixedRate = 8000)
+    @Scheduled(fixedRate = 5000)
     public void createTicket() {
         // Generate random x and y coordinates within the project manager area
         int randomX = 1 + (int) (Math.random() * 8);
