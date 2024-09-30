@@ -250,14 +250,8 @@ public class Board {
      * @param id the ticket ID
      * @param ticket the ticket Object
      */
-    public boolean addTicket(long id, Ticket ticket) {
-        Tile t = this.getTileAt(ticket.getPosition());
-        if (t.empty()) {
-            t.setTicket(ticket);
-            tickets.put(id, ticket);
-            return true;
-        }
-        return false;
+    public void addTicket(long id, Ticket ticket) {
+        tickets.put(id, ticket);
     }
 
     /**
