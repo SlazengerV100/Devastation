@@ -56,10 +56,14 @@ public class ClientAPI {
 
     @MessageMapping("/player/ticket/drop")
     @SendTo("/topic/player/ticket/drop")
-    public Player dropTicket(PlayerRequest playerRequest) {
+    public Ticket dropTicket(PlayerRequest playerRequest) {
         Player player = devastation.getBoard().getPlayers().get(playerRequest.playerId());
-        devastation.getBoard().dropTicket(player);
-        return player;
+        Ticket t = devastation.getBoard().dropTicket(player);
+        if(t != null) {
+            broadcastTicketCreate(t);
+            return t;
+        }
+        return null;
     }
 
     @SendTo("/topic/player/burnOut")
@@ -92,6 +96,7 @@ public class ClientAPI {
 
     @SendTo("/topic/ticket/create")
     public Ticket broadcastTicketCreate(Ticket ticket) {
+        System.out.println(ticket);
         messagingTemplate.convertAndSend("/topic/ticket/create", ticket);
         return ticket;
     }

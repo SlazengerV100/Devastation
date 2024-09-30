@@ -45,6 +45,9 @@ const setupSubscriptions = () => {
         updateTicketPickUp(message)
     })
 
+    stompClient.subscribe('/topic/player/ticket/drop', (message) => {
+        updateTicketDrop(message)
+    })
 };
 
 export const requestState = async () => {
@@ -121,6 +124,9 @@ export const sendPlayerAction = (actionType) => {
     switch (actionType){
         case 'PICKUP':
             stompClient.send("/app/player/ticket/pickUp", {}, JSON.stringify({playerId}));
+            break;
+        case 'DROP':
+            stompClient.send("/app/player/ticket/drop", {}, JSON.stringify({playerId}))
             break;
         default:
             console.error("Action type not recognised")
@@ -226,37 +232,54 @@ const updateNewTicket = (message) => {
 const updateTicketPickUp = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
-        const { id, heldTicket} = parsedMessage;
+        const { id, heldTicket } = parsedMessage;
 
-        if (heldTicket === null){
-            console.log("No ticket to pickup")
+        if (heldTicket === null) {
+            console.log("No ticket to pick up");
             return;
         }
-        console.log("Ticket pick up: " + " Player ID: " + id + " Held ticket: " + heldTicket.ticketTitle)
 
-        const ticketHeldId = heldTicket.id
+        console.log("Ticket pick up: " + " Player ID: " + id + " Held ticket: " + heldTicket.ticketTitle);
 
-        // Update the ticketsAtom to set the held field of the specified ticket to true
-        store.set(ticketsAtom, (prevTickets) => ({
-            ...prevTickets,
-            [ticketHeldId]: {
-                ...prevTickets[ticketHeldId], // Keep existing ticket data
-                held: true, // Set the held field to true
-            },
-        }));
+        const ticketHeldId = heldTicket.id;
 
-        console.log("TICKET PLAYER ID: " + id + " MY ID: " + store.get(localPlayerId))
-        // If this picket up update is for the local player then update their localHeldTicket
-        if (id === store.get(localPlayerId)){
-            console.log("HELD TICKET TO STORE: " + JSON.stringify(heldTicket))
+        // Remove the held ticket from the ticketsAtom
+        store.set(ticketsAtom, (prevTickets) => {
+            const { [ticketHeldId]: removedTicket, ...remainingTickets } = prevTickets; // Destructure to remove the held ticket
+            return remainingTickets;
+        });
+
+        // Update the localHeldTicket for the local player if the ID matches
+        if (id === store.get(localPlayerId)) {
+            console.log("HELD TICKET TO STORE: " + JSON.stringify(heldTicket));
             store.set(localHeldTicket, heldTicket);
+        } else {
+            if (store.get(localHeldTicket)?.id === ticketHeldId) {
+                store.set(localHeldTicket, null);
+            }
         }
+
         console.log("Updated localHeldTicket:", store.get(localHeldTicket));
 
-    } catch (error){
+    } catch (error) {
         console.error('Failed to parse player that attempted to pick up ticket:', error);
     }
-}
+};
+
+const updateTicketDrop = (message) => {
+    try {
+        const ticket = JSON.parse(message.body);
+        console.log("Ticket dropped: " + " Ticket ID: " + ticket);
+
+        if (ticket.id === store.get(localHeldTicket)?.id) {
+            store.set(localHeldTicket, null);
+        }
+
+    } catch (error) {
+        console.error('Failed to parse ticket drop message:', error);
+    }
+};
+
 
 
 
