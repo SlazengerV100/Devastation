@@ -233,10 +233,11 @@ public class Board {
                 ticket.setStation(Optional.of(station));
             }
         }
+        // If ticket in final column and is complete then remove from map and set tile to empty
         if (position.x() == BOARD_WIDTH-1){
             ticket.setInFinishedZone(true);
             if(ticket.isComplete()){
-                tickets.remove(ticket);
+                tickets.remove(ticket.getId());
                 getTileAt(position).empty();
             }
         }
