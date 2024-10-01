@@ -16,8 +16,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import java.util.Map;
-
 @Controller
 public class ClientAPI {
     @Getter private Devastation devastation;
@@ -88,15 +86,14 @@ public class ClientAPI {
         return score;
     }
 
-    @SendTo("topic/tickets/all")
-    @MessageMapping("/tickets/all")
-    public Map<Long, Ticket> broadcastAllTickets() {
-       return devastation.getBoard().getTickets();
+    @SendTo("/topic/timerUpdate")
+    public int broadcastTimerUpdate(int time) {
+        messagingTemplate.convertAndSend("/topic/timerUpdate", time);
+        return time;
     }
 
     @SendTo("/topic/ticket/create")
     public Ticket broadcastTicketCreate(Ticket ticket) {
-        System.out.println(ticket);
         messagingTemplate.convertAndSend("/topic/ticket/create", ticket);
         return ticket;
     }
