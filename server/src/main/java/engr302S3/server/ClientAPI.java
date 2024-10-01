@@ -58,6 +58,10 @@ public class ClientAPI {
         Player player = devastation.getBoard().getPlayers().get(playerRequest.playerId());
         Ticket t = devastation.getBoard().dropTicket(player);
         if(t != null) {
+            if(t.isComplete() && t.isInFinishedZone()){
+                broadcastScoreUpdate(devastation.updateScore(t));
+                broadcastTicketResolve(t);
+            }
             broadcastTicketCreate(t);
             return t;
         }

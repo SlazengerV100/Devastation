@@ -23,6 +23,7 @@ public class Ticket {
     @Setter private Optional<Position> position;
     private final double blowOutProb;
     @Setter private Optional<Station> station;
+    @Setter private boolean inFinishedZone = false;
 
     Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
         id = idTracker++;
@@ -37,5 +38,13 @@ public class Ticket {
      */
     public void incrementTime() {
         totalTime++;
+    }
+
+    /**
+     * Method to check if all tasks are completed and update ticket status
+     * @return if all tasks completed
+     */
+    public boolean isComplete() {
+      return tasks.stream().allMatch(Task::getCompleted);
     }
 }

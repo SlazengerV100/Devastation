@@ -196,6 +196,7 @@ public class Board {
 
         player.setHeldTicket(Optional.ofNullable(ticket));
         player.getHeldTicket().get().setPosition(Optional.ofNullable(player.getPosition()));
+        if(ticket.isInFinishedZone()){ticket.setInFinishedZone(false);}
 
         // If ticket is being worked on set the station it is at
         if(tile.getType().equals(TileType.STATION)){
@@ -233,6 +234,14 @@ public class Board {
             if(!station.inUse()){
                 station.setTicketWorkingOn(Optional.of(ticket));
                 ticket.setStation(Optional.of(station));
+            }
+        }
+        // If ticket in final column and is complete then remove from map and set tile to empty
+        if (position.x() == BOARD_WIDTH-1){
+            ticket.setInFinishedZone(true);
+            if(ticket.isComplete()){
+                tickets.remove(ticket.getId());
+                getTileAt(position).empty();
             }
         }
 
