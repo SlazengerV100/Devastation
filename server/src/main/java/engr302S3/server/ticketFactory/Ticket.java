@@ -22,7 +22,6 @@ public class Ticket {
     private int totalTime;
     @Setter private Optional<Position> position;
     private final double blowOutProb;
-    @Setter private Optional<Station> station;
     @Setter private boolean inFinishedZone = false;
 
     Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
