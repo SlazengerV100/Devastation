@@ -51,4 +51,25 @@ public class Devastation {
         ticketScore = Math.max(maxScore - (ticket.getTotalTime()*5), 0);
         score += ticketScore;
     }
+
+    /**
+     * Update the game score when a ticket is completed
+     * @param ticket completed ticket
+     */
+    public void updateScore(Ticket ticket){
+        int scorePerTask = 50;
+        int ticketScore = 0;
+        int maxScore = 1000;
+
+        // Update ticket score based on amount of tasks completed
+        for (Task task : ticket.getTasks()) {
+            if (task.getCompleted()) {
+                ticketScore += scorePerTask;
+            }
+        }
+
+        // Max ticket score can be 1000 and decreases to 0 based on time alive
+        ticketScore = Math.max(maxScore - (ticket.getTotalTime()*5), 0);
+        score += ticketScore;
+    }
 }

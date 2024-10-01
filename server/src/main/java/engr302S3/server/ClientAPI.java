@@ -9,15 +9,19 @@ import engr302S3.server.playerActions.TaskProgressBroadcast;
 import engr302S3.server.players.Player;
 import engr302S3.server.ticketFactory.Ticket;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.util.Map;
+import java.util.Optional;
+
 @Controller
 public class ClientAPI {
-    private Devastation devastation;
+    @Getter private Devastation devastation;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -31,7 +35,7 @@ public class ClientAPI {
     @SendTo("/topic/player/move")
     public Player movePlayer(Movement movementRequest) {
         Player player = devastation.getBoard().getPlayers().get(movementRequest.playerId());
-        player.movePlayer(movementRequest.direction());
+        devastation.getBoard().movePlayer(player, movementRequest.direction());
         return player;
     }
 
@@ -53,14 +57,16 @@ public class ClientAPI {
 
     @MessageMapping("/player/ticket/drop")
     @SendTo("/topic/player/ticket/drop")
-    public Ticket dropTicket(PlayerRequest playerRequest) {
+    public Player dropTicket(PlayerRequest playerRequest) {
         Player player = devastation.getBoard().getPlayers().get(playerRequest.playerId());
-        Ticket t = devastation.getBoard().dropTicket(player);
-        if(t != null) {
-            broadcastTicketCreate(t);
-            return t;
+        Optional<Ticket> ticket = player.getHeldTicket();
+        devastation.getBoard().dropTicket(player, devastation);
+        // If the ticket is completed broadcast updates to score and ticket
+        if(ticket.isPresent() && ticket.get().isComplete()){
+            this.broadcastScoreUpdate(devastation.getScore());
+            this.broadcastTicketResolve(ticket.get());
         }
-        return null;
+        return player;
     }
 
     @SendTo("/topic/player/burnOut")
@@ -85,10 +91,10 @@ public class ClientAPI {
         return score;
     }
 
-    @SendTo("/topic/timerUpdate")
-    public int broadcastTimerUpdate(int time) {
-        messagingTemplate.convertAndSend("/topic/timerUpdate", time);
-        return time;
+    @SendTo("topic/tickets/all")
+    @MessageMapping("/tickets/all")
+    public Map<Long, Ticket> broadcastAllTickets() {
+       return devastation.getBoard().getTickets();
     }
 
     @SendTo("/topic/ticket/create")
