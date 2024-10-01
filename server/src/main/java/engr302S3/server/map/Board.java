@@ -193,6 +193,7 @@ public class Board {
         Ticket ticket = (Ticket) tile.getContent();
         player.setHeldTicket(Optional.ofNullable(ticket));
         player.getHeldTicket().get().setPosition(player.getPosition());
+        if(ticket.isInFinishedZone()){ticket.setInFinishedZone(false);}
 
         // If ticket is being worked on set the station it is at
         if(tile.getType().equals(TileType.STATION)){
@@ -230,6 +231,13 @@ public class Board {
             if(!station.inUse()){
                 station.setTicketWorkingOn(Optional.of(ticket));
                 ticket.setStation(Optional.of(station));
+            }
+        }
+        if (position.x() == BOARD_WIDTH-1){
+            ticket.setInFinishedZone(true);
+            if(ticket.isComplete()){
+                tickets.remove(ticket);
+                getTileAt(position).empty();
             }
         }
 
