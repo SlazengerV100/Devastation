@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Ticket contains a collection of tasks for the players to complete. Tickets keep track of how
@@ -18,7 +19,7 @@ public class Ticket {
     private final ArrayList<Task> tasks;
     private final String ticketTitle;
     private int totalTime;
-    @Setter private Position position;
+    @Setter private Optional<Position> position;
     private final double blowOutProb;
 
     Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {

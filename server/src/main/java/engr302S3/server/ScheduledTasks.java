@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Class responsible for ensuring any objects that rely on time get updated accordingly.
  */
@@ -32,6 +34,9 @@ public class ScheduledTasks {
      */
     @Scheduled(fixedRate = 1000)
     public void updateGameTime() {
+        for (long i : clientAPI.getDevastation().getBoard().getTickets().keySet()){
+            System.out.println("TEST: " + i + " : " + clientAPI.getDevastation().getBoard().getTickets().get(i));
+        }
         //update the game clock
         clientAPI.getDevastation().decreaseTime();
         //check each tile for a ticket, and update the ticket timer if there is one
@@ -64,7 +69,7 @@ public class ScheduledTasks {
         // Get the tile at the random position
         Tile tile = clientAPI.getDevastation().getBoard().getTileAt(new Position(randomX, randomY));
         Ticket ticket = TicketFactory.getTicket();
-        ticket.setPosition(tile.getPosition());
+        ticket.setPosition(Optional.ofNullable(tile.getPosition()));
         // Try to add the ticket to the board
         if (clientAPI.getDevastation().getBoard().addTicket(ticket.getId(), ticket)) {
 
