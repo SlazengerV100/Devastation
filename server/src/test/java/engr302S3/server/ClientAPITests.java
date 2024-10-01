@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ClientAPIPlayerTests {
+public class ClientAPITests {
     private Devastation devastation;
     private ClientAPI api;
     private Player player;
