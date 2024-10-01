@@ -20,7 +20,7 @@ public class Ticket {
     private final ArrayList<Task> tasks;
     private final String ticketTitle;
     private int totalTime;
-    @Setter private Position position;
+    @Setter private Optional<Position> position;
     private final double blowOutProb;
     @Setter private Optional<Station> station;
     @Setter private boolean inFinishedZone = false;

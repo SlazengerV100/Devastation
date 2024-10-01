@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -96,7 +97,7 @@ public class ClientAPIPlayerTests {
         assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
         Ticket ticket = TicketFactory.getTicket();
         Position ticketPosition = new Position(initialPosition.x(), initialPosition.y() + 1);
-        ticket.setPosition(ticketPosition);
+        ticket.setPosition(Optional.of(ticketPosition));
         devastation.getBoard().getTileAt(ticketPosition).setTicket(ticket);
         if (player.getDirection() != Player.Direction.DOWN) {
             api.movePlayer(new Movement(player.getId(), Player.Direction.DOWN));
@@ -129,7 +130,7 @@ public class ClientAPIPlayerTests {
         assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
         Ticket ticket = TicketFactory.getTicket();
         Position ticketPosition = new Position(initialPosition.x(), initialPosition.y() + 1);
-        ticket.setPosition(ticketPosition);
+        ticket.setPosition(Optional.of(ticketPosition));
         devastation.getBoard().getTileAt(ticketPosition).setTicket(ticket);
         if (player.getDirection() != Player.Direction.UP) {
             api.movePlayer(new Movement(player.getId(), Player.Direction.UP));

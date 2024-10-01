@@ -191,8 +191,11 @@ public class Board {
         }
 
         Ticket ticket = (Ticket) tile.getContent();
+        // When picked up, set ticket position to none
+        ticket.setPosition(Optional.empty());
+
         player.setHeldTicket(Optional.ofNullable(ticket));
-        player.getHeldTicket().get().setPosition(player.getPosition());
+        player.getHeldTicket().get().setPosition(Optional.ofNullable(player.getPosition()));
         if(ticket.isInFinishedZone()){ticket.setInFinishedZone(false);}
 
         // If ticket is being worked on set the station it is at
@@ -222,7 +225,7 @@ public class Board {
 
         Ticket ticket = player.getHeldTicket().get();
 
-        player.getHeldTicket().ifPresent(x -> x.setPosition(position));
+        player.getHeldTicket().ifPresent(x -> x.setPosition(Optional.ofNullable(position)));
         player.setHeldTicket(Optional.empty());
 
         // Set ticket station is working on if not in use
@@ -277,11 +280,13 @@ public class Board {
      * @param ticket the ticket Object
      */
     public boolean addTicket(long id, Ticket ticket) {
-        Tile t = this.getTileAt(ticket.getPosition());
-        if (t.empty()) {
-            t.setTicket(ticket);
-            tickets.put(id, ticket);
-            return true;
+        if(ticket.getPosition().isPresent()) {
+            Tile t = this.getTileAt(ticket.getPosition().get());
+            if (t.empty()) {
+                t.setTicket(ticket);
+                tickets.put(id, ticket);
+                return true;
+            }
         }
         return false;
     }
