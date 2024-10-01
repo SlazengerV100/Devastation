@@ -34,9 +34,6 @@ public class ScheduledTasks {
      */
     @Scheduled(fixedRate = 1000)
     public void updateGameTime() {
-        for (long i : clientAPI.getDevastation().getBoard().getTickets().keySet()){
-            System.out.println("TEST: " + i + " : " + clientAPI.getDevastation().getBoard().getTickets().get(i));
-        }
         //update the game clock
         clientAPI.broadcastTimerUpdate(clientAPI.getDevastation().decreaseTime());
         //check each tile for a ticket, and update the ticket timer if there is one

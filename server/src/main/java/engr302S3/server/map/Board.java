@@ -200,7 +200,8 @@ public class Board {
 
         // If ticket is being worked on set the station it is at
         if(tile.getType().equals(TileType.STATION)){
-            ticket.setStation(Optional.empty());
+            Station station = (Station) getTileAt(position).getContent();
+            station.setTicketWorkingOn(Optional.empty());
         }
 
         tile.clearTile();
@@ -233,7 +234,6 @@ public class Board {
             Station station = (Station) getTileAt(position).getContent();
             if(!station.inUse()){
                 station.setTicketWorkingOn(Optional.of(ticket));
-                ticket.setStation(Optional.of(station));
             }
         }
         // If ticket in final column and is complete then remove from map and set tile to empty
