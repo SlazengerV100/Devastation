@@ -38,7 +38,7 @@ public class ScheduledTasks {
             System.out.println("TEST: " + i + " : " + clientAPI.getDevastation().getBoard().getTickets().get(i));
         }
         //update the game clock
-        clientAPI.getDevastation().decreaseTime();
+        clientAPI.broadcastTimerUpdate(clientAPI.getDevastation().decreaseTime());
         //check each tile for a ticket, and update the ticket timer if there is one
         for (int y = 0; y < Board.BOARD_HEIGHT; y++) {
 

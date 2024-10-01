@@ -2,6 +2,7 @@ package engr302S3.server.ticketFactory;
 
 import engr302S3.server.map.Position;
 
+import engr302S3.server.map.Station;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,7 @@ public class Ticket {
     private int totalTime;
     @Setter private Optional<Position> position;
     private final double blowOutProb;
+    @Setter private Optional<Station> station;
 
     Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
         id = idTracker++;

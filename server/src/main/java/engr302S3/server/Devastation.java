@@ -26,7 +26,7 @@ public class Devastation {
         this.board = new Board();
     }
 
-    public void decreaseTime() {
-        timeLeft --;
+    public int decreaseTime() {
+        return timeLeft--;
     }
 }
