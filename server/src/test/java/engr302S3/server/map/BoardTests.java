@@ -1,6 +1,5 @@
-package engr302S3.server;
+package engr302S3.server.map;
 
-import engr302S3.server.map.Board;
 import org.junit.jupiter.api.Test;
 
 public class BoardTests {
