@@ -193,6 +193,12 @@ public class Board {
         Ticket ticket = (Ticket) tile.getContent();
         player.setHeldTicket(Optional.ofNullable(ticket));
         player.getHeldTicket().get().setPosition(player.getPosition());
+
+        // If ticket is being worked on set the station it is at
+        if(tile.getType().equals(TileType.STATION)){
+            ticket.setStation(Optional.empty());
+        }
+
         tile.clearTile();
     }
 
@@ -217,6 +223,16 @@ public class Board {
 
         player.getHeldTicket().ifPresent(x -> x.setPosition(position));
         player.setHeldTicket(Optional.empty());
+
+        // Set ticket station is working on if not in use
+        if (getTileAt(position).getType().equals(TileType.STATION)){
+            Station station = (Station) getTileAt(position).getContent();
+            if(!station.inUse()){
+                station.setTicketWorkingOn(Optional.of(ticket));
+                ticket.setStation(Optional.of(station));
+            }
+        }
+
         board[position.x()][position.y()].setTicket(ticket);
         return ticket;
     }
