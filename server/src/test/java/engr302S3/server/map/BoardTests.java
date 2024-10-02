@@ -113,8 +113,8 @@ public class BoardTests {
     public void testPickUpTicket() {
         // Place a ticket on the station tile (4, 4)
         Ticket ticket = TicketFactory.getTicket();
-        Tile stationTile = board.getTileAt(4, 4);
-        ticket.setTile(Optional.of(stationTile));
+        Tile ticketTile = board.getTileAt(1, 2);
+        ticket.setTile(Optional.of(ticketTile));
         board.addTicket(1L, ticket);
 
         // Get the developer and move them to the tile with the ticket
@@ -125,14 +125,15 @@ public class BoardTests {
         assertNotNull(developer);
 
         // Move developer to the station tile
-        developer.setTile(stationTile);
+        Tile developerPosition = board.getTileAt(1,1);
+        developer.setDirection(Player.Direction.DOWN);
+        developer.setTile(developerPosition);
         board.pickUpTicket(developer);
 
         // Verify that the developer is now holding the ticket
         assertTrue(developer.getHeldTicket().isPresent());
         assertEquals(ticket, developer.getHeldTicket().get());
-
         // Verify that the tile no longer has a ticket
-        assertFalse(stationTile.containsTicket());
+        assertFalse(ticketTile.containsTicket());
     }
 }
