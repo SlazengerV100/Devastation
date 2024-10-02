@@ -59,7 +59,6 @@ public class ScheduledTasks {
 
         // Get the tile at the random position
         Tile tile = clientAPI.getDevastation().getBoard().getTileAt(randomX, randomY);
-        tile.setType(TileType.TICKET);
         Ticket ticket = TicketFactory.getTicket();
         ticket.setTile(Optional.ofNullable(tile));
 
