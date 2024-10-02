@@ -254,25 +254,30 @@ public class Board {
     }
 
     public void movePlayer(Player player, Player.Direction direction) {
-        Tile previous = player.getTile();
+        Tile currentTile = player.getTile();
+        Tile targetTile;
 
-        try {
-            Tile tile;
-
-            if (direction == player.getDirection()) {
-                tile = getTranslation(player.getTile(), direction);
-            } else {
-                tile = player.getTile();
-            }
-            if (tile.getType() == TileType.WALL || tile.getType() == TileType.STATION || tile.getType() == TileType.TICKET) {
-                return;
-            }
-
-            previous.clearTile();
-        } catch (IllegalArgumentException e) {
-            //Do nothing if position is out of bounds
+        //turn the player, don't move him
+        if(direction != player.getDirection()){
+            player.setDirection(direction);
+            return;
         }
+
+        // Determine target tile based on direction
+        targetTile = getTranslation(currentTile, direction);
+        if (isInvalidTile(targetTile)) return;
+
+        // Update player's tile to new tile
+        player.setTile(targetTile);
+        currentTile.clearTile();
     }
+
+    private boolean isInvalidTile(Tile tile) {
+        return tile.getType() == TileType.WALL ||
+                tile.getType() == TileType.STATION ||
+                tile.getType() == TileType.TICKET;
+    }
+
 
     private Tile getTranslation(Tile tile, Player.Direction direction) {
         return switch (direction) {
