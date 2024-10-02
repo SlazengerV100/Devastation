@@ -133,6 +133,10 @@ public class Board {
         Tile developerTile = board[shift * 3][BOARD_HEIGHT / 2];
         Tile testerTile = board[shift * 5][BOARD_HEIGHT / 2];
 
+        projectManagerTile.setType(TileType.PLAYER);
+        developerTile.setType(TileType.PLAYER);
+        testerTile.setType(TileType.PLAYER);
+
         ProjectManager projectManager = new ProjectManager(projectManagerTile);
         Developer developer = new Developer(developerTile);
         Tester tester = new Tester(testerTile);
