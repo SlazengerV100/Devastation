@@ -207,6 +207,7 @@ public class Board {
         Ticket ticket = player.getHeldTicket().get();
 
         ticket.setTile(Optional.of(tile));
+        tile.setType(TileType.TICKET);
         player.setHeldTicket(Optional.empty());
 
         Optional<Station> stationOptional = getStationOnTile(tile);

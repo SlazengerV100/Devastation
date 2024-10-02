@@ -61,8 +61,10 @@ public class ScheduledTasks {
         Tile tile = clientAPI.getDevastation().getBoard().getTileAt(randomX, randomY);
         Ticket ticket = TicketFactory.getTicket();
         ticket.setTile(Optional.ofNullable(tile));
+
         // Try to add the ticket to the board
         if (clientAPI.getDevastation().getBoard().addTicket(ticket.getId(), ticket)) {
+            tile.setType(TileType.TICKET);
             clientAPI.broadcastTicketCreate(ticket);
         } else {
             //tile is not free

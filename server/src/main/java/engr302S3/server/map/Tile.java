@@ -4,6 +4,7 @@ import engr302S3.server.players.Player;
 import engr302S3.server.ticketFactory.Ticket;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Game tiles in a devastation game
@@ -13,6 +14,7 @@ public class Tile {
 
     private int x;
     private int y;
+    @Setter
     private TileType type;
 
     /**
