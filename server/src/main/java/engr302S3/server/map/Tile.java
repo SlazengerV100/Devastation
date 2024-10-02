@@ -12,8 +12,8 @@ import lombok.Setter;
 @Getter
 public class Tile {
 
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     @Setter
     private TileType type;
 
