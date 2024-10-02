@@ -194,7 +194,7 @@ public class Board {
         // When picked up, set ticket position to none
         ticket.setTile(Optional.empty());
         player.setHeldTicket(Optional.ofNullable(ticket));
-        
+
         if (ticket.isInFinishedZone()) {
             ticket.setInFinishedZone(false);
         }
