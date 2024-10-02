@@ -25,7 +25,7 @@ public class Board {
     private final Map<Ticket, Tile> ticketTiles;
 
     public Board() {
-        this.board = createBoard();
+        this.board = createBoardFromFiles("src/main/resources/map._TempStations.csv", "src/main/resources/map._Wall.csv");
 
         this.players = new HashMap<>();
         this.stations = new HashMap<>();
@@ -36,38 +36,60 @@ public class Board {
         createStations();
     }
 
+    // New constructor that loads the board from a CSV string
+    public Board(String csvData) {
+        this.board = createBoardFromCsv(csvData);
 
-    /**
-     * Create the board with different tiles.
-     *
-     * @return the board
-     */
-    public Tile[][] createBoard() {
-        ArrayList<String[]> stations = loadFiles("src/main/resources/map._TempStations.csv");
-        ArrayList<String[]> walls = loadFiles("src/main/resources/map._Wall.csv");
+        this.players = new HashMap<>();
+        this.stations = new HashMap<>();
+        this.tickets = new HashMap<>();
+        this.ticketTiles = new HashMap<>();
 
-        // Assuming both walls and stations are guaranteed to have the same dimensions
+        createPlayers();
+        createStations();
+    }
+
+    // Method to create a board from CSV file paths
+    public Tile[][] createBoardFromFiles(String stationPath, String wallPath) {
+        ArrayList<String[]> stations = loadFiles(stationPath);
+        ArrayList<String[]> walls = loadFiles(wallPath);
+
+        return combineBoardData(walls, stations);
+    }
+
+    // Method to create a board from a CSV string
+    public Tile[][] createBoardFromCsv(String csvData) {
+        ArrayList<String[]> lines = new ArrayList<>();
+        Scanner scanner = new Scanner(csvData);
+
+        while (scanner.hasNextLine()) {
+            lines.add(scanner.nextLine().split(","));
+        }
+
+        // Reuse the same board generation logic for CSV string data
+        return combineBoardData(lines, lines); // You can customize stations vs. walls here if needed
+    }
+
+    // Helper method to combine data and generate the board
+    private Tile[][] combineBoardData(ArrayList<String[]> walls, ArrayList<String[]> stations) {
         BOARD_HEIGHT = walls.size();
         BOARD_WIDTH = walls.get(0).length;
-
-        System.out.println(BOARD_WIDTH + " " + BOARD_HEIGHT);
 
         String[][] combined = new String[BOARD_WIDTH][BOARD_HEIGHT];
 
         for (int y = 0; y < BOARD_HEIGHT; y++) {
             for (int x = 0; x < BOARD_WIDTH; x++) {
-                //.get here needs to be y,x to be read as intended
                 String wallTile = walls.get(y)[x];
                 String stationTile = stations.get(y)[x];
 
-                // Prioritise wall tiles over station tiles if present
+                // Prioritize wall tiles over station tiles if present
                 combined[x][y] = wallTile.equals("160") ? wallTile : stationTile;
             }
         }
 
         Tile[][] board = new Tile[BOARD_WIDTH][BOARD_HEIGHT];
 
-        //load initial tiles
+        // Load initial tiles
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_HEIGHT; y++) {
                 switch (combined[x][y]) {
@@ -81,19 +103,11 @@ public class Board {
         return board;
     }
 
-
-    /**
-     * Load a csv and scan it.
-     *
-     * @param path of the file
-     * @return the csv in arraylist format
-     */
+    // Method to load a CSV file
     private ArrayList<String[]> loadFiles(String path) {
-
         ArrayList<String[]> lines = new ArrayList<>();
 
         try {
-
             File file = new File(path);
             Scanner scanner = new Scanner(file);
 
@@ -113,9 +127,11 @@ public class Board {
      */
     private void createPlayers() {
         // Define player positions
-        Tile projectManagerTile = board[BOARD_WIDTH / 4][BOARD_HEIGHT / 2];
-        Tile developerTile = board[BOARD_WIDTH / 2][BOARD_HEIGHT / 2];
-        Tile testerTile = board[BOARD_WIDTH - 3][BOARD_HEIGHT / 2];
+        int shift = BOARD_WIDTH / 6;
+
+        Tile projectManagerTile = board[shift][BOARD_HEIGHT / 2];
+        Tile developerTile = board[shift * 3][BOARD_HEIGHT / 2];
+        Tile testerTile = board[shift * 5][BOARD_HEIGHT / 2];
 
         ProjectManager projectManager = new ProjectManager(projectManagerTile);
         Developer developer = new Developer(developerTile);
@@ -209,23 +225,24 @@ public class Board {
         ticket.setTile(Optional.of(tile));
         tile.setType(TileType.TICKET);
         player.setHeldTicket(Optional.empty());
-
-        Optional<Station> stationOptional = getStationOnTile(tile);
-        // Set ticket station is working on if not in use
-        if (stationOptional.isPresent()) {
-            Station station = stationOptional.get();
-            if (!station.inUse()) {
-                station.setTicketWorkingOn(Optional.of(ticket));
-            }
-        }
-        // If ticket in final column and is complete then remove from map and set tile to empty
-        if (tile.getX() == BOARD_WIDTH - 1) {
-            ticket.setInFinishedZone(true);
-            if (ticket.isComplete()) {
-                tickets.remove(ticket.getId());
-                tile.empty();
-            }
-        }
+        System.out.println("called");
+//
+//        Optional<Station> stationOptional = getStationOnTile(tile);
+//        // Set ticket station is working on if not in use
+//        if (stationOptional.isPresent()) {
+//            Station station = stationOptional.get();
+//            if (!station.inUse()) {
+//                station.setTicketWorkingOn(Optional.of(ticket));
+//            }
+//        }
+//        // If ticket in final column and is complete then remove from map and set tile to empty
+//        if (tile.getX() == BOARD_WIDTH - 1) {
+//            ticket.setInFinishedZone(true);
+//            if (ticket.isComplete()) {
+//                tickets.remove(ticket.getId());
+//                tile.empty();
+//            }
+//        }
 
         return ticket;
     }
@@ -281,12 +298,16 @@ public class Board {
 
 
     private Tile getTranslation(Tile tile, Player.Direction direction) {
-        return switch (direction) {
-            case LEFT -> board[tile.getX() - 1][tile.getY()];
-            case UP -> board[tile.getX()][tile.getY() - 1];
-            case DOWN -> board[tile.getX()][tile.getY() + 1];
-            case RIGHT -> board[tile.getX() + 1][tile.getY()];
-        };
+        try{
+            return switch (direction) {
+                case LEFT -> board[tile.getX() - 1][tile.getY()];
+                case UP -> board[tile.getX()][tile.getY() - 1];
+                case DOWN -> board[tile.getX()][tile.getY() + 1];
+                case RIGHT -> board[tile.getX() + 1][tile.getY()];
+            };
+        } catch (ArrayIndexOutOfBoundsException b){
+            return null;
+        }
     }
 
     /**
