@@ -1,6 +1,5 @@
 package engr302S3.server;
 
-import engr302S3.server.map.Position;
 import engr302S3.server.map.Tile;
 import engr302S3.server.map.TileType;
 import engr302S3.server.playerActions.*;
@@ -20,7 +19,7 @@ public class ClientAPITests {
     private Devastation devastation;
     private ClientAPI api;
     private Player player;
-    private Position initialPosition;
+    private Tile initialTile;
 
     @BeforeEach
     public void setUp() {
@@ -28,16 +27,15 @@ public class ClientAPITests {
         api = new ClientAPI(devastation);
         player = devastation.getBoard().getPlayers().values().stream().min(Comparator.comparing(Player::getId)).get();
         player.setActive(true);
-        initialPosition = player.getPosition();
+        initialTile = player.getTile();
     }
 
     @Test
     public void testMovePlayer_changeDirection() {
-        Tile initialTile = devastation.getBoard().getTileAt(initialPosition);
         assertFalse(initialTile.empty());
         api.movePlayer(new Movement(player.getId(), Player.Direction.DOWN));
-        Position newPosition = player.getPosition();
-        assertEquals(initialPosition, newPosition);
+        Tile newTile = player.getTile();
+        assertEquals(this.initialTile, newTile);
         assertEquals(Player.Direction.DOWN, player.getDirection());
     }
 
@@ -45,9 +43,9 @@ public class ClientAPITests {
     public void testMovePlayer_moveDown() {
         api.movePlayer(new Movement(player.getId(), Player.Direction.DOWN));
         api.movePlayer(new Movement(player.getId(), Player.Direction.DOWN));
-        Position newPosition = player.getPosition();
-        assertEquals(initialPosition.x(), newPosition.x());
-        assertEquals(initialPosition.y() + 1, newPosition.y());
+        Tile newTile = player.getTile();
+        assertEquals(initialTile.getX(), newTile.getX());
+        assertEquals(initialTile.getY() + 1, newTile.getY());
         assertEquals(Player.Direction.DOWN, player.getDirection());
     }
 
@@ -57,17 +55,17 @@ public class ClientAPITests {
         api.movePlayer(new Movement(player.getId(), Player.Direction.DOWN));
         api.movePlayer(new Movement(player.getId(), Player.Direction.UP));
         api.movePlayer(new Movement(player.getId(), Player.Direction.UP));
-        Position newPosition = player.getPosition();
-        assertEquals(initialPosition, newPosition);
+        Tile newTile = player.getTile();
+        assertEquals(initialTile, newTile);
         assertEquals(Player.Direction.UP, player.getDirection());
     }
 
     @Test
     public void testMovePlayer_moveRight() {
         api.movePlayer(new Movement(player.getId(), Player.Direction.RIGHT));
-        Position newPosition = player.getPosition();
-        assertEquals(initialPosition.x() + 1, newPosition.x());
-        assertEquals(initialPosition.y(), newPosition.y());
+        Tile newTile = player.getTile();
+        assertEquals(initialTile.getX() + 1, newTile.getX());
+        assertEquals(initialTile.getY(), newTile.getY());
         assertEquals(Player.Direction.RIGHT, player.getDirection());
     }
 
@@ -76,8 +74,8 @@ public class ClientAPITests {
         api.movePlayer(new Movement(player.getId(), Player.Direction.RIGHT));
         api.movePlayer(new Movement(player.getId(), Player.Direction.LEFT));
         api.movePlayer(new Movement(player.getId(), Player.Direction.LEFT));
-        Position newPosition = player.getPosition();
-        assertEquals(initialPosition, newPosition);
+        Tile newTile = player.getTile();
+        assertEquals(initialTile, newTile);
         assertEquals(Player.Direction.LEFT, player.getDirection());
     }
 
@@ -94,19 +92,18 @@ public class ClientAPITests {
     }
 
     private void testPickUpTicket(Player player) {
-        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        assertEquals(TileType.PLAYER, initialTile.getType());
         Ticket ticket = TicketFactory.getTicket();
-        Position ticketPosition = new Position(initialPosition.x(), initialPosition.y() + 1);
-        ticket.setPosition(Optional.of(ticketPosition));
-        devastation.getBoard().getTileAt(ticketPosition).setTicket(ticket);
+        Tile ticketTile = new Tile(initialTile.getX(), initialTile.getY() + 1);
+        ticket.setTile(Optional.of(ticketTile));
         if (player.getDirection() != Player.Direction.DOWN) {
             api.movePlayer(new Movement(player.getId(), Player.Direction.DOWN));
         }
         api.pickUpTicket(new PlayerRequest(player.getId()));
-        assertEquals(initialPosition, player.getPosition());
-        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        assertEquals(initialTile, player.getTile());
+        assertEquals(TileType.PLAYER, initialTile.getType());
         assertEquals(ticket, player.getHeldTicket().get());
-        assertEquals(TileType.EMPTY, devastation.getBoard().getTileAt(ticketPosition).getType());
+        assertEquals(TileType.EMPTY, ticketTile.getType());
     }
 
     @Test
@@ -116,40 +113,54 @@ public class ClientAPITests {
 
     @Test
     public void testPickUpTicket_noTicketPresent() {
-        Position noTicketPosition = new Position(initialPosition.x(), initialPosition.y() + 1);
-        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        Tile noTicketTile = new Tile(initialTile.getX(), initialTile.getY() + 1);
+        assertEquals(TileType.PLAYER, initialTile.getType());
         api.pickUpTicket(new PlayerRequest(player.getId()));
-        assertEquals(initialPosition, player.getPosition());
-        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        assertEquals(initialTile, player.getTile());
+        assertEquals(TileType.PLAYER, initialTile.getType());
         assertTrue(player.getHeldTicket().isEmpty());
-        assertEquals(TileType.EMPTY, devastation.getBoard().getTileAt(noTicketPosition).getType());
+        assertEquals(TileType.EMPTY, noTicketTile.getType());
     }
 
     @Test
     public void testPickUpTicket_wrongDirection() {
-        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        assertEquals(TileType.PLAYER, initialTile.getType());
         Ticket ticket = TicketFactory.getTicket();
-        Position ticketPosition = new Position(initialPosition.x(), initialPosition.y() + 1);
-        ticket.setPosition(Optional.of(ticketPosition));
-        devastation.getBoard().getTileAt(ticketPosition).setTicket(ticket);
+        Tile ticketTile = new Tile(initialTile.getX(), initialTile.getY() + 1);
+        ticket.setTile(Optional.of(ticketTile));
         if (player.getDirection() != Player.Direction.UP) {
             api.movePlayer(new Movement(player.getId(), Player.Direction.UP));
         }
         api.pickUpTicket(new PlayerRequest(player.getId()));
-        assertEquals(initialPosition, player.getPosition());
-        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        assertEquals(initialTile, player.getTile());
+        assertEquals(TileType.PLAYER, initialTile.getType());
         assertTrue(player.getHeldTicket().isEmpty());
-        assertEquals(TileType.EMPTY, devastation.getBoard().getTileAt(new Position(initialPosition.x(), initialPosition.y() - 1)).getType());
-        assertEquals(TileType.TICKET, devastation.getBoard().getTileAt(ticketPosition).getType());
+        assertEquals(TileType.EMPTY, new Tile(initialTile.getX(), initialTile.getY() - 1).getType());
+        assertEquals(TileType.TICKET, ticketTile.getType());
     }
+
+    @Test
+    public void testDropTicket_valid() {
+        this.testPickUpTicket(player);
+        Ticket ticket = player.getHeldTicket().get();
+        initialTile = player.getTile();
+        api.dropTicket(new PlayerRequest(player.getId()));
+        assertEquals(initialTile, player.getTile());
+        assertEquals(TileType.PLAYER, initialTile.getType());
+        assertTrue(player.getHeldTicket().isEmpty());
+        Tile ticketTile = devastation.getBoard().getTileAt(initialTile.getX(), initialTile.getY() + 1);
+        assertEquals(ticketTile, ticket.getTile().get());
+        assertEquals(TileType.TICKET, ticketTile.getType());
+    }
+
 
     @Test
     public void testDropTicket_noTicketPresent() {
         api.dropTicket(new PlayerRequest(player.getId()));
-        assertEquals(initialPosition, player.getPosition());
-        assertEquals(TileType.PLAYER, devastation.getBoard().getTileAt(initialPosition).getType());
+        assertEquals(initialTile, player.getTile());
+        assertEquals(TileType.PLAYER, initialTile.getType());
         assertTrue(player.getHeldTicket().isEmpty());
-        Position noTicketPosition = new Position(initialPosition.x(), initialPosition.y() + 1);
-        assertEquals(TileType.EMPTY, devastation.getBoard().getTileAt(noTicketPosition).getType());
+        Tile noTicketTile = new Tile(initialTile.getX(), initialTile.getY() + 1);
+        assertEquals(TileType.EMPTY, noTicketTile.getType());
     }
 }
