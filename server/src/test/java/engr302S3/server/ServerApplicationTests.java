@@ -60,30 +60,6 @@ class ServerApplicationTests {
     }
 
     @Test
-    public void testDropTicket() {
-        Devastation devastation = new Devastation();
-        Board board = devastation.getBoard();
-        long key = board.getPlayers().keySet().stream().sorted().findFirst().get();
-        Player player = board.getPlayers().get(key);
-        player.setActive(true);
-
-        assertTrue(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
-                "The tile should contain a ticket");
-
-        board.movePlayer(player, Player.Direction.LEFT);
-        board.pickUpTicket(player);
-
-        assertFalse(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
-                "The ticket should have been picked up and no longer be on the tile");
-
-        board.dropTicket(player);
-
-        assertTrue(board.getBoard()[Board.BOARD_WIDTH / 2 - 1][Board.BOARD_HEIGHT / 6].containsTicket(),
-                "The tile should contain the dropped ticket");
-
-    }
-
-    @Test
     public void testMovementBelowZero() {
         Devastation devastation = new Devastation();
         Board board = devastation.getBoard();

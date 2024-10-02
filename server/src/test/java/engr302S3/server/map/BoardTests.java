@@ -136,4 +136,61 @@ public class BoardTests {
         // Verify that the tile no longer has a ticket
         assertFalse(ticketTile.containsTicket());
     }
+
+    @Test
+    public void testPickUpTicket_noTicketPresent() {
+        Player developer = board.getPlayers().values().stream()
+                .filter(p -> p instanceof Developer)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(developer);
+        Tile initialTile = developer.getTile();
+        Tile noTicketTile = new Tile(initialTile.getX(), initialTile.getY() + 1);
+        assertEquals(TileType.PLAYER, initialTile.getType());
+        board.pickUpTicket(developer);
+        assertEquals(initialTile, developer.getTile());
+        assertEquals(TileType.PLAYER, initialTile.getType());
+        assertTrue(developer.getHeldTicket().isEmpty());
+        assertEquals(TileType.EMPTY, noTicketTile.getType());
+    }
+
+    @Test
+    public void testPickUpTicket_wrongDirection() {
+        Player developer = board.getPlayers().values().stream()
+                .filter(p -> p instanceof Developer)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(developer);
+        Tile initialTile = developer.getTile();
+        assertEquals(TileType.PLAYER, initialTile.getType());
+        Ticket ticket = TicketFactory.getTicket();
+        Tile ticketTile = new Tile(initialTile.getX(), initialTile.getY() + 1);
+        ticket.setTile(Optional.of(ticketTile));
+        ticketTile.setType(TileType.TICKET);
+        if (developer.getDirection() != Player.Direction.UP) {
+            board.movePlayer(developer, Player.Direction.UP);
+        }
+        board.pickUpTicket(developer);
+        assertEquals(initialTile, developer.getTile());
+        assertEquals(TileType.PLAYER, initialTile.getType());
+        assertTrue(developer.getHeldTicket().isEmpty());
+        assertEquals(TileType.EMPTY, new Tile(initialTile.getX(), initialTile.getY() - 1).getType());
+        assertEquals(TileType.TICKET, ticketTile.getType());
+    }
+
+    @Test
+    public void testDropTicket_noTicketPresent() {
+        Player developer = board.getPlayers().values().stream()
+                .filter(p -> p instanceof Developer)
+                .findFirst()
+                .orElse(null);
+        assertNotNull(developer);
+        Tile initialTile = developer.getTile();
+        board.dropTicket(developer);
+        assertEquals(initialTile, developer.getTile());
+        assertEquals(TileType.PLAYER, initialTile.getType());
+        assertTrue(developer.getHeldTicket().isEmpty());
+        Tile noTicketTile = new Tile(initialTile.getX(), initialTile.getY() + 1);
+        assertEquals(TileType.EMPTY, noTicketTile.getType());
+    }
 }
