@@ -6,6 +6,7 @@ import engr302S3.server.ticketFactory.Ticket;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,6 +19,7 @@ public class Station {
     private final long id;
     private final StationType stationType;
     private int progress;
+    private List<Tile> tiles;
     @Setter private Optional<Ticket> ticketWorkingOn;
 
     /**
@@ -25,9 +27,10 @@ public class Station {
      *
      * @param stationType the type of station.
      */
-    public Station(StationType stationType) {
+    public Station(StationType stationType, List<Tile> tiles) {
         id = idTracker++;
         this.stationType = stationType;
+        this.tiles = tiles;
         this.progress = 0;
         ticketWorkingOn = Optional.empty();
     }

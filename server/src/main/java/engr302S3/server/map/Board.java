@@ -22,6 +22,7 @@ public class Board {
     private final Map<Long, Player> players;
     private final Map<Long, Station> stations;
     private final Map<Long, Ticket> tickets;
+    private final Map<Ticket, Tile> ticketTiles;
 
     public Board() {
         this.board = createBoard();
@@ -29,10 +30,12 @@ public class Board {
         this.players = new HashMap<>();
         this.stations = new HashMap<>();
         this.tickets = new HashMap<>();
+        this.ticketTiles = new HashMap<>();
 
         createPlayers();
         createStations();
     }
+
 
     /**
      * Create the board with different tiles.
@@ -68,19 +71,11 @@ public class Board {
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_HEIGHT; y++) {
                 switch (combined[x][y]) {
-                    case "-1" -> board[x][y] = new Tile(new Position(x, y)); // Empty tile
-                    case "33" -> board[x][y] = new Tile(new Position(x, y), TileType.STATION); // Station tile
-                    case "160" -> board[x][y] = new Tile(new Position(x, y), TileType.WALL);  // Wall tile
+                    case "-1" -> board[x][y] = new Tile(x, y); // Empty tile
+                    case "33" -> board[x][y] = new Tile(x, y, TileType.STATION); // Station tile
+                    case "160" -> board[x][y] = new Tile(x, y, TileType.WALL);  // Wall tile
                 }
             }
-        }
-
-        // Print the board for debugging
-        for (int y = 0; y < BOARD_HEIGHT; y++) {
-            for (int x = 0; x < BOARD_WIDTH; x++) {
-                System.out.print(board[x][y] + " ");
-            }
-            System.out.println();  // New line after each row
         }
 
         return board;
@@ -102,7 +97,7 @@ public class Board {
             File file = new File(path);
             Scanner scanner = new Scanner(file);
 
-            while(scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) {
                 lines.add(scanner.nextLine().split(","));
             }
 
@@ -118,23 +113,18 @@ public class Board {
      */
     private void createPlayers() {
         // Define player positions
-        Position projectManagerPosition = new Position(BOARD_WIDTH / 4, BOARD_HEIGHT / 2);
-        Position developerPosition = new Position(BOARD_WIDTH / 2, BOARD_HEIGHT / 2);
-        Position testerPosition = new Position(BOARD_WIDTH - 3, BOARD_HEIGHT / 2);
+        Tile projectManagerTile = board[BOARD_WIDTH / 4][BOARD_HEIGHT / 2];
+        Tile developerTile = board[BOARD_WIDTH / 2][BOARD_HEIGHT / 2];
+        Tile testerTile = board[BOARD_WIDTH - 3][BOARD_HEIGHT / 2];
 
-        ProjectManager projectManager = new ProjectManager(projectManagerPosition);
-        Developer developer = new Developer(developerPosition);
-        Tester tester = new Tester(testerPosition);
+        ProjectManager projectManager = new ProjectManager(projectManagerTile);
+        Developer developer = new Developer(developerTile);
+        Tester tester = new Tester(testerTile);
 
         // Add players to the players map
         this.players.put(projectManager.getId(), projectManager);
         this.players.put(developer.getId(), developer);
         this.players.put(tester.getId(), tester);
-
-        // Initialise player positions on the board
-        board[projectManagerPosition.x()][projectManagerPosition.y()].setPlayer(projectManager);
-        board[developerPosition.x()][developerPosition.y()].setPlayer(developer);
-        board[testerPosition.x()][testerPosition.y()].setPlayer(tester);
     }
 
 
@@ -142,35 +132,30 @@ public class Board {
      * Create stations in a 2*2 radius of a Station tile on map.
      */
     public void createStations() {
-
-        Set<Position> finishedStations = new HashSet<>();
-
-        for (StationType type : StationType.values()) {
-            Station station = new Station(type);
-            this.stations.put(station.getId(), station);
-        }
-
-        long id = 0;
+        Set<Tile> finishedStations = new HashSet<>();
+        StationType[] types = StationType.values();
+        int typeIndex = 0;
 
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_HEIGHT; y++) {
-
-                if (finishedStations.contains(new Position(x, y))) {
+                if (finishedStations.contains(board[x][y])) {
                     continue;
                 }
 
                 if (board[x][y].getType() == TileType.STATION) {
+                    List<Tile> stationTiles = new ArrayList<>();
+                    StationType type = types[typeIndex++];
+                    stationTiles.add(board[x][y]);
+                    stationTiles.add(board[x][y + 1]);
+                    stationTiles.add(board[x + 1][y]);
+                    stationTiles.add(board[x + 1][y + 1]);
 
-                    board[x][y].setStation(stations.get(id));
-                    board[x + 1][y].setStation(stations.get(id));
-                    board[x][y + 1].setStation(stations.get(id));
-                    board[x + 1][y + 1].setStation(stations.get(id));
+                    Station station = new Station(type, stationTiles);
+                    this.stations.put(station.getId(), station);
 
-                    finishedStations.add(new Position(x + 1, y));
-                    finishedStations.add(new Position(x, y + 1));
-                    finishedStations.add(new Position(x + 1, y + 1));
-
-                    id++;
+                    finishedStations.add(board[x + 1][y]);
+                    finishedStations.add(board[x][y + 1]);
+                    finishedStations.add(board[x + 1][y + 1]);
                 }
             }
         }
@@ -183,20 +168,21 @@ public class Board {
      */
     public void pickUpTicket(Player player) { //This can be changed to string etc. or some other way to get players
 
-        Position position = player.getDirection().getTranslation(player.getPosition());
-        Tile tile = board[position.x()][position.y()];
-
-        if (tile.empty() || !tile.containsTicket()) {
+        Tile tile = getTranslation(player.getTile(), player.getDirection());
+        Optional<Ticket> ticketOptional = getTicketOnTile(tile);
+        // No ticket to pick up
+        if (ticketOptional.isEmpty()) {
             return;
         }
-
-        Ticket ticket = (Ticket) tile.getContent();
+        Ticket ticket = ticketOptional.get();
         // When picked up, set ticket position to none
-        ticket.setPosition(Optional.empty());
+        ticket.setTile(Optional.empty());
 
         player.setHeldTicket(Optional.ofNullable(ticket));
-        player.getHeldTicket().get().setPosition(Optional.ofNullable(player.getPosition()));
-        if(ticket.isInFinishedZone()){ticket.setInFinishedZone(false);}
+        player.getHeldTicket().get().setTile(Optional.ofNullable(player.getTile()));
+        if (ticket.isInFinishedZone()) {
+            ticket.setInFinishedZone(false);
+        }
 
         tile.clearTile();
     }
@@ -206,78 +192,107 @@ public class Board {
      */
     public Ticket dropTicket(Player player) {
 
-        Position position;
+        Tile tile;
 
         if (player.getHeldTicket().isEmpty()) {
             return null;
         }
 
         try {
-            position = player.getDirection().getTranslation(player.getPosition());
+            tile = getTranslation(player.getTile(), player.getDirection());
         } catch (IllegalArgumentException e) {
             return null; //Do nothing if the position is out of bounds
         }
 
         Ticket ticket = player.getHeldTicket().get();
 
-        player.getHeldTicket().ifPresent(x -> x.setPosition(Optional.ofNullable(position)));
+        ticket.setTile(Optional.of(tile));
         player.setHeldTicket(Optional.empty());
 
+        Optional<Station> stationOptional = getStationOnTile(tile);
         // Set ticket station is working on if not in use
-        if (getTileAt(position).getType().equals(TileType.STATION)){
-            Station station = (Station) getTileAt(position).getContent();
-            if(!station.inUse()){
+        if (stationOptional.isPresent()) {
+            Station station = stationOptional.get();
+            if (!station.inUse()) {
                 station.setTicketWorkingOn(Optional.of(ticket));
             }
         }
         // If ticket in final column and is complete then remove from map and set tile to empty
-        if (position.x() == BOARD_WIDTH-1){
+        if (tile.getX() == BOARD_WIDTH - 1) {
             ticket.setInFinishedZone(true);
-            if(ticket.isComplete()){
+            if (ticket.isComplete()) {
                 tickets.remove(ticket.getId());
-                getTileAt(position).empty();
+                tile.empty();
             }
         }
 
-        board[position.x()][position.y()].setTicket(ticket);
         return ticket;
     }
 
-    public void movePlayer(Player player, Player.Direction direction) {
+    /**
+     * Brute force all the tickets to find a ticket on the tile next to the player.
+     *
+     * @param tile the tile desired
+     * @return the ticket on the tile if there is one
+     */
+    private Optional<Ticket> getTicketOnTile(Tile tile) {
+        return tickets.values().stream()
+                .filter(t -> t.getTile().isPresent() && t.getTile().get().equals(tile))
+                .findFirst();
+    }
 
-        Position previous = player.getPosition();
-        Position position;
+    /**
+     * Brute force all the stations to find a station on the tile next to the player.
+     *
+     * @param tile the tile desired
+     * @return the station on the tile if there is one
+     */
+    private Optional<Station> getStationOnTile(Tile tile) {
+        return stations.values().stream()
+                .filter(s -> s.getTiles().stream().anyMatch(t -> t.equals(tile)))
+                .findFirst();
+    }
+
+    public void movePlayer(Player player, Player.Direction direction) {
+        Tile previous = player.getTile();
 
         try {
+            Tile tile;
+
             if (direction == player.getDirection()) {
-                position = direction.getTranslation(player.getPosition());
+                tile = getTranslation(player.getTile(), direction);
             } else {
-                position = player.getPosition();
+                tile = player.getTile();
             }
+            if (tile.getType() == TileType.WALL || tile.getType() == TileType.STATION || tile.getType() == TileType.TICKET) {
+                return;
+            }
+
+            previous.clearTile();
         } catch (IllegalArgumentException e) {
-            return; //Do nothing if position is out of bounds
+            //Do nothing if position is out of bounds
         }
+    }
 
-        if (board[position.x()][position.y()].getType() == TileType.WALL || board[position.x()][position.y()].getType() == TileType.STATION || board[position.x()][position.y()].getType() == TileType.TICKET) {
-            return;
-        }
-
-        position = player.movePlayer(direction);
-
-        board[previous.x()][previous.y()].clearTile();
-        board[position.x()][position.y()].setPlayer(player); //will not change player location if only direction is changed
+    private Tile getTranslation(Tile tile, Player.Direction direction) {
+        return switch (direction) {
+            case LEFT -> board[tile.getX() - 1][tile.getY()];
+            case UP -> board[tile.getX()][tile.getY() - 1];
+            case DOWN -> board[tile.getX()][tile.getY() + 1];
+            case RIGHT -> board[tile.getX() + 1][tile.getY()];
+        };
     }
 
     /**
      * Add a ticket to the board
-     * @param id the ticket ID
+     *
+     * @param id     the ticket ID
      * @param ticket the ticket Object
      */
     public boolean addTicket(long id, Ticket ticket) {
-        if(ticket.getPosition().isPresent()) {
-            Tile t = this.getTileAt(ticket.getPosition().get());
+        if (ticket.getTile().isPresent()) {
+            Tile t = ticket.getTile().get();
             if (t.empty()) {
-                t.setTicket(ticket);
                 tickets.put(id, ticket);
                 return true;
             }
@@ -288,11 +303,12 @@ public class Board {
     /**
      * Method to retrieve a specific tile at the given coordinates.
      *
-     * @param position The coordinates of the tile.
+     * @param x The position of the tile (x coordinates).
+     * @param y The position of the tile (y coordinates).
      * @return The tile at the given coordinates
      */
-    public Tile getTileAt(Position position) {
-        return board[position.x()][position.y()];
+    public Tile getTileAt(int x, int y) {
+        return board[x][y];
     }
 
     @Override
