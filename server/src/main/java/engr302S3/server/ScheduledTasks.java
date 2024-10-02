@@ -34,20 +34,11 @@ public class ScheduledTasks {
      */
     @Scheduled(fixedRate = 1000)
     public void updateGameTime() {
-        for (long i : clientAPI.getDevastation().getBoard().getTickets().keySet()){
-            System.out.println("TEST: " + i + " : " + clientAPI.getDevastation().getBoard().getTickets().get(i));
-        }
         //update the game clock
         clientAPI.broadcastTimerUpdate(clientAPI.getDevastation().decreaseTime());
         //check each tile for a ticket, and update the ticket timer if there is one
-        for (int y = 0; y < Board.BOARD_HEIGHT; y++) {
-
-            for (int x = 0; x < Board.BOARD_WIDTH; x++) {
-
-                if (clientAPI.getDevastation().getBoard().getTileAt(new Position(x, y)).getType() == TileType.TICKET) {
-                    ((Ticket) clientAPI.getDevastation().getBoard().getTileAt(new Position(x, y)).getContent()).incrementTime();
-                }
-            }
+        for (Ticket ticket : clientAPI.getDevastation().getBoard().getTickets().values()) {
+            ticket.incrementTime();
         }
         //update the stations and tasks that they are working on
         for (Station station : clientAPI.getDevastation().getBoard().getStations().values()) {
@@ -67,13 +58,13 @@ public class ScheduledTasks {
         int randomY = 1 + (int) (Math.random() * 13);
 
         // Get the tile at the random position
-        Tile tile = clientAPI.getDevastation().getBoard().getTileAt(new Position(randomX, randomY));
+        Tile tile = clientAPI.getDevastation().getBoard().getTileAt(randomX, randomY);
         Ticket ticket = TicketFactory.getTicket();
-        ticket.setPosition(Optional.ofNullable(tile.getPosition()));
+        ticket.setTile(Optional.ofNullable(tile));
+
         // Try to add the ticket to the board
         if (clientAPI.getDevastation().getBoard().addTicket(ticket.getId(), ticket)) {
-
-            tile.setTicket(ticket);
+            tile.setType(TileType.TICKET);
             clientAPI.broadcastTicketCreate(ticket);
         } else {
             //tile is not free

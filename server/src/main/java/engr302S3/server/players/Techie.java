@@ -1,6 +1,6 @@
 package engr302S3.server.players;
 
-import engr302S3.server.map.Position;
+import engr302S3.server.map.Tile;
 import engr302S3.server.ticketFactory.Ticket;
 
 import lombok.Getter;
@@ -18,8 +18,8 @@ public abstract class Techie extends Player {
     private int ticketsInArea;
     private boolean disabled;
 
-    public Techie(Role role, Position position) {
-        super(role, position);
+    public Techie(Role role, Tile tile) {
+        super(role, tile);
         this.ticketsInAreaArray = new Ticket[10];
         this.ticketsInArea = 0;
         this.disabled = false;

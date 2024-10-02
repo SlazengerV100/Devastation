@@ -1,8 +1,6 @@
 package engr302S3.server.ticketFactory;
 
-import engr302S3.server.map.Position;
-
-import engr302S3.server.map.Station;
+import engr302S3.server.map.Tile;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,9 +18,8 @@ public class Ticket {
     private final ArrayList<Task> tasks;
     private final String ticketTitle;
     private int totalTime;
-    @Setter private Optional<Position> position;
+    @Setter private Optional<Tile> tile;
     private final double blowOutProb;
-    @Setter private Optional<Station> station;
     @Setter private boolean inFinishedZone = false;
 
     Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {

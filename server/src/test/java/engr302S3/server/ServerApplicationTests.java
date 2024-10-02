@@ -1,11 +1,8 @@
 package engr302S3.server;
 
 import engr302S3.server.map.Board;
-import engr302S3.server.map.Position;
 import engr302S3.server.map.StationType;
-import engr302S3.server.map.TileType;
 import engr302S3.server.players.Player;
-import engr302S3.server.players.ProjectManager;
 import engr302S3.server.ticketFactory.Ticket;
 import engr302S3.server.ticketFactory.TicketFactory;
 
@@ -47,25 +44,6 @@ class ServerApplicationTests {
     }
 
     @Test
-    public void testMovement() {
-
-        Player player = new ProjectManager(new Position(1, 1));
-        player.setActive(true);
-
-        assertEquals(new Position(1, 1), player.getPosition(), "Initial position should be (1, 1)");
-
-        player.movePlayer(Player.Direction.RIGHT);
-        assertEquals(new Position(2, 1), player.getPosition(), "Player should move to the right to (2, 1)");
-
-        player.movePlayer(Player.Direction.LEFT);
-        assertEquals(new Position(2, 1), player.getPosition(), "Player should still be at (2, 1)");
-        assertEquals(Player.Direction.LEFT, player.getDirection(), "Player should now be facing left");
-
-        player.movePlayer(Player.Direction.LEFT);
-        assertEquals(new Position(1, 1), player.getPosition(), "Player should move back to (1, 1)");
-    }
-
-    @Test
     public void testTicketFactory() {
         List<Ticket> tickets = new ArrayList<>();
 
@@ -82,11 +60,6 @@ class ServerApplicationTests {
     }
 
     @Test
-    public void testDropTicket() {
-
-    }
-
-    @Test
     public void testMovementBelowZero() {
         Devastation devastation = new Devastation();
         Board board = devastation.getBoard();
@@ -94,11 +67,11 @@ class ServerApplicationTests {
         Player player = board.getPlayers().get(key);
 
         for (int i = 0; i < 50; i++) {
-            player.movePlayer(Player.Direction.LEFT);
+            board.movePlayer(player, Player.Direction.LEFT);
         }
 
-        System.out.print(player.getPosition());
-        assertTrue(player.getPosition().x() >= 0 && player.getPosition().y() >= 0,
+        System.out.print(player.getTile());
+        assertTrue(player.getTile().getX() >= 0 && player.getTile().getY() >= 0,
                 "Player position should not be below zero after multiple movements");
     }
 

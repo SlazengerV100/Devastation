@@ -4,6 +4,7 @@ import engr302S3.server.players.Player;
 import engr302S3.server.ticketFactory.Ticket;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Game tiles in a devastation game
@@ -11,33 +12,36 @@ import lombok.Getter;
 @Getter
 public class Tile {
 
-    private final Position position;
+    private final int x;
+    private final int y;
+    @Setter
     private TileType type;
-    private Object content; // Stores the actual content of the tile (Player, Station, or Ticket)
 
     /**
      * Constructor to create a tile at the given position.
      * Initializes the tile as empty with no content.
      *
-     * @param position The position of the tile (x, y coordinates).
+     * @param x The position of the tile (x coordinates).
+     * @param y The position of the tile (y coordinates).
      */
-    public Tile(Position position) {
-        this.position = position;
+    public Tile(int x, int y) {
+        this.x = x;
+        this.y = y;
         this.type = TileType.EMPTY;
-        this.content = null;
     }
 
     /**
      * Constructor to create a tile at the given position.
      * Initializes the tile as empty with no content.
      *
-     * @param position The position of the tile (x, y coordinates).
+     * @param x The position of the tile (x coordinates).
+     * @param y The position of the tile (y coordinates).
      * @param type the type of tile to be constructed.
      */
-    public Tile(Position position, TileType type) {
-        this.position = position;
+    public Tile(int x, int y, TileType type) {
+        this.x = x;
+        this.y = y;
         this.type = type;
-        this.content = null;
     }
 
     /**
@@ -55,37 +59,7 @@ public class Tile {
      * @return {@code true} if the tiles contents are a ticket, {@code false} otherwise.
      */
     public boolean containsTicket() {
-        return content instanceof Ticket;
-    }
-
-    /**
-     * Method to set the tile's content as a Station.
-     *
-     * @param station The Station object to set on the tile.
-     */
-    public void setStation(Station station) {
-        this.type = TileType.STATION;
-        this.content = station;
-    }
-
-    /**
-     * Method to set the tile's content as a Player.
-     *
-     * @param player The Player object to set on the tile.
-     */
-    public void setPlayer(Player player) {
-        this.type = TileType.PLAYER;
-        this.content = player;
-    }
-
-    /**
-     * Method to set the tile's content as a Ticket.
-     *
-     * @param ticket The Ticket object to set on the tile.
-     */
-    public void setTicket(Ticket ticket) {
-        this.type = TileType.TICKET;
-        this.content = ticket;
+        return type == TileType.TICKET;
     }
 
     /**
@@ -93,7 +67,6 @@ public class Tile {
      */
     public void clearTile() {
         this.type = TileType.EMPTY;
-        this.content = null;
     }
 
     @Override

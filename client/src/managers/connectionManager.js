@@ -68,27 +68,27 @@ export const requestState = async () => {
                     1: {
                         playerRole: parsedMessage[0].role,
                         direction: parsedMessage[0].direction,
-                        x: parsedMessage[0].position.x,
-                        y: parsedMessage[0].position.y,
+                        x: parsedMessage[0].tile.x,
+                        y: parsedMessage[0].tile.y,
                     },
                     2: {
                         playerRole: parsedMessage[1].role,
                         direction: parsedMessage[1].direction,
-                        x: parsedMessage[1].position.x,
-                        y: parsedMessage[1].position.y,
+                        x: parsedMessage[1].tile.x,
+                        y: parsedMessage[1].tile.y,
                     },
                     3: {
                         playerRole: parsedMessage[2].role,
                         direction: parsedMessage[2].direction,
-                        x: parsedMessage[2].position.x,
-                        y: parsedMessage[2].position.y,
+                        x: parsedMessage[2].tile.x,
+                        y: parsedMessage[2].tile.y,
                     },
                 };
                 store.set(players, updatedPlayers);
 
                 resolve(parsedMessage); // Resolve the Promise with the parsed message
             } catch (error) {
-                reject('Failed to parse message');
+                reject('Failed to parse message' + error);
             }
 
             // memory leak avoidance
@@ -150,7 +150,7 @@ export const fetchAllTickets = async () => {
                 console.log(tickets)
                 resolve(tickets); // Resolve with the list of tickets
             } catch (error) {
-                reject('Failed to parse ticket response');
+                reject('Failed to parse ticket response' + error);
             }
 
             subscription.unsubscribe();
@@ -177,14 +177,15 @@ export const activatePlayer = async (playerId, activate = true) => {
                 resolve(parsedMessage); // Resolve the Promise with the updated player map
                 const tickets = await fetchAllTickets();
                 tickets.forEach(t =>{
+                    console.log(t)
                     store.set(ticketsAtom, (prevTickets) => ({
                         ...prevTickets,
-                        [t.id]: { id: t.id, x: t.position.x, y: t.position.y, title: t.ticketTitle, held: false },
+                        [t.id]: { id: t.id, x: t.tile.x, y: t.position.y, title: t.ticketTitle, held: false },
                     }));
                 })
                 console.log(tickets)
             } catch (error) {
-                reject('Failed to parse activation response');
+                reject('Failed to parse activation response' + error);
             }
 
             // Unsubscribe to avoid memory leaks
@@ -196,14 +197,14 @@ export const activatePlayer = async (playerId, activate = true) => {
 const updatePlayerPosition = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
-        const { id, position, direction } = parsedMessage;
-
+        const { id, tile, direction } = parsedMessage;
+        console.log(parsedMessage)
         store.set(players, (prev) => ({
             ...prev,
             [id]: {
                 ...prev[id],
-                x: position.x,
-                y: position.y,
+                x: tile.x,
+                y: tile.y,
                 direction,
             },
         }));
@@ -217,11 +218,12 @@ const updatePlayerPosition = (message) => {
 const updateNewTicket = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
-        const { id, position, ticketTitle} = parsedMessage;
+        console.log(parsedMessage)
+        const { id, tile, ticketTitle} = parsedMessage;
 
         store.set(ticketsAtom, (prevTickets) => ({
             ...prevTickets,
-            [id]: { id: id, x: position.x, y: position.y, title: ticketTitle, held: false },
+            [id]: { id: id, x: tile.x, y: tile.y, title: ticketTitle, held: false },
         }));
 
     } catch (error){
@@ -245,9 +247,11 @@ const updateTicketPickUp = (message) => {
 
         // Remove the held ticket from the ticketsAtom
         store.set(ticketsAtom, (prevTickets) => {
-            const { [ticketHeldId]: removedTicket, ...remainingTickets } = prevTickets; // Destructure to remove the held ticket
-            return remainingTickets;
+            // eslint-disable-next-line no-unused-vars
+            const { [ticketHeldId]: _, ...updatedTickets } = prevTickets; // Destructure to remove the held ticket
+            return updatedTickets;
         });
+
 
         // Update the localHeldTicket for the local player if the ID matches
         if (id === store.get(localPlayerId)) {

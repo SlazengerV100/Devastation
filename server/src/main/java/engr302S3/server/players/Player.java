@@ -1,7 +1,7 @@
 package engr302S3.server.players;
 
-import engr302S3.server.map.Position;
 import engr302S3.server.ticketFactory.Ticket;
+import engr302S3.server.map.Tile;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,22 +30,13 @@ public abstract class Player {
         UP,
         DOWN,
         LEFT,
-        RIGHT;
-
-        public Position getTranslation(Position position) {
-            return switch (this) {
-                case LEFT -> new Position(position.x() - 1, position.y());
-                case UP -> new Position(position.x(), position.y() - 1);
-                case DOWN -> new Position(position.x(), position.y() + 1);
-                case RIGHT -> new Position(position.x() + 1, position.y());
-            };
-        }
+        RIGHT
     }
 
     private static long idTracker = 1;
     private final long id;
     private final Role role;
-    private Position position;
+    private Tile tile;
     private Direction direction;
     private boolean active;
     private Optional<Ticket> heldTicket; //setter doubles as pickup (no conditions needed)
@@ -54,49 +45,19 @@ public abstract class Player {
      * Player Constructor
      *
      * @param role of the player
-     * @param position of the player initially
+     * @param tile of the player initially
      */
-    public Player(Role role, Position position) {
+    public Player(Role role, Tile tile) {
         this.id = idTracker++;
         this.role = role;
-        this.position = position;
+        this.tile = tile;
         this.direction = Direction.RIGHT;
         this.active = false;
         this.heldTicket = Optional.empty();
     }
 
-    /**
-     * If player is not facing direction specified first input will face him that direction
-     *
-     * @param direction to move player in
-     */
-    public Position movePlayer(Direction direction) {
-
-        if (!active) {
-           return this.position;
-        }
-
-        if (this.direction != direction) {
-            setDirection(direction);
-            return this.position;
-        } else {
-
-            Position position;
-
-            try {
-                position = getDirection().getTranslation(this.position);
-            } catch (IllegalArgumentException e) {
-                return this.position; //cannot move if out of bounds
-            }
-
-            this.setPosition(position);
-        }
-
-        return this.position;
-    }
-
     @Override
     public String toString() {
-        return "Player role: " + role + ", Position: (" + position.x() + ", " + position.y() + "), Active: " + active;
+        return "Player role: " + role + ", Position: (" + tile.getX() + ", " + tile.getY() + "), Active: " + active;
     }
 }
