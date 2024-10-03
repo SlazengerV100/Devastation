@@ -18,3 +18,6 @@ export const localHeldTicket = atom(null);
 
 // Tickets atom
 export const ticketsAtom = atom([]);
+
+// Game time
+export const timeLeftAtom = atom();

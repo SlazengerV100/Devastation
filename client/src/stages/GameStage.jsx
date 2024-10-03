@@ -1,25 +1,25 @@
 import { Stage, Sprite, Text } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import {localHeldTicket, players as playerAtoms, ticketsAtom} from "../js/atoms.js";
+import {localHeldTicket, players as playerAtoms, ticketsAtom, timeLeftAtom} from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
 import Player from "../components/Player.jsx";
 import { useState, useEffect } from 'react';
 import {TILE_WIDTH } from "../js/spriteFrameGrabber.js";
 import Ticket from "../components/Ticket.jsx";
 import HeldTicket from "../components/HeldTicket.jsx";
+import TimerProgressBar from "../components/TimerProgressBar.jsx"
 
 
 const GameStage = () => {
     const players = useAtomValue(playerAtoms);
     const tickets = useAtomValue(ticketsAtom)
     const heldTicket = useAtomValue(localHeldTicket)
+    const timeLeft = useAtomValue(timeLeftAtom)
 
     useEffect(() => {
         console.log(tickets)
     }, [tickets]);
 
-    const MAP_WIDTH = 30 * TILE_WIDTH;
-    const MAP_HEIGHT = 15 * TILE_WIDTH; // Example height
 
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
@@ -42,10 +42,19 @@ const GameStage = () => {
         };
     }, []);
 
-    const mapPosition = {
+    const mapDrawInfo = {
         x: TILE_WIDTH,
-        y: (windowSize.height - MAP_HEIGHT) / 2
+        y: (windowSize.height - (15 * TILE_WIDTH)) / 2,
+        width: 30 * TILE_WIDTH,
+        height: 15 * TILE_WIDTH
     };
+
+    const progressBarDrawInfo = {
+        x: TILE_WIDTH,
+        y: TILE_WIDTH*2,
+        width: 30 * TILE_WIDTH,
+        height: TILE_WIDTH
+    }
 
     console.log("Tickets to render: ")
 
@@ -56,15 +65,16 @@ const GameStage = () => {
                 height={windowSize.height}
                 style={{position: 'absolute', top: 0, left: 0}}
             >
+                <TimerProgressBar timeLeft={timeLeft} progressBarDrawInfo={progressBarDrawInfo}/>
                 {/* Render the map centered */}
-                <Sprite image={map} x={mapPosition.x} y={mapPosition.y} width={MAP_WIDTH} height={MAP_HEIGHT}/>
+                <Sprite image={map} x={mapDrawInfo.x} y={mapDrawInfo.y} width={mapDrawInfo.width} height={mapDrawInfo.h}/>
 
                 {/* Render all players*/}
                 {Object.values(players).map((player, index) => (
                     <Player
                         player={player}
                         key={index}
-                        mapPosition={mapPosition}
+                        mapPosition={mapDrawInfo}
                     />
                 ))}
 
@@ -73,10 +83,10 @@ const GameStage = () => {
                     <Ticket
                         ticket={ticket}
                         key={index}
-                        mapPosition={mapPosition}
+                        mapPosition={mapDrawInfo}
                     />
                 ))}
-                <HeldTicket mapPosition={mapPosition} mapWidth={MAP_WIDTH} heldTicket = {heldTicket}/>
+                <HeldTicket mapPosition={mapDrawInfo} mapWidth={mapDrawInfo.width} heldTicket = {heldTicket}/>
             </Stage>
 
     );
