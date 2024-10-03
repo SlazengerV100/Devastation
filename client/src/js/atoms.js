@@ -21,3 +21,6 @@ export const ticketsAtom = atom([]);
 
 // Game time
 export const timeLeftAtom = atom();
+
+// Score
+export const scoreAtom = atom(0);

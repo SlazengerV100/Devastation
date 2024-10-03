@@ -1,8 +1,8 @@
 import { Container, Graphics, Text } from "@pixi/react";
 import { TextStyle } from "pixi.js";
-import { store } from '../App';
 import { localHeldTicket } from "../js/atoms.js";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import {useAtomValue} from "jotai";
 
 const textStyle = (fontSize) => new TextStyle({
     fontFamily: 'Courier New, monospace',
@@ -13,41 +13,39 @@ const textStyle = (fontSize) => new TextStyle({
     padding: fontSize / 5,
 });
 
-const HeldTicket = ({ mapPosition, mapWidth, heldTicket }) => {
-    const ticketViewX = mapPosition.x + mapWidth;
-    const ticketViewY = mapPosition.y;
+const HeldTicket = ({ heldTicketDrawInfo, heldTicket }) => {
+    const { x, y, width, height } = heldTicketDrawInfo;
 
     return (
-        <Container position={[ticketViewX, ticketViewY]}>
-            {
-                heldTicket ? (
-                    <>
-                        <Graphics draw={g => {
-                            g.clear();
-                            g.lineStyle(4, 0x000000);
-                            g.beginFill(0xe4d5b7);
-                            g.drawRect(10, 10, 400, 500);
-                            g.endFill();
-                        }} />
+        <Container position={[x, y]}>
+            {heldTicket ? (
+                <>
+                    <Graphics draw={g => {
+                        g.clear();
+                        g.lineStyle(2, 0x555555);
+                        g.beginFill(0xe4d5b7);
+                        g.drawRect(0, 0, width, height); // Use width and height for the rectangle
+                        g.endFill();
+                    }} />
 
-                        <Text text={`Ticket ${heldTicket.id}`} style={textStyle(25)} x={20} y={20} />
-                        <Text text={heldTicket.ticketTitle} style={textStyle(21)} x={30} y={50} />
+                    <Text text={`Ticket ${heldTicket.id}`} style={textStyle(25)} x={20} y={20} />
+                    <Text text={heldTicket.ticketTitle} style={textStyle(21)} x={30} y={50} />
 
-                        {heldTicket.tasks.map((task, index) => (
-                            <Text
-                                key={task.title}
-                                text={`${task.title}  ${task.completionTime}s`}
-                                style={textStyle(15)}
-                                x={40}
-                                y={80 + index * 30}
-                            />
-                        ))}
-                    </>
-                ) : <></>
-            }
+                    {heldTicket.tasks.map((task, index) => (
+                        <Text
+                            key={task.title}
+                            text={`${task.title}  ${task.completionTime}s`}
+                            style={textStyle(15)}
+                            x={40}
+                            y={80 + index * 30}
+                        />
+                    ))}
+                </>
+            ) : null}
         </Container>
     );
 };
 
 export default HeldTicket;
+
 
