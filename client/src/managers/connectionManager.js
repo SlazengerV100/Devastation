@@ -21,6 +21,7 @@ export const connect = async () => {
             console.log('Connected:', frame);
             setupSubscriptions();
             requestState();
+
             resolve();
         }, (error) => {
             console.error('STOMP connection error:', error);
@@ -147,8 +148,25 @@ export const fetchAllTickets = async () => {
         const subscription = stompClient.subscribe('/topic/tickets', (message) => {
             try {
                 const tickets = JSON.parse(message.body);
-                console.log(tickets)
-                resolve(tickets); // Resolve with the list of tickets
+                console.log("Tickets received from fetchAllTickets: " + JSON.stringify(tickets));
+
+                // Transform the tickets array into a map with relevant information
+                const ticketMap = tickets.reduce((acc, ticket) => {
+                    acc[ticket.id] = {
+                        id: ticket.id,
+                        x: ticket.tile.x,
+                        y: ticket.tile.y,
+                        title: ticket.ticketTitle,
+                        held: false, // Assuming "held" is initially set to false
+                    };
+                    return acc;
+                }, {});
+
+                // Update the ticketsAtom with the transformed ticketMap
+                store.set(ticketsAtom, ticketMap);
+
+                console.log("Tickets stored in atom now: " + JSON.stringify(store.get(ticketsAtom)));
+                resolve(); // Resolve with the list of tickets
             } catch (error) {
                 reject('Failed to parse ticket response' + error);
             }

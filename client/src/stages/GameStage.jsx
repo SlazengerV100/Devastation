@@ -46,6 +46,8 @@ const GameStage = () => {
         y: (windowSize.height - MAP_HEIGHT) / 2
     };
 
+    console.log("Tickets to render: ")
+
     return (
             <Stage
                 options={{backgroundColor: 0xf4f3ef}}
