@@ -49,6 +49,10 @@ const setupSubscriptions = () => {
     stompClient.subscribe('/topic/player/ticket/drop', (message) => {
         updateTicketDrop(message)
     })
+
+    stompClient.subscribe('/topic/timerUpdate', (message) => {
+        updateGameTimer(message)
+    })
 };
 
 export const requestState = async () => {
@@ -313,6 +317,17 @@ const updateTicketDrop = (message) => {
         console.error('Failed to parse ticket drop message:', error);
     }
 };
+
+const updateGameTimer = (message) => {
+    try {
+        const time = JSON.parse(message.body);
+
+
+
+    } catch (error) {
+        console.error('Failed to parse game timner message:', error);
+    }
+}
 
 
 
