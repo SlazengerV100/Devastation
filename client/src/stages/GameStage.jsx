@@ -8,7 +8,7 @@ import { TILE_WIDTH } from "../js/spriteFrameGrabber.js";
 import Ticket from "../components/Ticket.jsx";
 import HeldTicket from "../components/HeldTicket.jsx";
 import TimerProgressBar from "../components/TimerProgressBar.jsx";
-import ScoreBoard from "../components/ScoreBaord.jsx"; // Fixed typo in import
+import ScoreBoard from "../components/ScoreBoard.jsx"; // Fixed typo in import
 
 const GameStage = () => {
     const players = useAtomValue(playerAtoms);
