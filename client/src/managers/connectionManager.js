@@ -283,10 +283,6 @@ const updateTicketPickUp = (message) => {
         if (id === store.get(localPlayerId)) {
             console.log("HELD TICKET TO STORE: " + JSON.stringify(heldTicket));
             store.set(localHeldTicket, heldTicket);
-        } else {
-            if (store.get(localHeldTicket)?.id === ticketHeldId) {
-                store.set(localHeldTicket, null);
-            }
         }
 
         console.log("Updated localHeldTicket:", store.get(localHeldTicket));
@@ -299,12 +295,26 @@ const updateTicketPickUp = (message) => {
 const updateTicketDrop = (message) => {
     try {
         const ticket = JSON.parse(message.body);
+        const { id, tile, ticketTitle} = ticket;
         console.log("Ticket dropped: " + " Ticket ID: " + JSON.stringify(ticket));
 
         if (ticket.id === store.get(localHeldTicket)?.id) {
             console.log("REMOVE TICKET")
             store.set(localHeldTicket, null);
         }
+
+        // Update the held value of the specific ticket in ticketsAtom
+        store.set(ticketsAtom, (prevTickets) => {
+            // Check if the ticket exists in the map
+            if (prevTickets[id]) {
+                return {
+                    ...prevTickets,
+                    [id]: { id: id, x: tile.x, y: tile.y, title: ticketTitle, held: false }
+                };
+            }
+            // If the ticket doesn't exist, return the previous state unchanged
+            return prevTickets;
+        });
 
     } catch (error) {
         console.error('Failed to parse ticket drop message:', error);
