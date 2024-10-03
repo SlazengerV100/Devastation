@@ -1,5 +1,5 @@
 import { Stomp } from "@stomp/stompjs";
-import {localHeldTicket, localPlayerId, players, ticketsAtom} from "../js/atoms.js";
+import {localHeldTicket, localPlayerId, players, ticketsAtom, timeLeftAtom} from "../js/atoms.js";
 import { store } from '../App'
 
 let stompClient;
@@ -321,8 +321,7 @@ const updateTicketDrop = (message) => {
 const updateGameTimer = (message) => {
     try {
         const time = JSON.parse(message.body);
-
-
+        store.set(timeLeftAtom, time)
 
     } catch (error) {
         console.error('Failed to parse game timner message:', error);
