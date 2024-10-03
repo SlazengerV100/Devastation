@@ -1,5 +1,5 @@
 import { Stomp } from "@stomp/stompjs";
-import {localHeldTicket, localPlayerId, players, ticketsAtom, timeLeftAtom} from "../js/atoms.js";
+import {localHeldTicket, localPlayerId, players, scoreAtom, ticketsAtom, timeLeftAtom} from "../js/atoms.js";
 import { store } from '../App'
 
 let stompClient;
@@ -52,6 +52,10 @@ const setupSubscriptions = () => {
 
     stompClient.subscribe('/topic/timerUpdate', (message) => {
         updateGameTimer(message)
+    })
+
+    stompClient.subscribe('/topic/scoreUpdate', (message) => {
+        updateScore(message)
     })
 };
 
@@ -324,7 +328,17 @@ const updateGameTimer = (message) => {
         store.set(timeLeftAtom, time)
 
     } catch (error) {
-        console.error('Failed to parse game timner message:', error);
+        console.error('Failed to parse game timer message:', error);
+    }
+}
+
+const updateScore = (message) =>{
+    try {
+        const score = JSON.parse(message.body);
+        store.set(scoreAtom, score)
+
+    } catch (error) {
+        console.error('Failed to parse score message:', error);
     }
 }
 
