@@ -44,8 +44,13 @@ export default function keyHandler() {
             case ' ':
                 // Pick / drop ticket
                 console.log("SPACE pressed");
-                if (heldTicket !== null) { sendPlayerAction('DROP') }
-                sendPlayerAction('PICKUP'); // Replace with your actual backend action
+                console.log("HELD TICKET WHEN SPACE PRESSED" + JSON.stringify(heldTicket))
+
+                if (heldTicket !== null) {
+                    sendPlayerAction('DROP')
+                } else {
+                    sendPlayerAction('PICKUP'); // Replace with your actual backend action
+                }
                 break;
             default:
                 return; // Exit if the key is not handled

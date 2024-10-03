@@ -62,7 +62,6 @@ public class ClientAPI {
                 broadcastScoreUpdate(devastation.updateScore(t));
                 broadcastTicketResolve(t);
             }
-            broadcastTicketCreate(t);
             return t;
         }
         return null;

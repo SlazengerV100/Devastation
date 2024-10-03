@@ -1,6 +1,6 @@
 import { Stage, Sprite, Text } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import { players as playerAtoms, ticketsAtom } from "../js/atoms.js";
+import {localHeldTicket, players as playerAtoms, ticketsAtom} from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
 import Player from "../components/Player.jsx";
 import { useState, useEffect } from 'react';
@@ -12,6 +12,7 @@ import HeldTicket from "../components/HeldTicket.jsx";
 const GameStage = () => {
     const players = useAtomValue(playerAtoms);
     const tickets = useAtomValue(ticketsAtom)
+    const heldTicket = useAtomValue(localHeldTicket)
 
     useEffect(() => {
         console.log(tickets)
@@ -75,7 +76,7 @@ const GameStage = () => {
                         mapPosition={mapPosition}
                     />
                 ))}
-                <HeldTicket mapPosition={mapPosition} mapWidth={MAP_WIDTH}/>
+                <HeldTicket mapPosition={mapPosition} mapWidth={MAP_WIDTH} heldTicket = {heldTicket}/>
             </Stage>
 
     );

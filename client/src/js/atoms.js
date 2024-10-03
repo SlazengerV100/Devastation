@@ -14,7 +14,7 @@ export const players = atom({
 export const localPlayerId = atom(-1);
 
 // Local held ticket
-export const localHeldTicket = atom({});
+export const localHeldTicket = atom(null);
 
 // Tickets atom
 export const ticketsAtom = atom([]);

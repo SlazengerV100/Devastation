@@ -263,13 +263,21 @@ const updateTicketPickUp = (message) => {
 
         const ticketHeldId = heldTicket.id;
 
-        // Remove the held ticket from the ticketsAtom
+        // Update the held value of the specific ticket in ticketsAtom
         store.set(ticketsAtom, (prevTickets) => {
-            // eslint-disable-next-line no-unused-vars
-            const { [ticketHeldId]: _, ...updatedTickets } = prevTickets; // Destructure to remove the held ticket
-            return updatedTickets;
+            // Check if the ticket exists in the map
+            if (prevTickets[ticketHeldId]) {
+                return {
+                    ...prevTickets,
+                    [ticketHeldId]: {
+                        ...prevTickets[ticketHeldId],
+                        held: true, // Change the held value to true
+                    },
+                };
+            }
+            // If the ticket doesn't exist, return the previous state unchanged
+            return prevTickets;
         });
-
 
         // Update the localHeldTicket for the local player if the ID matches
         if (id === store.get(localPlayerId)) {
@@ -291,9 +299,10 @@ const updateTicketPickUp = (message) => {
 const updateTicketDrop = (message) => {
     try {
         const ticket = JSON.parse(message.body);
-        console.log("Ticket dropped: " + " Ticket ID: " + ticket);
+        console.log("Ticket dropped: " + " Ticket ID: " + JSON.stringify(ticket));
 
         if (ticket.id === store.get(localHeldTicket)?.id) {
+            console.log("REMOVE TICKET")
             store.set(localHeldTicket, null);
         }
 
