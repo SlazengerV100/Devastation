@@ -51,9 +51,9 @@ const GameStage = () => {
 
     const progressBarDrawInfo = {
         x: TILE_WIDTH,
-        y: TILE_WIDTH,
+        y: TILE_WIDTH*2,
         width: 30 * TILE_WIDTH,
-        height: TILE_WIDTH * 2
+        height: TILE_WIDTH
     }
 
     console.log("Tickets to render: ")
