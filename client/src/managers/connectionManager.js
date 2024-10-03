@@ -21,6 +21,7 @@ export const connect = async () => {
             console.log('Connected:', frame);
             setupSubscriptions();
             requestState();
+
             resolve();
         }, (error) => {
             console.error('STOMP connection error:', error);
@@ -147,8 +148,25 @@ export const fetchAllTickets = async () => {
         const subscription = stompClient.subscribe('/topic/tickets', (message) => {
             try {
                 const tickets = JSON.parse(message.body);
-                console.log(tickets)
-                resolve(tickets); // Resolve with the list of tickets
+                console.log("Tickets received from fetchAllTickets: " + JSON.stringify(tickets));
+
+                // Transform the tickets array into a map with relevant information
+                const ticketMap = tickets.reduce((acc, ticket) => {
+                    acc[ticket.id] = {
+                        id: ticket.id,
+                        x: ticket.tile.x,
+                        y: ticket.tile.y,
+                        title: ticket.ticketTitle,
+                        held: false, // Assuming "held" is initially set to false
+                    };
+                    return acc;
+                }, {});
+
+                // Update the ticketsAtom with the transformed ticketMap
+                store.set(ticketsAtom, ticketMap);
+
+                console.log("Tickets stored in atom now: " + JSON.stringify(store.get(ticketsAtom)));
+                resolve(); // Resolve with the list of tickets
             } catch (error) {
                 reject('Failed to parse ticket response' + error);
             }
@@ -241,29 +259,28 @@ const updateTicketPickUp = (message) => {
             return;
         }
 
-        console.log("Ticket pick up: " + " Player ID: " + id + " Held ticket: " + heldTicket.ticketTitle);
-
         const ticketHeldId = heldTicket.id;
 
-        // Remove the held ticket from the ticketsAtom
+        // Update the held value of the specific ticket in ticketsAtom
         store.set(ticketsAtom, (prevTickets) => {
-            // eslint-disable-next-line no-unused-vars
-            const { [ticketHeldId]: _, ...updatedTickets } = prevTickets; // Destructure to remove the held ticket
-            return updatedTickets;
+            // Check if the ticket exists in the map
+            if (prevTickets[ticketHeldId]) {
+                return {
+                    ...prevTickets,
+                    [ticketHeldId]: {
+                        ...prevTickets[ticketHeldId],
+                        held: true, // Change the held value to true
+                    },
+                };
+            }
+            // If the ticket doesn't exist, return the previous state unchanged
+            return prevTickets;
         });
-
 
         // Update the localHeldTicket for the local player if the ID matches
         if (id === store.get(localPlayerId)) {
-            console.log("HELD TICKET TO STORE: " + JSON.stringify(heldTicket));
             store.set(localHeldTicket, heldTicket);
-        } else {
-            if (store.get(localHeldTicket)?.id === ticketHeldId) {
-                store.set(localHeldTicket, null);
-            }
         }
-
-        console.log("Updated localHeldTicket:", store.get(localHeldTicket));
 
     } catch (error) {
         console.error('Failed to parse player that attempted to pick up ticket:', error);
@@ -273,11 +290,24 @@ const updateTicketPickUp = (message) => {
 const updateTicketDrop = (message) => {
     try {
         const ticket = JSON.parse(message.body);
-        console.log("Ticket dropped: " + " Ticket ID: " + ticket);
+        const { id, tile, ticketTitle} = ticket;
 
         if (ticket.id === store.get(localHeldTicket)?.id) {
             store.set(localHeldTicket, null);
         }
+
+        // Update the held value of the specific ticket in ticketsAtom
+        store.set(ticketsAtom, (prevTickets) => {
+            // Check if the ticket exists in the map
+            if (prevTickets[id]) {
+                return {
+                    ...prevTickets,
+                    [id]: { id: id, x: tile.x, y: tile.y, title: ticketTitle, held: false }
+                };
+            }
+            // If the ticket doesn't exist, return the previous state unchanged
+            return prevTickets;
+        });
 
     } catch (error) {
         console.error('Failed to parse ticket drop message:', error);
