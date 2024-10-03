@@ -259,8 +259,6 @@ const updateTicketPickUp = (message) => {
             return;
         }
 
-        console.log("Ticket pick up: " + " Player ID: " + id + " Held ticket: " + heldTicket.ticketTitle);
-
         const ticketHeldId = heldTicket.id;
 
         // Update the held value of the specific ticket in ticketsAtom
@@ -281,11 +279,8 @@ const updateTicketPickUp = (message) => {
 
         // Update the localHeldTicket for the local player if the ID matches
         if (id === store.get(localPlayerId)) {
-            console.log("HELD TICKET TO STORE: " + JSON.stringify(heldTicket));
             store.set(localHeldTicket, heldTicket);
         }
-
-        console.log("Updated localHeldTicket:", store.get(localHeldTicket));
 
     } catch (error) {
         console.error('Failed to parse player that attempted to pick up ticket:', error);
@@ -296,10 +291,8 @@ const updateTicketDrop = (message) => {
     try {
         const ticket = JSON.parse(message.body);
         const { id, tile, ticketTitle} = ticket;
-        console.log("Ticket dropped: " + " Ticket ID: " + JSON.stringify(ticket));
 
         if (ticket.id === store.get(localHeldTicket)?.id) {
-            console.log("REMOVE TICKET")
             store.set(localHeldTicket, null);
         }
 
