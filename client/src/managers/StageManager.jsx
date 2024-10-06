@@ -42,8 +42,10 @@ const StageManager = () => {
 
 
     const attemptConnect = async () => {
+        const serverUrl = import.meta.env.VITE_WEBSOCKET_URL;
+
         try {
-            await connect();
+            await connect(serverUrl);
             setConnectionStatus('connected');
         } catch (error) {
             console.error('Connection failed:', error);

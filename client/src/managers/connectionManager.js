@@ -4,10 +4,10 @@ import { store } from '../App'
 
 let stompClient;
 
-export const connect = async () => {
+export const connect = async (url) => {
     console.log("start");
     return new Promise((resolve, reject) => {
-        const socket = new WebSocket('ws://localhost:8080/stomp-endpoint');
+        const socket = new WebSocket(url);
 
         socket.addEventListener('error', (error) => {
             console.error('WebSocket error:', error);
