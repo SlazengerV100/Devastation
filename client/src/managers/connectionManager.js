@@ -57,6 +57,10 @@ const setupSubscriptions = () => {
     stompClient.subscribe('/topic/scoreUpdate', (message) => {
         updateScore(message)
     })
+
+    stompClient.subscribe('/topic/stations', (message) => {
+        updateStations(message)
+    })
 };
 
 export const requestState = async () => {
@@ -200,16 +204,11 @@ export const activatePlayer = async (playerId, activate = true) => {
         const subscription = stompClient.subscribe('/topic/player/activate', async (message) => {
             try {
                 const parsedMessage = JSON.parse(message.body);
+                await fetchAllTickets();
+                console.log("TEST1")
+                // Request stations
+                stompClient.send("/app/stations", {});
                 resolve(parsedMessage); // Resolve the Promise with the updated player map
-                const tickets = await fetchAllTickets();
-                tickets.forEach(t =>{
-                    console.log(t)
-                    store.set(ticketsAtom, (prevTickets) => ({
-                        ...prevTickets,
-                        [t.id]: { id: t.id, x: t.tile.x, y: t.position.y, title: t.ticketTitle, held: false },
-                    }));
-                })
-                console.log(tickets)
             } catch (error) {
                 reject('Failed to parse activation response' + error);
             }
@@ -336,6 +335,16 @@ const updateScore = (message) =>{
     try {
         const score = JSON.parse(message.body);
         store.set(scoreAtom, score)
+
+    } catch (error) {
+        console.error('Failed to parse score message:', error);
+    }
+}
+
+const updateStations = (message) => {
+    try {
+        const score = JSON.parse(message.body);
+        console.log("STATION: " + JSON.stringify(score))
 
     } catch (error) {
         console.error('Failed to parse score message:', error);
