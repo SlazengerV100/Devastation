@@ -4,12 +4,12 @@ package engr302S3.server.map;
  * Enum representing the different types of Stations, categorised into Tester and Developer.
  */
 public enum StationType {
-    UNIT_TESTING(Room.TESTER),
-    COVERAGE_TESTING(Room.TESTER),
-    STATIC_ANALYSIS(Room.TESTER),
     FRONTEND(Room.DEVELOPER),
     BACKEND(Room.DEVELOPER),
-    API(Room.DEVELOPER);
+    API(Room.DEVELOPER),
+    UNIT_TESTING(Room.TESTER),
+    COVERAGE_TESTING(Room.TESTER),
+    STATIC_ANALYSIS(Room.TESTER);
 
     private final Room room; //Enum to represent the room of the role.
 
