@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { Stage, Container, Text, AnimatedSprite, Sprite } from '@pixi/react';
+import { Stage, Container, AnimatedSprite, Sprite } from '@pixi/react';
 import { textures } from "../js/spriteFrameGrabber.js";
 import { localPlayerId } from "../js/atoms.js";
 import { requestState, activatePlayer } from "../managers/connectionManager.js";
 import { store } from "../App.jsx";
 import backgroundURL from '../../assets/SelectPlayerBackground.png';
+import BlankButton from "../components/BlankButton.jsx";
+import TitleURL from "../../assets/SelectYourCharacter.png"
 import * as PIXI from 'pixi.js';
 
 const CharacterSelectStage = () => {
@@ -26,7 +28,6 @@ const CharacterSelectStage = () => {
         };
         window.addEventListener("resize", handleResize);
 
-        // Cleanup the event listener on component unmount
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
@@ -56,9 +57,8 @@ const CharacterSelectStage = () => {
     // Constants for layout based on window size
     const stageWidth = windowSize.width;
     const stageHeight = windowSize.height;
-    const buttonYPosition = stageHeight * 0.8;
+    const buttonYPosition = stageHeight * 0.6;
     const characterYPosition = stageHeight * 0.4;
-    const buttonWidth = stageWidth * 0.15;
     const characterScale = stageWidth * 0.001;
 
     return (
@@ -73,14 +73,15 @@ const CharacterSelectStage = () => {
                 >
                     {/* Background */}
                     <Container>
-                        <Sprite texture={PIXI.Texture.from(backgroundURL)} width={stageWidth}/>
+                        <Sprite texture={PIXI.Texture.from(backgroundURL)} width={stageWidth} height={stageHeight}/>
                     </Container>
 
+                    {/* title */}
+                    <Sprite texture={PIXI.Texture.from(TitleURL)} anchor={0.5} y={stageHeight * 0.2} x={stageWidth / 2}/>
                     {/* Characters running above buttons */}
                     <Container>
                         {playerMap.map((player, index) => {
-                            const xPosition = (index + 1) * (stageWidth / (playerMap.length + 1)) - buttonWidth / 2;
-
+                            const xPosition = (index + 1) * (stageWidth / (playerMap.length + 1));
                             return (
                                 <Container key={player.id}>
                                     {/* Animated character running in place */}
@@ -88,25 +89,19 @@ const CharacterSelectStage = () => {
                                         textures={textures[player.role].running["DOWN"]}
                                         animationSpeed={0.15}
                                         isPlaying={true}
+                                        anchor={0.5}
                                         x={xPosition}
                                         y={characterYPosition}
                                         scale={{ x: characterScale, y: characterScale }}
                                     />
 
-                                    {/* Player select button */}
-                                    <Text
+                                    <BlankButton
                                         text={player.role}
-                                        style={{
-                                            fontSize: stageWidth * 0.03,
-                                            fill: player.active ? 0xAAAAAA : 0xFFFFFF,
-                                            align: 'center',
-                                        }}
-                                        interactive={true}
-                                        buttonMode={true}
-                                        x={xPosition + buttonWidth / 2}
+                                        size="medium"
+                                        action={() => setSessionPlayer(player.id)}
+                                        x={xPosition - 180}
                                         y={buttonYPosition}
-                                        anchor={0.5}
-                                        pointerdown={() => setSessionPlayer(player.id)}
+                                        active={!player.active}
                                     />
                                 </Container>
                             );
