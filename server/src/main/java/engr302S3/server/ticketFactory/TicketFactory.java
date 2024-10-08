@@ -64,7 +64,7 @@ public class TicketFactory {
         List<StationType> stations = new ArrayList<>(List.of(StationType.values()));
         List<StationType> devStations = stations
                 .stream()
-                .filter(StationType::isTester)
+                .filter(StationType::isDeveloper)
                 .collect(Collectors.toCollection(ArrayList::new));
 
         StationType station = devStations.get(random.nextInt(devStations.size())); //there should always be at least one dev room task, so add a random dev station task first

@@ -14,6 +14,7 @@ public class Tile {
 
     private final int x;
     private final int y;
+    @Getter
     @Setter
     private TileType type;
 
