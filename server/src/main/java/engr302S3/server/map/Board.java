@@ -199,6 +199,14 @@ public class Board {
         ticket.setTile(Optional.empty());
         player.setHeldTicket(Optional.ofNullable(ticket));
 
+        Optional<Station> stationOptional = getStationOnTile(tile);
+        // Set ticket station is working on if not in use
+        if (stationOptional.isPresent()) {
+            Station station = stationOptional.get();
+            if (station.inUse()) {
+                station.setTicketWorkingOn(Optional.empty()); // Set to empty Optional instead of ticket
+            }
+        }
 
         tile.clearTile();
     }
@@ -225,7 +233,6 @@ public class Board {
         ticket.setTile(Optional.of(tile));
         tile.setType(TileType.TICKET);
         player.setHeldTicket(Optional.empty());
-        System.out.println("called");
 
         Optional<Station> stationOptional = getStationOnTile(tile);
         // Set ticket station is working on if not in use
