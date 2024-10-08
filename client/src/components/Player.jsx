@@ -9,7 +9,7 @@ const Player = ({ player, mapPosition }) => {
     // Use useEffect to restart the animation with new loaded textures
     useEffect(() => {
         if (spriteRef.current) {
-            spriteRef.current.textures = textures.running[player.direction];
+            spriteRef.current.textures = textures[player.playerRole].running[player.direction];
             if (!spriteRef.current.playing) spriteRef.current.gotoAndPlay(0);
         }
     }, [player.direction]);
@@ -18,14 +18,12 @@ const Player = ({ player, mapPosition }) => {
     const playerPositionX = mapPosition.x + (player.x * TILE_WIDTH);
     const playerPositionY = mapPosition.y + (player.y * TILE_WIDTH) - TILE_WIDTH;
 
-    console.log(player.x + " " + player.y)
-
     return (
         <AnimatedSprite
             ref={spriteRef}
             key={player.id}
             isPlaying={true}
-            textures={textures.running[player.direction]} // Use the correct direction for textures
+            textures={textures[player.playerRole].running[player.direction]} // Use the correct direction for textures
             animationSpeed={0.15}
             x={playerPositionX}
             y={playerPositionY}
