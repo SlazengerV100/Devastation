@@ -1,4 +1,4 @@
-import { Stage, Sprite, Text } from '@pixi/react';
+import { Stage, Sprite } from '@pixi/react';
 import { useAtomValue } from 'jotai';
 import { localHeldTicket, players as playerAtoms, scoreAtom, ticketsAtom, timeLeftAtom } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useAtom } from "jotai";
 import {localPlayerId} from "../js/atoms.js";  // Import the atom
 import { requestState, activatePlayer } from "../managers/connectionManager.js";
 import {store} from "../App.jsx";
