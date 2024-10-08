@@ -6,15 +6,15 @@ import { textures, TILE_WIDTH } from "../js/spriteFrameGrabber.js";
 const Player = ({ player, mapPosition }) => {
     const spriteRef = useRef(null);
 
-    // Use useEffect to restart the animation with new loaded textures
+    // Use useEffect to restart the animation when the direction changes
     useEffect(() => {
         if (spriteRef.current) {
             spriteRef.current.textures = textures[player.playerRole].running[player.direction];
-            if (!spriteRef.current.playing) spriteRef.current.gotoAndPlay(0);
+            spriteRef.current.gotoAndPlay(0);
         }
-    }, [player.direction]);
+    }, [player.direction, player.playerRole]);
 
-    // Adjust player's position relative to the centered map
+    // Calculate player position relative to the map
     const playerPositionX = mapPosition.x + (player.x * TILE_WIDTH);
     const playerPositionY = mapPosition.y + (player.y * TILE_WIDTH) - TILE_WIDTH;
 
@@ -23,7 +23,7 @@ const Player = ({ player, mapPosition }) => {
             ref={spriteRef}
             key={player.id}
             isPlaying={true}
-            textures={textures[player.playerRole].running[player.direction]} // Use the correct direction for textures
+            textures={textures[player.playerRole].running[player.direction]}
             animationSpeed={0.15}
             x={playerPositionX}
             y={playerPositionY}
