@@ -3,6 +3,7 @@ package engr302S3.server;
 import ch.qos.logback.core.net.server.Client;
 import engr302S3.server.map.*;
 import engr302S3.server.playerActions.TaskProgressBroadcast;
+import engr302S3.server.ticketFactory.Task;
 import engr302S3.server.ticketFactory.Ticket;
 import engr302S3.server.ticketFactory.TicketFactory;
 
@@ -42,6 +43,15 @@ public class ScheduledTasks {
         }
         //update the stations and tasks that they are working on
         for (Station station : clientAPI.getDevastation().getBoard().getStations().values()) {
+            if (station.getTicketWorkingOn().isPresent()){
+                Ticket processingTicket = station.getTicketWorkingOn().get();
+                for (Task task : processingTicket.getTasks()){
+                    if (task.getType() == station.getStationType()){
+                        task.updateCompletion();
+                    }
+                }
+            }
+
             if (station.progress()) {
                 clientAPI.broadcastTaskCompletion(new TaskProgressBroadcast(station.getTicketWorkingOn().get(), station.getStationType()));
             }
@@ -71,4 +81,5 @@ public class ScheduledTasks {
             System.out.println("Tile at (" + randomX + ", " + randomY + ") is not empty. Ticket not created.");
         }
     }
+
 }

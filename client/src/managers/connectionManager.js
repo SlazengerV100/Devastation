@@ -61,6 +61,10 @@ const setupSubscriptions = () => {
     stompClient.subscribe('/topic/stations', (message) => {
         updateStations(message)
     })
+
+    stompClient.subscribe('/topic/ticket/resolve', (message) => {
+        updateTicketComplete(message)
+    })
 };
 
 export const requestState = async () => {
@@ -260,6 +264,7 @@ const updateTicketPickUp = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
         const { id, heldTicket } = parsedMessage;
+        console.log(JSON.stringify(heldTicket))
 
         if (heldTicket === null) {
             console.log("No ticket to pick up");
@@ -350,6 +355,30 @@ const updateStations = (message) => {
         console.error('Failed to parse score message:', error);
     }
 }
+
+const updateTicketComplete = (message) => {
+    try {
+        const ticket = JSON.parse(message.body);
+
+        // Remove the ticket from ticketsAtom
+        store.set(ticketsAtom, (prevTickets) => {
+            // Create a shallow copy of the previous tickets
+            const updatedTickets = { ...prevTickets };
+
+            // Check if the ticket exists in the map
+            if (updatedTickets[ticket.id]) {
+                delete updatedTickets[ticket.id]; // Remove the ticket from the map
+            }
+
+            // Return the updated tickets map
+            return updatedTickets;
+        });
+
+    } catch (error) {
+        console.error('Failed to parse ticket message:', error);
+    }
+};
+
 
 
 

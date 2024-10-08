@@ -17,7 +17,7 @@ export const localPlayerId = atom(-1);
 export const localHeldTicket = atom(null);
 
 // Tickets atom
-export const ticketsAtom = atom([]);
+export const ticketsAtom = atom(new Map());
 
 // Game time
 export const timeLeftAtom = atom();

@@ -18,6 +18,7 @@ public class Task {
     private static final int MAX_TIME = 11;
     private final Random random = new Random();
     private final String title;
+    @Getter
     private final StationType type;
     private int completionTime = random.nextInt(MIN_TIME, MAX_TIME);
     @Setter private Boolean completed = false;

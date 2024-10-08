@@ -1,6 +1,7 @@
 package engr302S3.server.ticketFactory;
 
 import engr302S3.server.map.Tile;
+import engr302S3.server.map.TileType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,6 @@ public class Ticket {
     private int totalTime;
     @Setter private Optional<Tile> tile;
     private final double blowOutProb;
-    @Setter private boolean inFinishedZone = false;
 
     Ticket(String title, int totalTime, double blowOutProb, ArrayList<Task> tasks) {
         id = idTracker++;
@@ -28,6 +28,14 @@ public class Ticket {
         this.totalTime = totalTime;
         this.blowOutProb = blowOutProb;
         this.tasks = tasks;
+    }
+
+    public boolean isInFinishZone(){
+        if (tile.isPresent()){
+            Tile ticketTile = tile.get();
+            return ticketTile.getX() == 29 && ticketTile.getY() == 7;
+        }
+        return false;
     }
 
     /**
