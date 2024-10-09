@@ -46,8 +46,10 @@ const CharacterSelectStage = () => {
     const setSessionPlayer = async (playerId) => {
         try {
             const player = await activatePlayer(playerId);
-            sessionStorage.setItem('playerID', player.id);
-            store.set(localPlayerId, player.id);
+            if (sessionStorage.getItem('playerID') !== null){
+                sessionStorage.setItem('playerID', player.id);
+                store.set(localPlayerId, player.id);
+            }
             await updatePlayerSelection();
         } catch (error) {
             console.error('Failed to activate player:', error);
