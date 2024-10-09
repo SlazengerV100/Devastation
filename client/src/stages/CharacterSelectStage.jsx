@@ -46,7 +46,7 @@ const CharacterSelectStage = () => {
     const setSessionPlayer = async (playerId) => {
         try {
             const player = await activatePlayer(playerId);
-            if (sessionStorage.getItem('playerID') !== null){
+            if (sessionStorage.getItem('playerID') === null){
                 sessionStorage.setItem('playerID', player.id);
                 store.set(localPlayerId, player.id);
             }
