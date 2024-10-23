@@ -40,7 +40,7 @@ const LoadingStage = ({attemptConnect}) => {
                 connectionStatus === 'disconnected' && (
                     <BlankButton
                         text={'Try Connect'}
-                        x={windowSize.width / 2}
+                        x={(windowSize.width / 2) - 200}
                         y={windowSize.height / 2}
                         size={'large'}
                         action={attemptConnect}
@@ -50,7 +50,8 @@ const LoadingStage = ({attemptConnect}) => {
             {
                 connectionStatus === 'connected' && (
                     <BlankButton
-                        text={'Play'} x={windowSize.width / 2}
+                        text={'Play'}
+                        x={(windowSize.width / 2) - 200}
                         y={windowSize.height / 2}
                         size={'large'}
                         action={() => {
