@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Stage, Container, AnimatedSprite, Sprite } from '@pixi/react';
 import { textures } from "../js/spriteFrameGrabber.js";
-import { localPlayerId } from "../js/atoms.js";
+import { localPlayerId, currentPageAtom } from "../js/atoms.js";
+import { useSetAtom } from "jotai";
 import { requestState, activatePlayer } from "../managers/connectionManager.js";
 import { store } from "../App.jsx";
 import backgroundURL from '../../assets/SelectPlayerBackground.png';
@@ -12,6 +13,7 @@ import * as PIXI from 'pixi.js';
 const CharacterSelectStage = () => {
     const [playerMap, setPlayerMap] = useState([]);
     const [loading, setLoading] = useState(true);
+    const setPage = useSetAtom(currentPageAtom)
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight
@@ -49,6 +51,7 @@ const CharacterSelectStage = () => {
             if (sessionStorage.getItem('playerID') === null){
                 sessionStorage.setItem('playerID', player.id);
                 store.set(localPlayerId, player.id);
+                setPage("game")
             }
             await updatePlayerSelection();
         } catch (error) {
