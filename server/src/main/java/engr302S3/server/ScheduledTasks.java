@@ -44,16 +44,13 @@ public class ScheduledTasks {
         //update the stations and tasks that they are working on
         for (Station station : clientAPI.getDevastation().getBoard().getStations().values()) {
             if (station.getTicketWorkingOn().isPresent()){
+                clientAPI.broadcastTaskCompletion(new TaskProgressBroadcast(station.getTicketWorkingOn().get(), station.getStationType()));
                 Ticket processingTicket = station.getTicketWorkingOn().get();
                 for (Task task : processingTicket.getTasks()){
                     if (task.getType() == station.getStationType()){
                         task.updateCompletion();
                     }
                 }
-            }
-
-            if (station.progress()) {
-                clientAPI.broadcastTaskCompletion(new TaskProgressBroadcast(station.getTicketWorkingOn().get(), station.getStationType()));
             }
         }
     }

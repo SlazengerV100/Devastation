@@ -24,3 +24,6 @@ export const timeLeftAtom = atom();
 
 // Score
 export const scoreAtom = atom(0);
+
+//Station Progress
+export const stationProgress = atom(new Map());

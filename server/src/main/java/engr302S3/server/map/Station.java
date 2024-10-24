@@ -17,7 +17,9 @@ public class Station {
 
     private static long idTracker;
     private final long id;
+    @Getter
     private final StationType stationType;
+    @Getter
     private int progress;
     private List<Tile> tiles;
     @Setter private Optional<Ticket> ticketWorkingOn;
@@ -73,4 +75,5 @@ public class Station {
     private void resetProgress() {
         progress = 0;
     }
+
 }

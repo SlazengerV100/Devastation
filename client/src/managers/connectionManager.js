@@ -1,5 +1,13 @@
 import { Stomp } from "@stomp/stompjs";
-import {localHeldTicket, localPlayerId, players, scoreAtom, ticketsAtom, timeLeftAtom} from "../js/atoms.js";
+import {
+    localHeldTicket,
+    localPlayerId,
+    players,
+    scoreAtom,
+    stationProgress,
+    ticketsAtom,
+    timeLeftAtom
+} from "../js/atoms.js";
 import { store } from '../App'
 
 let stompClient;
@@ -64,6 +72,10 @@ const setupSubscriptions = () => {
 
     stompClient.subscribe('/topic/ticket/resolve', (message) => {
         updateTicketComplete(message)
+    })
+
+    stompClient.subscribe('/topic/ticket/task/completionUpdate', (message) => {
+        updateStationProgress(message)
     })
 };
 
@@ -379,6 +391,35 @@ const updateTicketComplete = (message) => {
     }
 };
 
+const updateStationProgress = (message) => {
+    try {
+        const messageData = JSON.parse(message.body);
+        const stationType = messageData.stationType
+        const ticket = messageData.ticket
+
+
+        let task;
+        if (ticket && ticket.tasks && Array.isArray(ticket.tasks)) {
+            task = ticket.tasks.find(t => t.type === stationType); // finding the task with matching StationType
+        }
+
+        const progress = task.completionTime / task.completionTimeTotal
+        store.set(stationProgress, (prevProgress) => {
+            // Check if the ticket exists in the map
+                return {
+                    ...prevProgress,
+                    [stationType]: progress
+                };
+        });
+        const stationProg = store.get(stationProgress)
+
+        // Remove the ticket from ticketsAtom
+
+
+    } catch (error) {
+        console.error('Failed to parse ticket message:', error);
+    }
+}
 
 
 
