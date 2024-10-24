@@ -1,6 +1,13 @@
 import { Stage, Sprite } from '@pixi/react';
 import { useAtomValue } from 'jotai';
-import { localHeldTicket, players as playerAtoms, scoreAtom, ticketsAtom, timeLeftAtom } from "../js/atoms.js";
+import {
+    localHeldTicket,
+    players as playerAtoms,
+    scoreAtom,
+    stationProgress,
+    ticketsAtom,
+    timeLeftAtom
+} from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
 import Player from "../components/Player.jsx";
 import { useState, useEffect } from 'react';
@@ -8,7 +15,8 @@ import { TILE_WIDTH } from "../js/spriteFrameGrabber.js";
 import Ticket from "../components/Ticket.jsx";
 import HeldTicket from "../components/HeldTicket.jsx";
 import TimerProgressBar from "../components/TimerProgressBar.jsx";
-import ScoreBoard from "../components/ScoreBoard.jsx"; // Fixed typo in import
+import ScoreBoard from "../components/ScoreBoard.jsx";
+import StationProgressBar from "../components/StationProgressBar.jsx"; // Fixed typo in import
 
 const GameStage = () => {
     const players = useAtomValue(playerAtoms);
@@ -16,6 +24,7 @@ const GameStage = () => {
     const heldTicket = useAtomValue(localHeldTicket);
     const timeLeft = useAtomValue(timeLeftAtom);
     const score = useAtomValue(scoreAtom);
+    const stationProg = useAtomValue(stationProgress);
 
     useEffect(() => {
         console.log(tickets);
@@ -83,15 +92,6 @@ const GameStage = () => {
             {/* Render the map centered */}
             <Sprite image={map} x={mapDrawInfo.x} y={mapDrawInfo.y} width={mapDrawInfo.width} height={mapDrawInfo.height} />
 
-            {/* Render all players */}
-            {Object.values(players).map((player, index) => (
-                <Player
-                    player={player}
-                    key={index}
-                    mapPosition={mapDrawInfo}
-                />
-            ))}
-
             {/* Render all tickets */}
             {Object.values(tickets).map((ticket, index) => (
                 <Ticket
@@ -100,7 +100,27 @@ const GameStage = () => {
                     mapPosition={mapDrawInfo}
                 />
             ))}
+
+            {Object.entries(stationProg).map(([key, stationProgSingle], index) => (
+                <StationProgressBar
+                    stationProgress={stationProgSingle}
+                    key={key} // or key={index} if you prefer
+                    stationName={key} // passing the key as a prop if needed
+                    mapDrawInfo={mapDrawInfo}
+                    tileWidth={TILE_WIDTH}
+                />
+            ))}
+
             <HeldTicket heldTicketDrawInfo={heldTicketDrawInfo} heldTicket={heldTicket}/>
+
+            {/* Render all players */}
+            {Object.values(players).map((player, index) => (
+                <Player
+                    player={player}
+                    key={index}
+                    mapPosition={mapDrawInfo}
+                />
+            ))}
         </Stage>
     );
 };
