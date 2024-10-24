@@ -52,6 +52,8 @@ public class ScheduledTasks {
                     }
                 }
             }
+
+            station.progress();
         }
     }
 
