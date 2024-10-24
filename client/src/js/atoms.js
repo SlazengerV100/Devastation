@@ -27,3 +27,5 @@ export const scoreAtom = atom(0);
 
 //what page is currently showing
 export const currentPageAtom = atom("home")
+//Station Progress
+export const stationProgress = atom(new Map());

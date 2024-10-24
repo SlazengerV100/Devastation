@@ -21,11 +21,14 @@ public class Task {
     @Getter
     private final StationType type;
     private int completionTime = random.nextInt(MIN_TIME, MAX_TIME);
+    @Getter
+    private final int completionTimeTotal;
     @Setter private Boolean completed = false;
 
     public Task(StationType type) {
         this.title = type.toString();
         this.type = type;
+        this.completionTimeTotal = completionTime;
     }
 
     /**
