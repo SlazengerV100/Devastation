@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 import LoadingStage from '../stages/LoadingStage.jsx';
 import CharacterSelectStage from "../stages/CharacterSelectStage.jsx";
 import GameStage from "../stages/GameStage.jsx";
-import { useAtom } from 'jotai';
-import { connectionStatusAtom, localPlayerId } from '../js/atoms.js';
+import { useAtom, useAtomValue } from 'jotai';
+import { connectionStatusAtom, localPlayerId, currentPageAtom } from '../js/atoms.js';
 import { connect } from "./connectionManager.js";
 import {init} from "../js/spriteFrameGrabber.js";
 
 const StageManager = () => {
     const [connectionStatus, setConnectionStatus] = useAtom(connectionStatusAtom);
     const [localPlayerIdValue, setLocalPlayerIdValue] = useAtom(localPlayerId);
+    const currentScreen = useAtomValue(currentPageAtom)
+
     const [currentStage, setCurrentStage] = useState(<GameStage />);
     const [loading, setLoading] = useState(true);
 
@@ -53,20 +55,20 @@ const StageManager = () => {
         }
     };
 
+
     // Trigger stage update based on connection status and storedPlayer changes
     useEffect(() => {
-        if (connectionStatus === 'disconnected') {
-            setCurrentStage(<LoadingStage attemptConnect={attemptConnect}/>);
+        switch(currentScreen){
+            case "home" : setCurrentStage(<LoadingStage attemptConnect={attemptConnect}/> )
+                break
+            case "select" : setCurrentStage(<CharacterSelectStage/>)
+                break;
+            case "game" : setCurrentStage(<GameStage/>)
+                break;
+            default :
+                setCurrentStage(<div>{`Unknown screen ${currentScreen}`}</div>)
         }
-
-        else if (localPlayerIdValue !== -1) {
-            setCurrentStage(<GameStage />);
-        }
-
-        else {
-            setCurrentStage(<CharacterSelectStage />);
-        }
-    }, [connectionStatus, localPlayerIdValue]); // Effect depends on connectionStatus and storedPlayer
+    }, [connectionStatus, localPlayerIdValue, currentScreen]); // Effect depends on connectionStatus and storedPlayer
 
 
     return (
