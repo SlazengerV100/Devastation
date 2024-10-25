@@ -276,7 +276,6 @@ const updateTicketPickUp = (message) => {
     try {
         const parsedMessage = JSON.parse(message.body);
         const { id, heldTicket } = parsedMessage;
-        console.log(JSON.stringify(heldTicket))
 
         if (heldTicket === null) {
             console.log("No ticket to pick up");
@@ -284,6 +283,18 @@ const updateTicketPickUp = (message) => {
         }
 
         const ticketHeldId = heldTicket.id;
+
+        // Get the current state of the stationProgress map
+        const stationProgMap = store.get(stationProgress);
+        console.log("MAP: " + JSON.stringify(stationProgMap))
+
+        // Create a new map without the entry where ticketId matches ticketHeldId
+        const newMap = new Map(
+            Array.from(stationProgMap).filter(([key, value]) => value.ticketId !== ticketHeldId)
+        );
+
+        store.set(stationProgress, newMap)
+
 
         // Update the held value of the specific ticket in ticketsAtom
         store.set(ticketsAtom, (prevTickets) => {
@@ -396,7 +407,7 @@ const updateStationProgress = (message) => {
         const messageData = JSON.parse(message.body);
         const stationType = messageData.stationType
         const ticket = messageData.ticket
-
+        const ticketId = ticket.id
 
         let task;
         if (ticket && ticket.tasks && Array.isArray(ticket.tasks)) {
@@ -408,12 +419,13 @@ const updateStationProgress = (message) => {
             // Check if the ticket exists in the map
                 return {
                     ...prevProgress,
-                    [stationType]: progress
+                    [stationType]: {progress, ticketId}
                 };
         });
-        const stationProg = store.get(stationProgress)
 
-        // Remove the ticket from ticketsAtom
+        console.log("TICKET: " + ticket.id)
+
+
 
 
     } catch (error) {

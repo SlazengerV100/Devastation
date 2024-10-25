@@ -7,8 +7,6 @@ const Ticket = ({ ticket, mapPosition }) => {
     const ticketPositionY = mapPosition.y + ticket.y * TILE_WIDTH;
 
 
-    console.log("Ticket " + ticket.held);
-
     return (
         ticket.held
             ?
