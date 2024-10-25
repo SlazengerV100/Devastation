@@ -103,7 +103,7 @@ const GameStage = () => {
 
             {Object.entries(stationProg).map(([key, stationProgSingle], index) => (
                 <StationProgressBar
-                    stationProgress={stationProgSingle}
+                    stationProgress={stationProgSingle.progress}
                     key={key} // or key={index} if you prefer
                     stationName={key} // passing the key as a prop if needed
                     mapDrawInfo={mapDrawInfo}

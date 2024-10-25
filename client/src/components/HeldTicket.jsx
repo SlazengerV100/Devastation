@@ -34,8 +34,8 @@ const HeldTicket = ({ heldTicketDrawInfo, heldTicket }) => {
                     {heldTicket.tasks.map((task, index) => (
                         <Text
                             key={task.title}
-                            text={`${task.title}  ${task.completionTime}s`}
-                            style={textStyle(15)}
+                            text={task.completionTime === 0 ? `${task.title}  ✔️` : `${task.title}  ${task.completionTime}s`}
+                            style={textStyle(20)}
                             x={40}
                             y={80 + index * 30}
                         />

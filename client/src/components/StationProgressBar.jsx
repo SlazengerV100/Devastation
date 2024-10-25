@@ -1,5 +1,6 @@
-import { Graphics } from '@pixi/react';
+import { Graphics, Text } from '@pixi/react';
 import { useMemo } from 'react';
+import {TILE_WIDTH} from "../js/spriteFrameGrabber.js";
 
 const StationProgressBar = ({ stationProgress, stationName, mapDrawInfo, tileWidth }) => {
     // Hard-code x and y based on stationName
@@ -42,9 +43,6 @@ const StationProgressBar = ({ stationProgress, stationName, mapDrawInfo, tileWid
     const width = 2 * tileWidth;  // Fixed full width of the progress bar
     const height = tileWidth/2;
 
-    console.log("STATION: " + stationName);
-    console.log("PROGRESS: " + stationProgress);
-
     let fillColor = 0x3CB371;  // Green color for progress bar
 
     // Calculate the current width of the progress bar based on stationProgress (0 -> 1)
@@ -52,28 +50,44 @@ const StationProgressBar = ({ stationProgress, stationName, mapDrawInfo, tileWid
 
     return (
         <>
-            {/* Progress bar with dark grey border */}
-            <Graphics
-                draw={g => {
-                    g.clear();
-                    g.lineStyle(2, 0x333333); // Dark grey border, 2px thick
-                    g.beginFill(0xCCCCCC); // Grey background
-                    g.drawRect(x, y, width, height); // Full width background
-                    g.endFill();
-                }}
-            />
+            {/* Conditional rendering based on stationProgress */}
+            {stationProgress === 0 ? (
+                // If stationProgress is 0, display "TASK COMPLETE"
+                <Text
+                    text="Task Complete"
+                    x={x}
+                    y={y}
+                    style={{ fill: '#ffffff', fontSize: 24 }} // Example style
+                    width={TILE_WIDTH*2}
+                    height={TILE_WIDTH/2}
+                />
+            ) : (
+                <>
+                    {/* Progress bar with dark grey border */}
+                    <Graphics
+                        draw={g => {
+                            g.clear();
+                            g.lineStyle(2, 0x333333); // Dark grey border, 2px thick
+                            g.beginFill(0xCCCCCC); // Grey background
+                            g.drawRect(x, y, width, height); // Full width background
+                            g.endFill();
+                        }}
+                    />
 
-            {/* Dynamic progress bar that shrinks as stationProgress decreases */}
-            <Graphics
-                draw={g => {
-                    g.clear();
-                    g.beginFill(fillColor); // Green for the remaining progress
-                    g.drawRect(x + 2, y + 2, currentWidth, height - 4); // Inset by 2px to fit inside the border
-                    g.endFill();
-                }}
-            />
+                    {/* Dynamic progress bar that shrinks as stationProgress decreases */}
+                    <Graphics
+                        draw={g => {
+                            g.clear();
+                            g.beginFill(fillColor); // Green for the remaining progress
+                            g.drawRect(x + 2, y + 2, currentWidth, height - 4); // Inset by 2px to fit inside the border
+                            g.endFill();
+                        }}
+                    />
+                </>
+            )}
         </>
     );
+
 };
 
 export default StationProgressBar;
