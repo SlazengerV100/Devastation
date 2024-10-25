@@ -23,8 +23,7 @@ class ServerApplicationTests {
 
     @Test
     public void testPrintBoard() {
-        File file = new File("src/main/resources/map._TempStations.csv");
-
+        File file = new File("src/main/resources/map.csv");
 
         try {
             Scanner scanner = new Scanner(file);
@@ -40,6 +39,7 @@ class ServerApplicationTests {
 
         Devastation devastation = new Devastation();
 
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
         System.out.println(devastation.getBoard());
     }
 
