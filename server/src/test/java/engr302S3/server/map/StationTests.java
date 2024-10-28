@@ -67,14 +67,19 @@ public class StationTests {
         assertTrue(ticket.getTasks().contains(task));
     }
 
-    @Test
-    public void testTicketDropOntoStation() {
+    private void testTicketDropOntoStation(int x, int y) {
+        board.dropTicket(player);
         assertTrue(station.inUse());
         assertEquals(Optional.of(ticket), station.getTicketWorkingOn());
         assertTrue(ticket.getTile().isPresent());
         Tile tile = ticket.getTile().get();
-        assertEquals(tile, board.getTileAt(3, 4));
+        assertEquals(tile, board.getTileAt(x, y));
         assertEquals(tile.getType(), TileType.STATION_AND_TICKET);
+    }
+
+    @Test
+    public void testTicketDropOntoStation() {
+        testTicketDropOntoStation(3, 4);
     }
 
     @Test
@@ -91,10 +96,18 @@ public class StationTests {
 
     @Test
     public void testPickUpAndDrop() {
+        testTicketDropOntoStation(3, 4);
+        testTicketPickUpFromStation();
         testTicketDropOntoStation();
         testTicketPickUpFromStation();
-        board.dropTicket(player);
-        testTicketDropOntoStation();
+    }
+
+    @Test
+    public void testPickUpFromAnyTile() {
+        testTicketDropOntoStation(3, 4);
+        board.movePlayer(player, Player.Direction.LEFT);
+        board.movePlayer(player, Player.Direction.LEFT);
+        board.movePlayer(player, Player.Direction.DOWN);
         testTicketPickUpFromStation();
     }
 }

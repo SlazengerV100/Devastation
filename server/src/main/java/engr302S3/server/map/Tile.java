@@ -83,7 +83,8 @@ public class Tile {
             case EMPTY -> "_*_|";
             case WALL -> "_W_|";
             case BOUNDARY -> "_B_|";
-            case STATION_AND_TICKET -> "_I_|";
+            case STATION_AND_TICKET -> "_ST_|";
+            case BOUNDARY_AND_TICKET -> "_BT_|";
         };
     }
 }
