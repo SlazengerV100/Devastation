@@ -9,5 +9,6 @@ public enum TileType {
     PLAYER,
     TICKET,
     WALL,
-    BOUNDARY
+    BOUNDARY,
+    STATION_AND_TICKET
 }

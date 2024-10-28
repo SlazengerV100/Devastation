@@ -251,7 +251,7 @@ public class Board {
         Ticket ticket = player.getHeldTicket().get();
 
         ticket.setTile(Optional.of(tile));
-        tile.setType(TileType.TICKET);
+        tile.setType(TileType.STATION_AND_TICKET);
         player.setHeldTicket(Optional.empty());
 
         Optional<Station> stationOptional = getStationOnTile(tile);
@@ -317,6 +317,7 @@ public class Board {
     private boolean isInvalidTile(Tile tile) {
         return tile.getType() == TileType.WALL ||
                 tile.getType() == TileType.STATION ||
+                tile.getType() == TileType.STATION_AND_TICKET ||
                 tile.getType() == TileType.TICKET;
     }
 

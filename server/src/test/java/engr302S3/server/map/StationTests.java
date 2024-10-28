@@ -40,12 +40,6 @@ public class StationTests {
     }
 
     @Test
-    public void testTicketPlacement() {
-        assertTrue(station.inUse());
-        assertEquals(Optional.of(ticket), station.getTicketWorkingOn());
-    }
-
-    @Test
     public void testProgress() {
         station.progress();
         assertEquals(1, station.getProgress(), "Station progress should be 1 after one increment");
@@ -74,6 +68,16 @@ public class StationTests {
     }
 
     @Test
+    public void testTicketDropOntoStation() {
+        assertTrue(station.inUse());
+        assertEquals(Optional.of(ticket), station.getTicketWorkingOn());
+        assertTrue(ticket.getTile().isPresent());
+        Tile tile = ticket.getTile().get();
+        assertEquals(tile, board.getTileAt(3, 4));
+        assertEquals(tile.getType(), TileType.STATION_AND_TICKET);
+    }
+
+    @Test
     public void testTicketPickUpFromStation() {
         board.pickUpTicket(player);
         assertEquals(Optional.of(ticket), player.getHeldTicket());
@@ -81,7 +85,7 @@ public class StationTests {
         assertFalse(station.inUse());
         for (Tile tile : station.getTiles()) {
             assertFalse(tile.containsTicket(), "Station tile should not have a ticket after pick up");
-            assertEquals(tile.getType(), TileType.STATION);
+            assertTrue(tile.getType() == TileType.STATION || tile.getType() == TileType.STATION_AND_TICKET);
         }
     }
 }

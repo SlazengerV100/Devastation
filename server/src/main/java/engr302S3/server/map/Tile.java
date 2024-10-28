@@ -60,14 +60,18 @@ public class Tile {
      * @return {@code true} if the tiles contents are a ticket, {@code false} otherwise.
      */
     public boolean containsTicket() {
-        return type == TileType.TICKET;
+        return type == TileType.TICKET || type == TileType.STATION_AND_TICKET;
     }
 
     /**
      * Method to clear the tile, setting it back to empty with no content.
      */
     public void clearTile() {
-        this.type = TileType.EMPTY;
+        if (type == TileType.STATION_AND_TICKET) {
+            type = TileType.STATION;
+        } else {
+            type = TileType.EMPTY;
+        }
     }
 
     @Override
@@ -79,6 +83,7 @@ public class Tile {
             case EMPTY -> "_*_|";
             case WALL -> "_W_|";
             case BOUNDARY -> "_B_|";
+            case STATION_AND_TICKET -> "_I_|";
         };
     }
 }
