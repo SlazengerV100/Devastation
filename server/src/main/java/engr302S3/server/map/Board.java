@@ -23,14 +23,17 @@ public class Board {
     private final Map<Long, Station> stations;
     private final Map<Long, Ticket> tickets;
     private final Map<Ticket, Tile> ticketTiles;
+    private final ArrayList<Tile> boundaries;
 
     public Board() {
-        this.board = createBoardFromFiles("src/main/resources/map._TempStations.csv", "src/main/resources/map._Wall.csv");
+        this.boundaries = new ArrayList<>();
+        this.board = createBoard("src/main/resources/map.csv");
 
         this.players = new HashMap<>();
         this.stations = new HashMap<>();
         this.tickets = new HashMap<>();
         this.ticketTiles = new HashMap<>();
+
 
         createPlayers();
         createStations();
@@ -38,6 +41,7 @@ public class Board {
 
     // New constructor that loads the board from a CSV string
     public Board(String csvData) {
+        this.boundaries = new ArrayList<>();
         this.board = createBoardFromCsv(csvData);
 
         this.players = new HashMap<>();
@@ -49,54 +53,27 @@ public class Board {
         createStations();
     }
 
-    // Method to create a board from CSV file paths
-    public Tile[][] createBoardFromFiles(String stationPath, String wallPath) {
-        ArrayList<String[]> stations = loadFiles(stationPath);
-        ArrayList<String[]> walls = loadFiles(wallPath);
+    /**
+     * For each value in the csv assign the type value corresponding to tile type
+     *
+     * @param path of csv
+     * @return the board
+     */
+    public Tile[][] createBoard(String path) {
+        ArrayList<String[]> map = load(path);
 
-        return combineBoardData(walls, stations);
+        return getTiles(map);
     }
 
-    // Method to create a board from a CSV string
-    public Tile[][] createBoardFromCsv(String csvData) {
-        ArrayList<String[]> lines = new ArrayList<>();
-        Scanner scanner = new Scanner(csvData);
-
-        while (scanner.hasNextLine()) {
-            lines.add(scanner.nextLine().split(","));
-        }
-
-        // Reuse the same board generation logic for CSV string data
-        return combineBoardData(lines, lines); // You can customize stations vs. walls here if needed
-    }
-
-    // Helper method to combine data and generate the board
-    private Tile[][] combineBoardData(ArrayList<String[]> walls, ArrayList<String[]> stations) {
-        BOARD_HEIGHT = walls.size();
-        BOARD_WIDTH = walls.get(0).length;
-
-        String[][] combined = new String[BOARD_WIDTH][BOARD_HEIGHT];
-
-        for (int y = 0; y < BOARD_HEIGHT; y++) {
-            for (int x = 0; x < BOARD_WIDTH; x++) {
-                String wallTile = walls.get(y)[x];
-                String stationTile = stations.get(y)[x];
-
-                // Prioritize wall tiles over station tiles if present
-                combined[x][y] = wallTile.equals("160") ? wallTile : stationTile;
-            }
-        }
+    private Tile[][] getTiles(ArrayList<String[]> map) {
+        BOARD_HEIGHT = map.size();
+        BOARD_WIDTH = map.get(0).length;
 
         Tile[][] board = new Tile[BOARD_WIDTH][BOARD_HEIGHT];
 
-        // Load initial tiles
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_HEIGHT; y++) {
-                switch (combined[x][y]) {
-                    case "-1" -> board[x][y] = new Tile(x, y); // Empty tile
-                    case "33" -> board[x][y] = new Tile(x, y, TileType.STATION); // Station tile
-                    case "160" -> board[x][y] = new Tile(x, y, TileType.WALL);  // Wall tile
-                }
+                board[x][y] = createTile(x, y, map.get(y)[x]);
             }
         }
 
@@ -104,7 +81,7 @@ public class Board {
     }
 
     // Method to load a CSV file
-    private ArrayList<String[]> loadFiles(String path) {
+    private ArrayList<String[]> load(String path) {
         ArrayList<String[]> lines = new ArrayList<>();
 
         try {
@@ -120,6 +97,25 @@ public class Board {
         }
 
         return lines;
+    }
+
+
+    private Tile createTile(int x, int y, String code) {
+
+        Tile tile;
+
+        switch (code) {
+            case "33" -> tile = new Tile(x, y, TileType.STATION);
+            case "50" -> tile = new Tile(x, y, TileType.BOUNDARY);
+            case "160" -> tile = new Tile(x, y, TileType.WALL);
+            default -> tile = new Tile(x, y);
+        }
+
+        if (tile.getType() == TileType.BOUNDARY) {
+            boundaries.add(tile);
+        }
+
+        return tile;
     }
 
     /**
@@ -149,36 +145,36 @@ public class Board {
 
 
     /**
-     * Create stations in a 2*2 radius of a Station tile on map.
+     * Create stations in a 2x2 radius of a Station tile on the map.
      */
     public void createStations() {
         Set<Tile> finishedStations = new HashSet<>();
         StationType[] types = StationType.values();
         int typeIndex = 0;
 
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_HEIGHT; y++) {
-                if (finishedStations.contains(board[x][y])) {
-                    continue;
-                }
-
-                if (board[x][y].getType() == TileType.STATION) {
-                    List<Tile> stationTiles = new ArrayList<>();
-                    StationType type = types[typeIndex++];
-                    stationTiles.add(board[x][y]);
-                    stationTiles.add(board[x][y + 1]);
-                    stationTiles.add(board[x + 1][y]);
-                    stationTiles.add(board[x + 1][y + 1]);
-
-                    Station station = new Station(type, stationTiles);
-                    this.stations.put(station.getId(), station);
-
-                    finishedStations.add(board[x + 1][y]);
-                    finishedStations.add(board[x][y + 1]);
-                    finishedStations.add(board[x + 1][y + 1]);
+        for (int x = 0; x < BOARD_WIDTH - 1; x++) {
+            for (int y = 0; y < BOARD_HEIGHT - 1; y++) {
+                Tile tile = board[x][y];
+                if (tile.getType() == TileType.STATION && !finishedStations.contains(tile)) {
+                    createStationCluster(x, y, types[typeIndex++ % types.length], finishedStations);
                 }
             }
         }
+    }
+
+    /**
+     * Creates a 2x2 station cluster starting from the top-left tile (x, y).
+     */
+    private void createStationCluster(int x, int y, StationType type, Set<Tile> finishedStations) {
+        List<Tile> stationTiles = List.of(
+                board[x][y], board[x][y + 1],
+                board[x + 1][y], board[x + 1][y + 1]
+        );
+
+        Station station = new Station(type, stationTiles);
+        stations.put(station.getId(), station);
+
+        finishedStations.addAll(stationTiles); // Mark the 2x2 tiles as processed
     }
 
     /**
@@ -228,6 +224,10 @@ public class Board {
             return null; //Do nothing if the position is out of bounds
         }
 
+        if (tile.getType() == TileType.TICKET) {
+            return null;
+        }
+
         Ticket ticket = player.getHeldTicket().get();
 
         ticket.setTile(Optional.of(tile));
@@ -242,14 +242,6 @@ public class Board {
                 station.setTicketWorkingOn(Optional.of(ticket));
             }
         }
-//        // If ticket in final column and is complete then remove from map and set tile to empty
-//        if (tile.getX() == BOARD_WIDTH - 1) {
-//            ticket.setInFinishedZone(true);
-//            if (ticket.isComplete()) {
-//                tickets.remove(ticket.getId());
-//                tile.empty();
-//            }
-//        }
 
         return ticket;
     }
@@ -290,6 +282,11 @@ public class Board {
 
         // Determine target tile based on direction
         targetTile = getTranslation(currentTile, direction);
+
+        if (boundaries.contains(targetTile)) {
+            return;
+        }
+
         if (isInvalidTile(targetTile)) return;
 
         // Update player's tile to new tile
@@ -334,6 +331,26 @@ public class Board {
         return false;
     }
 
+
+    // Method to create a board from a CSV string
+    public Tile[][] createBoardFromCsv(String csvData) {
+        ArrayList<String[]> lines = new ArrayList<>();
+        Scanner scanner = new Scanner(csvData);
+
+        while (scanner.hasNextLine()) {
+            lines.add(scanner.nextLine().split(","));
+        }
+
+        // Reuse the same board generation logic for CSV string data
+        return combineBoardData(lines); // You can customize stations vs. walls here if needed
+    }
+
+    // Helper method to combine data and generate the board
+    private Tile[][] combineBoardData(ArrayList<String[]> lines) {
+        return getTiles(lines);
+    }
+
+
     /**
      * Method to retrieve a specific tile at the given coordinates.
      *
@@ -347,20 +364,19 @@ public class Board {
 
     @Override
     public String toString() {
-
         StringBuilder sb = new StringBuilder();
 
-        sb.append("_____".repeat(BOARD_WIDTH));
+        sb.append("_____".repeat(BOARD_WIDTH)).append("\n");
 
-        sb.append("\n");
-
-        for (int x = 0; x < BOARD_WIDTH; x++) {
+        for (int y = 0; y < BOARD_HEIGHT; y++) {
             sb.append("|");
-            for (int y = 0; y < BOARD_HEIGHT; y++) {
+            for (int x = 0; x < BOARD_WIDTH; x++) {
                 sb.append(board[x][y].toString());
             }
-            sb.append("\n");
+            sb.append("|\n");
         }
+
+        sb.append("‾‾‾‾‾".repeat(BOARD_WIDTH));
 
         return sb.toString();
     }
