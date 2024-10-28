@@ -88,4 +88,13 @@ public class StationTests {
             assertTrue(tile.getType() == TileType.STATION || tile.getType() == TileType.STATION_AND_TICKET);
         }
     }
+
+    @Test
+    public void testPickUpAndDrop() {
+        testTicketDropOntoStation();
+        testTicketPickUpFromStation();
+        board.dropTicket(player);
+        testTicketDropOntoStation();
+        testTicketPickUpFromStation();
+    }
 }
