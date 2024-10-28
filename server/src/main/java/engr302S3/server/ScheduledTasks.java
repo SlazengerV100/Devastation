@@ -58,10 +58,22 @@ public class ScheduledTasks {
     }
 
     /**
-     * Every 5second try to generate a new ticket if there is room of the board
+     * Every 5second try to generate a new ticket if there is room on the board
      */
-    @Scheduled(fixedRate = 8000)
-    public void createTicket() {
+    @Scheduled(fixedRate = 5000)
+    public void createTicket(){
+        double spawnChance = 0.5; // 50% chance to spawn a ticket
+        // if there are tickets on the board roll to see if another ticket will spawn
+        if (!clientAPI.getDevastation().getBoard().getTickets().isEmpty()) {
+            if (Math.random() < spawnChance) {
+                spawnTicket();
+            }
+        }
+        else{ // if there are no tickets on the board then always spawn a ticket
+            spawnTicket();
+        }
+    }
+    private void spawnTicket() {
         // Generate random x and y coordinates within the project manager area
         int randomX = 1 + (int) (Math.random() * 8);
         int randomY = 1 + (int) (Math.random() * 13);
