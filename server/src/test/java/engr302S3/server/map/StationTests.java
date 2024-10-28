@@ -32,8 +32,9 @@ public class StationTests {
         do {
             ticket = TicketFactory.getTicket();
         } while (ticket.getTasks().stream().map(Task::getType).noneMatch(stationType -> stationType.equals(station.getStationType())));
-
-        player.setHeldTicket(Optional.of(ticket));
+        ticket.setTile(Optional.of(board.getTileAt(4, 3)));
+        assertTrue(board.addTicket(ticket.getId(), ticket));
+        board.pickUpTicket(player);
         board.movePlayer(player, Player.Direction.DOWN);
         board.dropTicket(player);
     }
