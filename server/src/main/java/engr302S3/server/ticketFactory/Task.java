@@ -23,7 +23,7 @@ public class Task {
     private int completionTime = random.nextInt(MIN_TIME, MAX_TIME);
     @Getter
     private final int completionTimeTotal;
-    @Setter private Boolean completed = false;
+    @Getter private Boolean completed = false;
 
     public Task(StationType type) {
         this.title = type.toString();

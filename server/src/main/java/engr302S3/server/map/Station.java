@@ -47,17 +47,12 @@ public class Station {
     }
 
     /**
-     * Increment the progress indicator by one.
-     *
-     * @return {@code true} if the task is now complete as a result of the increment, {@code false} if the task is still in progress or there is no task to progress.
+     * Increment the progress indicator by one if there is a ticket on this station.
      */
-    public boolean progress() {
-        if (ticketWorkingOn.isEmpty()) {
-            return false;
+    public void progress() {
+        if (!ticketWorkingOn.isEmpty()) {
+            progress++;
         }
-
-        progress++;
-        return getRelevantTask(ticketWorkingOn.get()).map(task -> progress >= task.getCompletionTime()).orElse(false);
     }
 
     /**
@@ -65,7 +60,7 @@ public class Station {
      *
      * @return the task that is associated with this station, or an {@link java.util.Optional#empty() Optional.empty()} if there is no task for this station.
      */
-    private Optional<Task> getRelevantTask(Ticket ticket) {
+    Optional<Task> getRelevantTask(Ticket ticket) {
         return ticket.getTasks().stream().filter(task -> task.getType().equals(stationType)).findFirst();
     }
 

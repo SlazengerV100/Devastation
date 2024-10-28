@@ -24,6 +24,15 @@ public class Board {
     private final Map<Long, Ticket> tickets;
     private final Map<Ticket, Tile> ticketTiles;
     private final ArrayList<Tile> boundaries;
+    // A simple 6x6 map with one wall and one station tile
+    private static final String mapData = """
+                -1,-1,-1,-1,-1,-1
+                -1,-1,-1,-1,-1,-1
+                -1,-1,160,-1,-1,-1
+                -1,-1,-1,-1,-1,-1
+                -1,-1,33,33,-1,-1
+                -1,-1,33,33,-1,-1
+                """;
 
     public Board() {
         this.boundaries = new ArrayList<>();
@@ -39,8 +48,11 @@ public class Board {
         createStations();
     }
 
-    // New constructor that loads the board from a CSV string
-    public Board(String csvData) {
+    /**
+     * Loads the board from a CSV string
+     * FOR TESTING PURPOSES ONLY
+     */
+    Board(String csvData) {
         this.boundaries = new ArrayList<>();
         this.board = createBoardFromCsv(csvData);
 
@@ -51,6 +63,14 @@ public class Board {
 
         createPlayers();
         createStations();
+    }
+
+    /**
+     * Get a test board that has one station and
+     * @return the test board
+     */
+    static Board testingBoard() {
+        return new Board(mapData);
     }
 
     /**
@@ -231,7 +251,7 @@ public class Board {
         Ticket ticket = player.getHeldTicket().get();
 
         ticket.setTile(Optional.of(tile));
-        tile.setType(TileType.TICKET);
+        tile.setType(TileType.STATION_AND_TICKET);
         player.setHeldTicket(Optional.empty());
 
         Optional<Station> stationOptional = getStationOnTile(tile);
@@ -297,6 +317,7 @@ public class Board {
     private boolean isInvalidTile(Tile tile) {
         return tile.getType() == TileType.WALL ||
                 tile.getType() == TileType.STATION ||
+                tile.getType() == TileType.STATION_AND_TICKET ||
                 tile.getType() == TileType.TICKET;
     }
 

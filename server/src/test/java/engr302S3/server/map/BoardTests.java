@@ -17,24 +17,14 @@ public class BoardTests {
 
     @BeforeEach
     public void setUp() {
-        // A simple 5x5 map with one wall and one station tile
-        String mapData = """
-                -1,-1,-1,-1,-1
-                -1,-1,-1,-1,-1
-                -1,-1,160,-1,-1
-                -1,-1,-1,-1,-1
-                -1,-1,-1,-1,-1
-                """;
-
-        // Create the board from CSV string
-        board = new Board(mapData);
+        board = Board.testingBoard();
     }
 
     @Test
     public void testBoardCreation() {
         // Assert that the board was created correctly with the correct dimensions
-        assertEquals(5, Board.BOARD_WIDTH);
-        assertEquals(5, Board.BOARD_HEIGHT);
+        assertEquals(6, Board.BOARD_WIDTH);
+        assertEquals(6, Board.BOARD_HEIGHT);
 
         // Verify that walls and station tiles are placed correctly
         assertEquals(TileType.WALL, board.getTileAt(2, 2).getType()); // Wall at center
