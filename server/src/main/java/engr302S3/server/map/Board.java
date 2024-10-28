@@ -203,8 +203,8 @@ public class Board {
      * @param player to requested to pick up item
      */
     public void pickUpTicket(Player player) { //This can be changed to string etc. or some other way to get players
-
         Tile tile = getTranslation(player.getTile(), player.getDirection());
+        System.out.println("x: " + tile.getX() + ", y: " + tile.getY());
         Optional<Ticket> ticketOptional = getTicketOnTile(tile);
         // No ticket to pick up
         if (ticketOptional.isEmpty()) {
@@ -212,6 +212,7 @@ public class Board {
         }
         Ticket ticket = ticketOptional.get();
         tile = ticket.getTile().get();
+        System.out.println("x: " + tile.getX() + ", y: " + tile.getY());
         // When picked up, set ticket position to none
         ticket.setTile(Optional.empty());
         player.setHeldTicket(Optional.ofNullable(ticket));
@@ -252,7 +253,13 @@ public class Board {
         Ticket ticket = player.getHeldTicket().get();
 
         ticket.setTile(Optional.of(tile));
-        tile.setType(TileType.STATION_AND_TICKET);
+        TileType newType = switch (tile.getType()) {
+            case STATION -> TileType.STATION_AND_TICKET;
+            case BOUNDARY -> TileType.BOUNDARY_AND_TICKET;
+            default -> TileType.TICKET;
+        };
+        tile.setType(newType);
+
         player.setHeldTicket(Optional.empty());
 
         Optional<Station> stationOptional = getStationOnTile(tile);
@@ -276,6 +283,7 @@ public class Board {
      */
     private Optional<Ticket> getTicketOnTile(Tile tile) {
         if (tile.getType() == TileType.STATION || tile.getType() == TileType.STATION_AND_TICKET) {
+            System.out.println(tile.getType());
             StationType stationType = getStationOnTile(tile).get().getStationType();
             return tickets.values().stream()
                     .filter(t -> t.getTile().isPresent() && getStationOnTile(t.getTile().get()).isPresent() && getStationOnTile(t.getTile().get()).get().getStationType().equals(stationType))
