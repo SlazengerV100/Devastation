@@ -211,6 +211,7 @@ public class Board {
             return;
         }
         Ticket ticket = ticketOptional.get();
+        tile = ticket.getTile().get();
         // When picked up, set ticket position to none
         ticket.setTile(Optional.empty());
         player.setHeldTicket(Optional.ofNullable(ticket));
@@ -268,11 +269,18 @@ public class Board {
 
     /**
      * Brute force all the tickets to find a ticket on the tile next to the player.
+     * If the tile next to the player is a station, it will attempt to get the ticket from any of the tiles for that station.
      *
      * @param tile the tile desired
      * @return the ticket on the tile if there is one
      */
     private Optional<Ticket> getTicketOnTile(Tile tile) {
+        if (tile.getType() == TileType.STATION || tile.getType() == TileType.STATION_AND_TICKET) {
+            StationType stationType = getStationOnTile(tile).get().getStationType();
+            return tickets.values().stream()
+                    .filter(t -> t.getTile().isPresent() && getStationOnTile(t.getTile().get()).isPresent() && getStationOnTile(t.getTile().get()).get().getStationType().equals(stationType))
+                    .findFirst();
+        }
         return tickets.values().stream()
                 .filter(t -> t.getTile().isPresent() && t.getTile().get().equals(tile))
                 .findFirst();
