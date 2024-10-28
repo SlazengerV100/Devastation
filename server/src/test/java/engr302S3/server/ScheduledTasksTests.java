@@ -66,7 +66,6 @@ public class ScheduledTasksTests {
         stations.put(station.getId(), station);
 
         when(board.getStations()).thenReturn(stations);
-        when(station.progress()).thenReturn(true);
         when(station.getTicketWorkingOn()).thenReturn(Optional.of(ticket));
 //        when(ticket.getStationType()).thenReturn("type");
 
@@ -85,7 +84,6 @@ public class ScheduledTasksTests {
         stations.put(station.getId(), station);
 
         when(board.getStations()).thenReturn(stations);
-        when(station.progress()).thenReturn(false);
 
         scheduledTasks.updateGameTime();
 
@@ -99,7 +97,6 @@ public class ScheduledTasksTests {
         stations.put(station.getId(), station);
 
         when(board.getStations()).thenReturn(stations);
-        when(station.progress()).thenReturn(false);
         when(station.getTicketWorkingOn()).thenReturn(Optional.empty());
 
         scheduledTasks.updateGameTime();
