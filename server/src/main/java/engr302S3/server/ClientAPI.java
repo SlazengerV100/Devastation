@@ -43,6 +43,7 @@ public class ClientAPI {
     public Player activatePlayer(Activation activationRequest){
         Player player = devastation.getBoard().getPlayers().get(activationRequest.playerId());
         player.setActive(activationRequest.activate());
+        devastation.tryRun();
         return player;
     }
 
