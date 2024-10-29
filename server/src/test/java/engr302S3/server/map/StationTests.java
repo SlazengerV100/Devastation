@@ -110,4 +110,18 @@ public class StationTests {
         board.movePlayer(player, Player.Direction.DOWN);
         testTicketPickUpFromStation();
     }
+
+    @Test
+    public void testTicketDropOntoCompletionTile() {
+        board.pickUpTicket(player);
+        board.movePlayer(player, Player.Direction.RIGHT);
+        board.movePlayer(player, Player.Direction.RIGHT);
+        board.movePlayer(player, Player.Direction.DOWN);
+        board.dropTicket(player);
+        Tile tile = board.getTileAt(4, 4);
+        assertEquals(tile.getType(), TileType.COMPLETION);
+        Tile playerTile = player.getTile();
+        board.movePlayer(player, Player.Direction.DOWN);
+        assertEquals(playerTile, player.getTile());
+    }
 }

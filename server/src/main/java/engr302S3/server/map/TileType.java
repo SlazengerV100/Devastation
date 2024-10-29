@@ -11,5 +11,6 @@ public enum TileType {
     WALL,
     BOUNDARY,
     STATION_AND_TICKET,
-    BOUNDARY_AND_TICKET
+    BOUNDARY_AND_TICKET,
+    COMPLETION
 }
