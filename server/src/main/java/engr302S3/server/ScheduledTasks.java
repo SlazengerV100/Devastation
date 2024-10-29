@@ -38,6 +38,12 @@ public class ScheduledTasks {
         if (!clientAPI.getDevastation().isRunning()) return;
         //update the game clock
         clientAPI.broadcastTimerUpdate(clientAPI.getDevastation().decreaseTime());
+        if (clientAPI.getDevastation().isFinished()) {
+            clientAPI.broadcastGameCompleted();
+            System.out.println("GAME COMPLETED");
+            clientAPI.getDevastation().setRunning(false);
+            return;
+        }
         //check each tile for a ticket, and update the ticket timer if there is one
         for (Ticket ticket : clientAPI.getDevastation().getBoard().getTickets().values()) {
             ticket.incrementTime();

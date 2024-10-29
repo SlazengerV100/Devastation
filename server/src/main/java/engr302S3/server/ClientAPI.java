@@ -112,6 +112,11 @@ public class ClientAPI {
         return ticket;
     }
 
+    @SendTo("/topic/gameCompleted")
+    public void broadcastGameCompleted() {
+        messagingTemplate.convertAndSend("/topic/gameCompleted", "end");
+    }
+
     @SendTo("/topic/ticket/task/completionUpdate")
     public TaskProgressBroadcast broadcastTaskCompletion(TaskProgressBroadcast tpb) {
         System.out.println("PROG STATION" + tpb);
