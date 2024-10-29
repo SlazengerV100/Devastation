@@ -35,6 +35,7 @@ public class ScheduledTasks {
      */
     @Scheduled(fixedRate = 1000)
     public void updateGameTime() {
+        if (!clientAPI.getDevastation().isRunning()) return;
         //update the game clock
         clientAPI.broadcastTimerUpdate(clientAPI.getDevastation().decreaseTime());
         //check each tile for a ticket, and update the ticket timer if there is one
@@ -62,6 +63,7 @@ public class ScheduledTasks {
      */
     @Scheduled(fixedRate = 5000)
     public void createTicket(){
+        if (!clientAPI.getDevastation().isRunning()) return;
         double spawnChance = 0.5; // 50% chance to spawn a ticket
         // if there are tickets on the board roll to see if another ticket will spawn
         if (!clientAPI.getDevastation().getBoard().getTickets().isEmpty()) {
