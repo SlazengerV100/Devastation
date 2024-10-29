@@ -250,28 +250,26 @@ public class Board {
             return null;
         }
 
+        Optional<Station> stationOptional = getStationOnTile(tile);
         Ticket ticket = player.getHeldTicket().get();
+        // Set ticket station is working on if not in use
+        if (stationOptional.isPresent()) {
+            Station station = stationOptional.get();
+            if (station.inUse()) {
+                return null;
+            }
+            station.setTicketWorkingOn(Optional.of(ticket));
+        }
 
-        ticket.setTile(Optional.of(tile));
         TileType newType = switch (tile.getType()) {
             case STATION -> TileType.STATION_AND_TICKET;
             case BOUNDARY -> TileType.BOUNDARY_AND_TICKET;
             case COMPLETION -> TileType.COMPLETION;
             default -> TileType.TICKET;
         };
+        ticket.setTile(Optional.of(tile));
         tile.setType(newType);
-
         player.setHeldTicket(Optional.empty());
-
-        Optional<Station> stationOptional = getStationOnTile(tile);
-        // Set ticket station is working on if not in use
-        if (stationOptional.isPresent()) {
-            Station station = stationOptional.get();
-            if (!station.inUse()) {
-                station.setTicketWorkingOn(Optional.of(ticket));
-            }
-        }
-
         return ticket;
     }
 
