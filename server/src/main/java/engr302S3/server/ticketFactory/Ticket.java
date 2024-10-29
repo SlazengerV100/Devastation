@@ -33,7 +33,7 @@ public class Ticket {
     public boolean isInFinishZone(){
         if (tile.isPresent()){
             Tile ticketTile = tile.get();
-            return ticketTile.getX() == 29 && ticketTile.getY() == 7;
+            return ticketTile.getType() == TileType.COMPLETION;
         }
         return false;
     }

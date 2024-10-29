@@ -30,7 +30,7 @@ public class Board {
                 -1,-1,-1,-1,-1,-1
                 -1,-1,160,-1,-1,-1
                 -1,-1,-1,-1,-1,-1
-                -1,-1,33,33,-1,-1
+                -1,-1,33,33,101,-1
                 -1,-1,33,33,-1,-1
                 """;
 
@@ -128,6 +128,7 @@ public class Board {
             case "33" -> tile = new Tile(x, y, TileType.STATION);
             case "50" -> tile = new Tile(x, y, TileType.BOUNDARY);
             case "160" -> tile = new Tile(x, y, TileType.WALL);
+            case "101" -> tile = new Tile(x, y, TileType.COMPLETION);
             default -> tile = new Tile(x, y);
         }
 
@@ -233,7 +234,6 @@ public class Board {
      * Drop currently held ticket of player, may change parameter to string for specific player
      */
     public Ticket dropTicket(Player player) {
-
         Tile tile;
 
         if (player.getHeldTicket().isEmpty()) {
@@ -256,6 +256,7 @@ public class Board {
         TileType newType = switch (tile.getType()) {
             case STATION -> TileType.STATION_AND_TICKET;
             case BOUNDARY -> TileType.BOUNDARY_AND_TICKET;
+            case COMPLETION -> TileType.COMPLETION;
             default -> TileType.TICKET;
         };
         tile.setType(newType);
@@ -323,20 +324,12 @@ public class Board {
             return;
         }
 
-        if (isInvalidTile(targetTile)) return;
+        if (!targetTile.empty()) return;
 
         // Update player's tile to new tile
         player.setTile(targetTile);
         currentTile.clearTile();
     }
-
-    private boolean isInvalidTile(Tile tile) {
-        return tile.getType() == TileType.WALL ||
-                tile.getType() == TileType.STATION ||
-                tile.getType() == TileType.STATION_AND_TICKET ||
-                tile.getType() == TileType.TICKET;
-    }
-
 
     private Tile getTranslation(Tile tile, Player.Direction direction) {
         try{

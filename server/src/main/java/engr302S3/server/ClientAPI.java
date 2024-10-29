@@ -16,6 +16,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.util.Optional;
+
 @Controller
 public class ClientAPI {
     @Getter private Devastation devastation;
@@ -59,6 +61,8 @@ public class ClientAPI {
         Ticket t = devastation.getBoard().dropTicket(player);
         if(t != null) {
             if(t.isComplete() && t.isInFinishZone()){
+                t.setTile(Optional.empty());
+                devastation.getBoard().getTickets().remove(t.getId());
                 broadcastScoreUpdate(devastation.updateScore(t));
                 broadcastTicketResolve(t);
             }
