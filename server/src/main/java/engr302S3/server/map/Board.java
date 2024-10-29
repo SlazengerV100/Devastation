@@ -246,7 +246,7 @@ public class Board {
             return null; //Do nothing if the position is out of bounds
         }
 
-        if (tile.getType() == TileType.TICKET) {
+        if (tile.getType() == TileType.TICKET || tile.getType() == TileType.WALL) {
             return null;
         }
 

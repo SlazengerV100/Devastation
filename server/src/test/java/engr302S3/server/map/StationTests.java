@@ -124,4 +124,16 @@ public class StationTests {
         board.movePlayer(player, Player.Direction.DOWN);
         assertEquals(playerTile, player.getTile());
     }
+
+    @Test
+    public void testTicketDropOntoWall() {
+        board.pickUpTicket(player);
+        board.movePlayer(player, Player.Direction.LEFT);
+        board.movePlayer(player, Player.Direction.LEFT);
+        board.movePlayer(player, Player.Direction.UP);
+        board.dropTicket(player);
+        assertTrue(ticket.getTile().isEmpty());
+        assertEquals(Optional.of(ticket), player.getHeldTicket());
+        assertEquals(board.getTileAt(2,2).getType(), TileType.WALL);
+    }
 }
