@@ -25,7 +25,7 @@ public class Devastation {
     @Setter
     private boolean running;        // Flag to indicate if the game is running
     @Getter(AccessLevel.NONE)
-    private int timeLeft = 300;           // Time left for the game (seconds)
+    private int timeLeft = 5;           // Time left for the game (seconds)
 
 
     public Devastation() {
@@ -64,5 +64,12 @@ public class Devastation {
      */
     public void tryRun() {
         running = board.getPlayers().values().stream().allMatch(Player::isActive);
+    }
+
+    /**
+     * Check if the game is finished.
+     */
+    public boolean isFinished() {
+        return timeLeft < 0;
     }
 }

@@ -6,7 +6,8 @@ import {
     scoreAtom,
     stationProgress,
     ticketsAtom,
-    timeLeftAtom
+    timeLeftAtom,
+    currentPageAtom
 } from "../js/atoms.js";
 import { store } from '../App'
 
@@ -76,6 +77,10 @@ const setupSubscriptions = () => {
 
     stompClient.subscribe('/topic/ticket/task/completionUpdate', (message) => {
         updateStationProgress(message)
+    })
+
+    stompClient.subscribe('/topic/gameCompleted', (message) => {
+        store.set(currentPageAtom, message)
     })
 };
 
@@ -290,6 +295,7 @@ const updateTicketPickUp = (message) => {
 
         // Create a new map without the entry where ticketId matches ticketHeldId
         const newMap = new Map(
+            // eslint-disable-next-line no-unused-vars
             Array.from(stationProgMap).filter(([key, value]) => value.ticketId !== ticketHeldId)
         );
 
