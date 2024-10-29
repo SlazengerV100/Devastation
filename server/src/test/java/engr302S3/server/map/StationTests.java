@@ -136,4 +136,18 @@ public class StationTests {
         assertEquals(Optional.of(ticket), player.getHeldTicket());
         assertEquals(board.getTileAt(2,2).getType(), TileType.WALL);
     }
+
+    @Test
+    public void testTicketDropOntoStationTwoAtATime() {
+        board.movePlayer(player, Player.Direction.RIGHT);
+        Ticket ticket2 = TicketFactory.getTicket();
+        ticket2.setTile(Optional.of(board.getTileAt(4,3)));
+        assertTrue(board.addTicket(ticket2.getId(), ticket2));
+        board.pickUpTicket(player);
+        board.movePlayer(player, Player.Direction.DOWN);
+        board.dropTicket(player);
+        assertEquals(Optional.of(ticket), station.getTicketWorkingOn());
+        assertEquals(Optional.of(ticket2), player.getHeldTicket());
+        assertEquals(ticket.getTile().get().getType(), TileType.STATION_AND_TICKET);
+    }
 }
