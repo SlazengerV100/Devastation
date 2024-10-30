@@ -119,7 +119,6 @@ public class ClientAPI {
 
     @SendTo("/topic/ticket/task/completionUpdate")
     public TaskProgressBroadcast broadcastTaskCompletion(TaskProgressBroadcast tpb) {
-        System.out.println("PROG STATION" + tpb);
         messagingTemplate.convertAndSend("/topic/ticket/task/completionUpdate", tpb);
         return tpb;
     }
