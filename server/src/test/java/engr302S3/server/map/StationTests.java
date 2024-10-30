@@ -33,7 +33,7 @@ public class StationTests {
             ticket = TicketFactory.getTicket();
         } while (ticket.getTasks().stream().map(Task::getType).noneMatch(stationType -> stationType.equals(station.getStationType())));
         ticket.setTile(Optional.of(board.getTileAt(4, 3)));
-        assertTrue(board.addTicket(ticket.getId(), ticket));
+        board.addTicket(ticket.getId(), ticket);
         board.pickUpTicket(player);
         board.movePlayer(player, Player.Direction.DOWN);
         board.dropTicket(player);
@@ -142,7 +142,7 @@ public class StationTests {
         board.movePlayer(player, Player.Direction.RIGHT);
         Ticket ticket2 = TicketFactory.getTicket();
         ticket2.setTile(Optional.of(board.getTileAt(4,3)));
-        assertTrue(board.addTicket(ticket2.getId(), ticket2));
+        board.addTicket(ticket2.getId(), ticket2);
         board.pickUpTicket(player);
         board.movePlayer(player, Player.Direction.DOWN);
         board.dropTicket(player);

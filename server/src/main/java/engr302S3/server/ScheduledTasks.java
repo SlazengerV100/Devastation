@@ -40,7 +40,6 @@ public class ScheduledTasks {
         clientAPI.broadcastTimerUpdate(clientAPI.getDevastation().decreaseTime());
         if (clientAPI.getDevastation().isFinished()) {
             clientAPI.broadcastGameCompleted();
-            System.out.println("GAME COMPLETED");
             clientAPI.getDevastation().setRunning(false);
             return;
         }
@@ -88,17 +87,14 @@ public class ScheduledTasks {
 
         // Get the tile at the random position
         Tile tile = clientAPI.getDevastation().getBoard().getTileAt(randomX, randomY);
+        if (!tile.empty()) {
+            System.out.println("Tile at (" + randomX + ", " + randomY + ") is not empty. Ticket not created.");
+            return;
+        }
         Ticket ticket = TicketFactory.getTicket();
         ticket.setTile(Optional.ofNullable(tile));
-
-        // Try to add the ticket to the board
-        if (clientAPI.getDevastation().getBoard().addTicket(ticket.getId(), ticket)) {
-            tile.setType(TileType.TICKET);
-            clientAPI.broadcastTicketCreate(ticket);
-        } else {
-            //tile is not free
-            System.out.println("Tile at (" + randomX + ", " + randomY + ") is not empty. Ticket not created.");
-        }
+        clientAPI.getDevastation().getBoard().addTicket(ticket.getId(), ticket);
+        tile.setType(TileType.TICKET);
+        clientAPI.broadcastTicketCreate(ticket);
     }
-
 }
