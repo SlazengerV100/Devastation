@@ -6,6 +6,7 @@ import * as PIXI from "pixi.js";
 import backgroundURL from "../../assets/background.png";
 import titleURL from "../../assets/DEV-A-STATION.png";
 import BlankButton from "../components/BlankButton.jsx";
+import HowToPlay from "../components/HowToPlay.jsx";
 
 const LoadingStage = ({attemptConnect}) => {
     const connectionStatus = useAtomValue(connectionStatusAtom)
@@ -14,6 +15,8 @@ const LoadingStage = ({attemptConnect}) => {
         width: window.innerWidth,
         height: window.innerHeight
     });
+
+    const [showHowToPlay, setShowHowtoPlay] = useState(false)
 
     useEffect(() => {
         const handleResize = () => {
@@ -35,7 +38,13 @@ const LoadingStage = ({attemptConnect}) => {
         >
             <Sprite texture={PIXI.Texture.from(backgroundURL)} width={windowSize.width} height={windowSize.height}/>
             <Sprite texture={PIXI.Texture.from(titleURL)} anchor={0.5} y={windowSize.height * 0.2} x={windowSize.width / 2}/>
-
+            <BlankButton
+                text={'How to Play'}
+                x={(windowSize.width / 2) + 200}
+                y={windowSize.height / 2}
+                size={'large'}
+                action={() => setShowHowtoPlay(true)}
+            />
             {
                 connectionStatus === 'disconnected' && (
                     <BlankButton
@@ -51,27 +60,18 @@ const LoadingStage = ({attemptConnect}) => {
                 connectionStatus === 'connected' && (
                     <BlankButton
                         text={'Play'}
-                        x={(windowSize.width / 2) - 200}
+                        x={(windowSize.width / 2) - 600}
                         y={windowSize.height / 2}
                         size={'large'}
                         action={() => {
                             setCurrentPage("select")
-                            console.log('clicked')
                         }}
                     />
 
                 )
             }
+            {showHowToPlay && <HowToPlay setShow={setShowHowtoPlay} /> }
         </Stage>
-        // <div>
-        //     {connectionStatus === 'disconnected' && (
-        //         <div>
-        //             <p>Not connected</p>
-        //             <button onClick={attemptConnect}>Try Reconnecting</button>
-        //
-        //         </div>
-        //     )}
-        // </div>
     );
 };
 
