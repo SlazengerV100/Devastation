@@ -53,7 +53,7 @@ const HowToPlay = ({ setShow }) => {
                 <Graphics
                     draw={(g) => {
                         g.clear();
-                        g.beginFill(0xadd8e6); // Light blue background for text box
+                        g.beginFill(0xadd8e6);
                         g.drawRoundedRect(-800, -240, 700, 600, 40);
                         g.endFill();
                     }}
@@ -65,7 +65,7 @@ const HowToPlay = ({ setShow }) => {
                     y={40}
                     style={{
                         fontSize: 36,
-                        fill: "#494949", // Yellow text color for readability
+                        fill: "#494949",
                         fontFamily: "Pixelify Sans",
                         fontWeight: "300",
                         wordWrap: true,
@@ -74,12 +74,11 @@ const HowToPlay = ({ setShow }) => {
                     }}
                 />
 
-                {/* Right Image Box with Rounded Corners */}
                 <Graphics
                     draw={(g) => {
                         g.clear();
-                        g.beginFill(0xadd8e6); // Light blue background for image box
-                        g.drawRoundedRect(100, -240, 790, 600, 40); // Larger rectangle with rounded corners
+                        g.beginFill(0xadd8e6);
+                        g.drawRoundedRect(100, -240, 790, 600, 40);
                         g.endFill();
                     }}
                 />
@@ -91,7 +90,7 @@ const HowToPlay = ({ setShow }) => {
                     y={-200}
                     style={{
                         fontSize: 48,
-                        fill: "#545454", // Yellow text color
+                        fill: "#545454",
                         fontFamily: "Pixelify Sans",
                         fontWeight: "700",
                     }}
@@ -112,7 +111,7 @@ const HowToPlay = ({ setShow }) => {
                     interactive={true}
                     pointerdown={goBack}
                     anchor={0.5}
-                    x={-screenWidth * 0.4} // Position left button based on screen width
+                    x={-screenWidth * 0.4}
                     y={0}
                     style={{ fontSize: 60, fill: "white", cursor: "pointer" }}
                 />
@@ -121,7 +120,7 @@ const HowToPlay = ({ setShow }) => {
                     interactive={true}
                     pointerdown={goForward}
                     anchor={0.5}
-                    x={screenWidth * 0.4} // Position right button based on screen width
+                    x={screenWidth * 0.4}
                     y={0}
                     style={{ fontSize: 60, fill: "white", cursor: "pointer" }}
                 />
