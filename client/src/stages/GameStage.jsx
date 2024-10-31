@@ -9,7 +9,6 @@ import {
     timeLeftAtom
 } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
-import background from '../../assets/SelectPlayerBackground.png'
 import Player from "../components/Player.jsx";
 import { useState, useEffect } from 'react';
 import { TILE_WIDTH } from "../js/spriteFrameGrabber.js";

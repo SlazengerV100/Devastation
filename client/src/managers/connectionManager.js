@@ -79,8 +79,8 @@ const setupSubscriptions = () => {
         updateStationProgress(message)
     })
 
-    stompClient.subscribe('/topic/gameCompleted', (message) => {
-        store.set(currentPageAtom, message)
+    stompClient.subscribe('/topic/gameCompleted', () => {
+        store.set(currentPageAtom, "end")
     })
 };
 
