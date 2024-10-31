@@ -9,6 +9,7 @@ import {
     timeLeftAtom
 } from "../js/atoms.js";
 import map from '../../assets/map.png'; // Map image asset
+import background from '../../assets/SelectPlayerBackground.png'
 import Player from "../components/Player.jsx";
 import { useState, useEffect } from 'react';
 import { TILE_WIDTH } from "../js/spriteFrameGrabber.js";
@@ -81,7 +82,7 @@ const GameStage = () => {
 
     return (
         <Stage
-            options={{ backgroundColor: 0xf4f3ef }}
+            options={{ backgroundColor: 0x808080 }}
             width={windowSize.width}
             height={windowSize.height}
             style={{ position: 'absolute', top: 0, left: 0 }}
@@ -101,7 +102,7 @@ const GameStage = () => {
                 />
             ))}
 
-            {Object.entries(stationProg).map(([key, stationProgSingle], index) => (
+            {Object.entries(stationProg).map(([key, stationProgSingle]) => (
                 <StationProgressBar
                     stationProgress={stationProgSingle.progress}
                     key={key} // or key={index} if you prefer
