@@ -13,27 +13,27 @@ const StationProgressBar = ({ stationProgress, stationName, mapDrawInfo, tileWid
     switch (stationName) {
         case 'FRONTEND':
             x = mapX + (12 * tileWidth);
-            y = mapY + (5 * tileWidth);
+            y = mapY + (2 * tileWidth);
             break;
         case 'BACKEND':
             x = mapX + (14 * tileWidth);
-            y = mapY + (13 * tileWidth);
+            y = mapY + (10 * tileWidth);
             break;
         case 'API':
             x = mapX + (16 * tileWidth);
-            y = mapY + (5 * tileWidth);
+            y = mapY + (2 * tileWidth);
             break;
         case 'STATIC_ANALYSIS':
             x = mapX + (26 * tileWidth);
-            y = mapY + (13 * tileWidth);
+            y = mapY + (10 * tileWidth);
             break;
         case 'COVERAGE_TESTING':
             x = mapX + (24 * tileWidth);
-            y = mapY + (5 * tileWidth);
+            y = mapY + (2 * tileWidth);
             break;
         case 'UNIT_TESTING':
             x = mapX + (22 * tileWidth);
-            y = mapY + (13 * tileWidth);
+            y = mapY + (10 * tileWidth);
             break;
         default:
             x = 100;
