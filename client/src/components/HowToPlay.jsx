@@ -111,8 +111,8 @@ const HowToPlay = ({ setShow }) => {
                     interactive={true}
                     pointerdown={goBack}
                     anchor={0.5}
-                    x={-screenWidth * 0.4}
-                    y={0}
+                    x={-850} // Adjusted to align with the left edge of the container
+                    y={70}
                     style={{ fontSize: 60, fill: "white", cursor: "pointer" }}
                 />
                 <Text
@@ -120,8 +120,8 @@ const HowToPlay = ({ setShow }) => {
                     interactive={true}
                     pointerdown={goForward}
                     anchor={0.5}
-                    x={screenWidth * 0.4}
-                    y={0}
+                    x={950} // Adjusted to align with the right edge of the container
+                    y={70}
                     style={{ fontSize: 60, fill: "white", cursor: "pointer" }}
                 />
 
