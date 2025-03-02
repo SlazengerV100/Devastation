@@ -28,7 +28,7 @@ The server will start on http://localhost:8080.
 2. **If you are running the client for the first time, run** `yarn install`
 3. Run the development server: `yarn run dev`
 
-The client will be available at http://localhost:3000.
+The client will be available at http://localhost:5173.
 
 ## Running the client and server simultaenously
 If you are hosting the game and playing it, you can run the client and server using a single command.
