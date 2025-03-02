@@ -9,8 +9,7 @@ Before you can run the client or server, make sure you have the following depend
 | **Node**   | Used on the client side for running scripts.    |
 
 ## Set the server environment variable
-1. Open a terminal window.
-1. Navigate to the `/client` directory
+1. Navigate to the `client` directory
 2. Create a file `.env`
 3. Write `VITE_WEBSOCKET_URL=[VALUE]` to this file
    - If you are running server locally, use `ws://localhost:8080/stomp-endpoint`
