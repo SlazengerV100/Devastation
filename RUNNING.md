@@ -9,6 +9,7 @@ Before you can run the client or server, make sure you have the following depend
 | **Node**   | Used on the client side for running scripts.    |
 
 ## Set the server environment variable
+1. Open a terminal window.
 1. Navigate to the `/client` directory
 2. Create a file `.env`
 3. Write `VITE_WEBSOCKET_URL=[VALUE]` to this file
@@ -16,6 +17,7 @@ Before you can run the client or server, make sure you have the following depend
    - If you are connecting to the server running on an AWS EC2 instance, use `ws://[YOUR-AWS-EC2-INSTANCE]:8080/stomp-endpoint`
 
 ## Running the server
+If you are running both the server and client on the same machine, you will need to open a separate terminal window for each.
 1. Navigate to the server/ directory: `cd server`
 2. **If you are running the server for the first time, run** `mvn clean install`
 3. Run Spring Boot: `mvn spring-boot:run`
