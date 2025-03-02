@@ -31,6 +31,7 @@ The server will start on http://localhost:8080.
 The client will be available at http://localhost:3000.
 
 ## Running the client and server simultaenously
+If you are hosting the game and playing it, you can run the client and server using a single command.
 1. Using the provided script in the `package.json`, from the project root directory, run `yarn run start-all`
 
 This will start both the client and server on the following endpoints:
