@@ -21,4 +21,4 @@ Points are awarded based upon the comparison between the total completion time a
 - The game incorporates real-world agile challenges like random events and prioritising tasks
 
 # Running the game
-See [RUNNING.MD](https://github.com/SlazengerV100/Devastation/blob/main/RUNNING.MD)
+See [RUNNING.md](https://github.com/SlazengerV100/Devastation/blob/main/RUNNING.md)
