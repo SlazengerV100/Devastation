@@ -1,4 +1,4 @@
-# Before Running
+# Before running
 
 Before you can run the client or server, make sure you have the following dependencies installed globally on your machine:
 
@@ -8,6 +8,7 @@ Before you can run the client or server, make sure you have the following depend
 | **Yarn**   | Used on the client side and for launch scripts. |
 | **Node**   | Used on the client side for running scripts.    |
 
+# Running
 ## Set the server environment variable
 1. Navigate to the `client` directory
 2. Create a file `.env`
